@@ -14,6 +14,7 @@ class AvatarDropdown extends React.Component {
       const { dispatch } = this.props;
 
       if (dispatch) {
+        localStorage.removeItem('token');
         dispatch({
           type: 'login/logout',
         });
@@ -55,21 +56,20 @@ class AvatarDropdown extends React.Component {
         </Menu.Item>
       </Menu>
     );
-    return currentUser && currentUser.name ? (
+    return currentUser && currentUser.username ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={styles.name}>{currentUser.name}</span>
+          <Avatar
+            size="small"
+            className={styles.avatar}
+            src="http://localhost:1337/uploads/b2e3753a51bb4560aea0714dd290f161.jpeg"
+            alt="avatar"
+          />
+          <span className={styles.name}>{currentUser.username}</span>
         </span>
       </HeaderDropdown>
     ) : (
-      <Spin
-        size="small"
-        style={{
-          marginLeft: 8,
-          marginRight: 8,
-        }}
-      />
+      <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
     );
   }
 }

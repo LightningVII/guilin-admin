@@ -1,10 +1,9 @@
 import request from '@/utils/request';
+
 export async function query() {
-  return request('/api/users');
+  return request('/strapi/users');
 }
+
 export async function queryCurrent() {
-  return request('/api/currentUser');
-}
-export async function queryNotices() {
-  return request('/api/notices');
+  return request.get('/strapi/users/me');
 }

@@ -1,10 +1,16 @@
 import request from '@/utils/request';
+
 export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
+  const { userName: identifier, password } = params;
+  return request('/strapi/auth/local', {
     method: 'POST',
-    data: params,
+    data: {
+      identifier,
+      password,
+    },
   });
 }
+
 export async function getFakeCaptcha(mobile) {
   return request(`/api/login/captcha?mobile=${mobile}`);
 }
