@@ -9,15 +9,10 @@ const BermudaTriangle = props => {
         // Create a polygon geometry
         const polygon = {
           type: 'polygon', // autocasts as new Polygon()
-
-          rings: [
-            [117.290592, 34.21428],
-            [117.294418, 34.221967],
-            [117.27886, 34.216146],
-            [117.290592, 34.21428],
-          ],
+          rings: props.rings,
         };
 
+        console.log('object :', props.rings);
         // Create a symbol for rendering the graphic
         const fillSymbol = {
           type: 'simple-fill', // autocasts as new SimpleFillSymbol()
@@ -45,6 +40,15 @@ const BermudaTriangle = props => {
   }, []);
 
   return null;
+};
+
+BermudaTriangle.defaultProps = {
+  rings: [
+    [117.294418, 34.221967],
+    [117.290592, 34.21428],
+    [117.27886, 34.216146],
+    [117.294418, 34.221967],
+  ],
 };
 
 export default BermudaTriangle;
