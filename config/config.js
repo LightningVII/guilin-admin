@@ -96,13 +96,18 @@ export default {
           routes: [
             {
               path: '/',
-              redirect: '/welcome',
+              redirect: '/remote-sensing',
             },
+            // {
+            //   path: '/remote-sensing',
+            //   component: './404',
+            // },
             {
               path: '/welcome',
               name: 'welcome',
               icon: 'smile',
               component: './Welcome',
+              hideInMenu: true,
             },
             {
               path: '/admin',
@@ -110,6 +115,60 @@ export default {
               icon: 'crown',
               component: './Admin',
               authority: ['admin'],
+              hideInMenu: true,
+            },
+            {
+              icon: 'crown',
+              name: 'dashboard.zh-CN',
+              path: '/statistics',
+              component: './statistics',
+            },
+            {
+              path: '/remote-sensing/list',
+            },
+            {
+              name: 'monitoring-results',
+              icon: 'smile',
+              path: '/remote-sensing',
+              component: './remote-sensing/list',
+            },
+            {
+              path: '/remote-sensing/details/arcgis-show',
+              name: 'map-show',
+              icon: 'crown',
+              component: './arcgis-show/map',
+              hideInMenu: true,
+            },
+            {
+              name: 'remote-sensing-data',
+              icon: 'smile',
+              path: '/remote-sensing/details',
+              component: './remote-sensing/details',
+              hideInMenu: true,
+            },
+            // 反馈
+            // {
+            //   path: '/feedback/list',
+            // },
+            {
+              name: 'feedback-list',
+              icon: 'smile',
+              path: '/feedback',
+              component: './feedback/list',
+            },
+            {
+              name: 'create-feedback',
+              icon: 'smile',
+              path: '/feedback/create',
+              component: './feedback/create',
+              hideInMenu: true,
+            },
+            {
+              name: 'feedback-details',
+              icon: 'smile',
+              path: '/feedback/details',
+              component: './feedback/details',
+              hideInMenu: true,
             },
             {
               component: './404',
@@ -163,12 +222,15 @@ export default {
   },
   manifest: {
     basePath: '/',
-  }, // chainWebpack: webpackPlugin,
+  },
+  // chainWebpack: webpackPlugin,
   proxy: {
     '/strapi': {
       target: 'http://localhost:1337/',
       changeOrigin: true,
-      pathRewrite: { '^/strapi': '' },
+      pathRewrite: {
+        '^/strapi': '',
+      },
     },
   },
 };

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Card, Typography, Alert, Icon } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Map } from '@esri/react-arcgis';
 
 export default () => (
   <PageHeaderWrapper content=" 这个页面只有 admin 权限才能查看">
     <Card>
+      <Map style={{ width: '100%', height: '100vh' }} />
       <Alert
         message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
         type="success"
