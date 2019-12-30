@@ -10,7 +10,7 @@ import { Map } from '@esri/react-arcgis';
 // setDefaultOptions({ css: true });
 
 const MyBasemap = props => {
-  const { center, zoom, children, handleLoad, handleDrag } = props;
+  const { center, zoom, children, handleLoad } = props;
   const [basemap, setBasemap] = useState(null);
   // const [mapExtent, setMapExtent] = useState({});
   useEffect(() => {
@@ -39,7 +39,7 @@ const MyBasemap = props => {
   return (
     <Map
       onLoad={handleLoad}
-      onDrag={handleDrag}
+      // onDrag={handleDrag}
       mapProperties={{ basemap }}
       viewProperties={{
         center,
@@ -55,7 +55,7 @@ const MyBasemap = props => {
 MyBasemap.defaultProps = {
   center: [117.290592, 34.21428],
   zoom: 13,
-  handleDrag: () => {},
+  // handleDrag: () => {},
 };
 
 export default MyBasemap;

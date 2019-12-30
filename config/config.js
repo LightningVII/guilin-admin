@@ -70,7 +70,7 @@ export default {
   plugins,
   hash: true,
   targets: {
-    ie: 9,
+    ie: 8,
   },
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: [
@@ -97,8 +97,7 @@ export default {
             {
               path: '/',
               redirect: '/remote-sensing',
-            },
-            // {
+            }, // {
             //   path: '/remote-sensing',
             //   component: './404',
             // },
@@ -145,8 +144,7 @@ export default {
               path: '/remote-sensing/details',
               component: './remote-sensing/details',
               hideInMenu: true,
-            },
-            // 反馈
+            }, // 反馈
             // {
             //   path: '/feedback/list',
             // },
