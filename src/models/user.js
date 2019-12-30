@@ -10,7 +10,6 @@ const UserModel = {
   effects: {
     *fetch(_, { call, put }) {
       const response = yield call(queryUsers);
-      console.log('userInfo :', response);
       yield put({
         type: 'save',
         payload: response,
@@ -34,14 +33,11 @@ const UserModel = {
       state = {
         currentUser: {},
       },
-      action,
     ) {
       return {
         ...state,
         currentUser: {
           ...state.currentUser,
-          notifyCount: action.payload.totalCount,
-          unreadCount: action.payload.unreadCount,
         },
       };
     },

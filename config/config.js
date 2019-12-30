@@ -121,6 +121,7 @@ export default {
               name: 'dashboard.zh-CN',
               path: '/statistics',
               component: './statistics',
+              authority: ['admin'],
             },
             {
               path: '/remote-sensing/list',
@@ -130,6 +131,7 @@ export default {
               icon: 'smile',
               path: '/remote-sensing',
               component: './remote-sensing/list',
+              authority: ['guest'],
             },
             {
               path: '/remote-sensing/details/arcgis-show',

@@ -20,8 +20,8 @@ export default () => {
               id="basemap1"
               handleLoad={(map, view) => {
                 basemap1 = view;
-                basemap1.watch('extent', function(e) {
-                  if(basemap1.focused)basemap2.extent = basemap1.extent
+                basemap1.watch('extent', () => {
+                  if (basemap1.focused) basemap2.extent = basemap1.extent;
                 });
               }}
               // handleDrag={() => {
@@ -36,9 +36,12 @@ export default () => {
               id="basemap2"
               handleLoad={(map, view) => {
                 basemap2 = view;
-                basemap2.watch('extent', function() {
-                  if(basemap2.focused){basemap1.extent = basemap2.extent};
-                });
+                function extentCallBack() {
+                  if (basemap2.focused) {
+                    basemap1.extent = basemap2.extent;
+                  }
+                }
+                basemap2.watch('extent', extentCallBack);
               }}
               // handleDrag={() => {
               //   basemap1.extent = basemap2.extent;
