@@ -226,7 +226,8 @@ export default {
   // chainWebpack: webpackPlugin,
   proxy: {
     '/strapi': {
-      target: 'http://localhost:1337/',
+      target: 'http://47.52.250.238:1337/',
+      // target: 'http://1bc20b9d.ngrok.io/',
       changeOrigin: true,
       pathRewrite: {
         '^/strapi': '',

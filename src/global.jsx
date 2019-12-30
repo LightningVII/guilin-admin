@@ -1,7 +1,15 @@
 import { Button, message, notification } from 'antd';
 import React from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { loadScript, loadCss } from 'esri-loader';
 import defaultSettings from '../config/defaultSettings';
+
+loadScript({
+  url: 'http://112.35.60.89:82/api4.11/init.js',
+});
+loadCss('http://112.35.60.89:82/api4.11/esri/css/main.css');
+// setDefaultOptions({ css: true });
+
 const { pwa } = defaultSettings; // if pwa is true
 
 if (pwa) {

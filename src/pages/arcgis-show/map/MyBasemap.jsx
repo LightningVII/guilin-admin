@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { loadModules, setDefaultOptions } from 'esri-loader';
+import { loadModules } from 'esri-loader';
+// import { loadModules, setDefaultOptions, loadScript, loadCss } from 'esri-loader';
 import { Map } from '@esri/react-arcgis';
 
-setDefaultOptions({ css: true });
+// loadScript({
+//   url: 'http://112.35.60.89:82/api4.11/init.js',
+// });
+// loadCss('http://112.35.60.89:82/api4.11/esri/css/main.css');
+// setDefaultOptions({ css: true });
 
 const MyBasemap = props => {
   const { center, zoom, children, handleLoad, handleDrag } = props;

@@ -62,7 +62,7 @@ class AvatarDropdown extends React.Component {
           <Avatar
             size="small"
             className={styles.avatar}
-            src="http://localhost:1337/uploads/b2e3753a51bb4560aea0714dd290f161.jpeg"
+            src="http://47.52.250.238:1337/uploads/b2e3753a51bb4560aea0714dd290f161.jpeg"
             alt="avatar"
           />
           <span className={styles.name}>{currentUser.username}</span>
