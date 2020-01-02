@@ -1,7 +1,6 @@
 import React from 'react';
 // import { Menu, Icon, Button } from 'antd';
 import { Menu, Icon } from 'antd';
-import styles from './index.less';
 
 // const { SubMenu } = Menu;
 
@@ -63,9 +62,7 @@ class App extends React.Component {
 }
 
 export default () => (
-  <div className={styles.container}>
-    <div id="components-menu-demo-inline-collapsed">
-      <App />
-    </div>
+  <div id="components-menu-demo-inline-collapsed">
+    <App />
   </div>
 );
