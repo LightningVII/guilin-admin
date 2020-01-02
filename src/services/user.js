@@ -7,3 +7,7 @@ export async function query() {
 export async function queryCurrent() {
   return request.get('/strapi/users/me');
 }
+
+export async function queryNotices() {
+  return request('/api/notices');
+}
