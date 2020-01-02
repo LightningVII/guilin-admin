@@ -20,6 +20,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
 import styles from './style.less';
+import TimelineAlternate from './TimelineAlternate';
 
 const { Step } = Steps;
 const ButtonGroup = Button.Group;
@@ -45,6 +46,7 @@ function itemRender(route, params, routeList, paths) {
     <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
   );
 }
+
 const mobileMenu = (
   <Menu>
     <Menu.Item key="1">操作一</Menu.Item>
@@ -294,7 +296,10 @@ class Details extends Component {
     return (
       <PageHeaderWrapper
         onBack={() => window.history.back()}
-        breadcrumb={{ routes, itemRender }}
+        breadcrumb={{
+          routes,
+          itemRender,
+        }}
         title="单号：234231029431"
         extra={action}
         className={styles.pageHeader}
@@ -335,6 +340,9 @@ class Details extends Component {
                   </Steps>
                 )}
               </RouteContext.Consumer>
+            </Card>
+            <Card>
+              <TimelineAlternate />
             </Card>
             <Card
               title="用户信息"
