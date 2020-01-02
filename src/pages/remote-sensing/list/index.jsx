@@ -1,18 +1,78 @@
-import { Button, Divider, Dropdown, Form, Icon, Menu, message } from 'antd';
-import React, { useState } from 'react';
+import {
+  Badge,
+  Card,
+  Table,
+  Tabs,
+  Button,
+  Divider,
+  Dropdown,
+  Form,
+  Icon,
+  Menu,
+  message,
+  DatePicker,
+} from 'antd';
+import React, { useState, useEffect } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import router from 'umi/router';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import FeedbackList from './components/FeedbackList';
 import { queryRule, updateRule, addRule, removeRule } from './service';
+import styles from './style.less';
 
+const { RangePicker } = DatePicker;
+const { TabPane } = Tabs;
+
+const operations = (
+  <div className={styles.salesExtraWrap}>
+    <div className={styles.salesExtra}>
+      <Button type="link" style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
+        <FormattedMessage id="dashboardanalysis.analysis.all-day" defaultMessage="All Day" />
+      </Button>
+      <Button type="link" style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
+        <FormattedMessage id="dashboardanalysis.analysis.all-week" defaultMessage="All Week" />
+      </Button>
+      <Button type="link" style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
+        <FormattedMessage id="dashboardanalysis.analysis.all-month" defaultMessage="All Month" />
+      </Button>
+      <Button type="link" style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
+        <FormattedMessage id="dashboardanalysis.analysis.all-year" defaultMessage="All Year" />
+      </Button>
+    </div>
+    <RangePicker
+      // value={rangePickerValue}
+      // onChange={handleRangePickerChange}
+      style={{
+        width: 256,
+      }}
+    />
+  </div>
+);
+const valueEnum = {
+  0: {
+    text: '关闭',
+    status: 'default',
+  },
+  1: {
+    text: '运行中',
+    status: 'processing',
+  },
+  2: {
+    text: '已上线',
+    status: 'success',
+  },
+  3: {
+    text: '异常',
+    status: 'error',
+  },
+};
 /**
  * 添加节点
  * @param fields
  */
-
 const handleAdd = async fields => {
   const hide = message.loading('正在添加');
 
@@ -81,6 +141,41 @@ const TableList = () => {
   const [stepFormValues, setStepFormValues] = useState({});
   const [actionRef, setActionRef] = useState();
   const [selectedRowKeys, setSelectedRowKeys] = useState([1042]);
+  const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const fetch = (params = {}) => {
+    setLoading(true);
+    queryRule(params).then(d => {
+      setPagination({
+        total: d.totalCount,
+      });
+      setLoading(false);
+      setData(d.data);
+    });
+  };
+
+  const handleTableChange = (p, filters, sorter) => {
+    console.log('pagination, filters, sorter :', p, filters, sorter);
+    // const pager = { ...this.state.pagination };
+    // pager.current = pagination.current;
+    // this.setState({
+    //   pagination: pager,
+    // });
+    // this.fetch({
+    //   results: pagination.pageSize,
+    //   page: pagination.current,
+    //   sortField: sorter.field,
+    //   sortOrder: sorter.order,
+    //   ...filters,
+    // });
+  };
+
+  useEffect(() => {
+    fetch({ current: 1, pageSize: 10 });
+  }, []);
+
   const columns = [
     {
       title: '规则名称',
@@ -99,23 +194,9 @@ const TableList = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      valueEnum: {
-        0: {
-          text: '关闭',
-          status: 'Default',
-        },
-        1: {
-          text: '运行中',
-          status: 'Processing',
-        },
-        2: {
-          text: '已上线',
-          status: 'Success',
-        },
-        3: {
-          text: '异常',
-          status: 'Error',
-        },
+      render: record => {
+        const { text, status } = valueEnum[record];
+        return <Badge text={text} status={status} />;
       },
     },
     {
@@ -131,14 +212,6 @@ const TableList = () => {
       align: 'right',
       render: () => (
         <>
-          {/* <a
-        onClick={() => {
-        handleUpdateModalVisible(true);
-        setStepFormValues(record);
-        }}
-        >
-        查看详情
-        </a> */}
           <a onClick={() => router.push('/remote-sensing/details')}>查看详情</a>
           <Divider type="vertical" />
           <a onClick={() => router.push('/remote-sensing/details/arcgis-show')}>地图查看</a>
@@ -172,8 +245,31 @@ const TableList = () => {
     查看详情（市操作员、县操作员），查看地图（市操作员、县操作员），查看反馈报告（市操作员、县操作员、具体勘查人员），归档（市操作员、县操作员），
     reopen（市操作员、县操作员），填写反馈报告（具体勘查人员）"
     >
+      <Card bordered={false}>
+        <Tabs tabBarExtraContent={operations}>
+          <TabPane tab="已接收" key="1">
+            <Table
+              loading={loading}
+              rowKey="key"
+              rowSelection={rowSelection}
+              expandedRowRender={record => <FeedbackList record={record} />}
+              pagination={pagination}
+              columns={columns}
+              dataSource={data}
+              onChange={handleTableChange}
+            />
+          </TabPane>
+          <TabPane tab="Tab 2" key="2">
+            aaaa
+          </TabPane>
+          <TabPane tab="Tab 3" key="3">
+            aaaa
+          </TabPane>
+        </Tabs>
+      </Card>
       <ProTable
-        headerTitle="查询表格"
+        style={{ marginTop: '24px' }}
+        headerTitle={<FormattedMessage id="menu.list.table-list" defaultMessage="Sales Ranking" />}
         onInit={setActionRef}
         rowKey="key"
         rowSelection={rowSelection}
@@ -224,6 +320,7 @@ const TableList = () => {
         request={params => queryRule(params)}
         columns={columns}
       />
+
       <CreateForm
         onSubmit={async value => {
           const success = await handleAdd(value);
