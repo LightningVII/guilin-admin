@@ -3,9 +3,9 @@ import { Row, Col, Card } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
-import MyBasemap from './MyBasemap';
-import BermudaTriangle from './BermudaTriangle';
-import MyFeatureLayer from './MyFeatureLayer';
+import MyBasemap from '../components/MyBasemap';
+import BermudaTriangle from '../components/BermudaTriangle';
+import MyFeatureLayer from '../components/MyFeatureLayer';
 
 export default () => {
   // const [extent, setExtent] = useState();

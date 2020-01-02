@@ -26,18 +26,28 @@ const UserModel = {
 
   reducers: {
     saveCurrentUser(state, action) {
-      return { ...state, currentUser: action.payload || {} };
+      return {
+        ...state,
+        currentUser:
+          {
+            ...state.currentUser,
+            ...action.payload,
+          } || state.currentUser,
+      };
     },
 
     changeNotifyCount(
       state = {
         currentUser: {},
       },
+      action,
     ) {
       return {
         ...state,
         currentUser: {
           ...state.currentUser,
+          notifyCount: action.payload.totalCount,
+          unreadCount: action.payload.unreadCount,
         },
       };
     },
