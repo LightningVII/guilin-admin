@@ -1,8 +1,11 @@
 export default {
   'menu.dashboard.zh-CN': '控制台',
-  'menu.map-show': '地图展示',
+  'menu.map-show': '遥感监测',
   'menu.monitoring-results': '监测报告',
-  'menu.remote-sensing-data': '遥感数据',
+  'menu.remote-sensing.data': '遥感数据',
+  'menu.data.center': '数据中心',
+  'menu.task.center': '任务审批',
+  'menu.map-show.center': '展示中心',
   'menu.create-feedback': '新建反馈',
   'menu.feedback-details': '反馈详情',
   'menu.feedback-list': '反馈信息',

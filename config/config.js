@@ -1,6 +1,7 @@
-import defaultSettings from './defaultSettings'; // https://umijs.org/config/
-
 import slash from 'slash2';
+import defaultSettings from './defaultSettings'; // https://umijs.org/config/
+import routes from './routes';
+
 import themePluginConfig from './themePluginConfig';
 import theme from './theme';
 const { pwa } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
@@ -73,117 +74,7 @@ export default {
     ie: 8,
   },
   // umi routes: https://umijs.org/zh/guide/router.html
-  routes: [
-    {
-      path: '/user',
-      component: '../layouts/UserLayout',
-      routes: [
-        {
-          name: 'login',
-          path: '/user/login',
-          component: './user/login',
-        },
-      ],
-    },
-    {
-      path: '/',
-      component: '../layouts/SecurityLayout',
-      routes: [
-        {
-          path: '/',
-          component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
-          routes: [
-            {
-              path: '/',
-              redirect: '/remote-sensing',
-            }, // {
-            //   path: '/remote-sensing',
-            //   component: './404',
-            // },
-            {
-              path: '/welcome',
-              name: 'welcome',
-              icon: 'smile',
-              component: './Welcome',
-              hideInMenu: true,
-            },
-            {
-              path: '/admin',
-              name: 'admin',
-              icon: 'crown',
-              component: './Admin',
-              authority: ['admin'],
-              hideInMenu: true,
-            },
-            {
-              icon: 'crown',
-              name: 'dashboard.zh-CN',
-              path: '/statistics',
-              component: './statistics',
-              authority: ['admin'],
-            },
-            {
-              path: '/remote-sensing/list',
-            },
-            {
-              name: 'monitoring-results',
-              icon: 'smile',
-              path: '/remote-sensing',
-              component: './remote-sensing/list',
-              authority: ['guest'],
-            },
-            {
-              path: '/remote-sensing/details/arcgis-show',
-              name: 'map-show',
-              icon: 'crown',
-              component: './arcgis-show/map',
-              hideInMenu: true,
-            },
-            {
-              name: 'remote-sensing-data',
-              icon: 'smile',
-              path: '/remote-sensing/details',
-              component: './remote-sensing/details',
-              hideInMenu: true,
-            }, // 反馈
-            // {
-            //   path: '/feedback/list',
-            // },
-            {
-              name: 'feedback-list',
-              icon: 'smile',
-              path: '/feedback',
-              component: './feedback/list',
-            },
-            {
-              name: 'create-feedback',
-              icon: 'smile',
-              path: '/feedback/create',
-              component: './feedback/create',
-              hideInMenu: true,
-            },
-            {
-              name: 'feedback-details',
-              icon: 'smile',
-              path: '/feedback/details',
-              component: './feedback/details',
-              hideInMenu: true,
-            },
-            {
-              component: './404',
-            },
-          ],
-        },
-        {
-          component: './404',
-        },
-      ],
-    },
-    {
-      component: './404',
-    },
-  ],
+  routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme,
   define: {

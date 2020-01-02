@@ -23,7 +23,7 @@ class AvatarDropdown extends React.Component {
       return;
     }
 
-    router.push(`/account/${key}`);
+    router.push(key);
   };
 
   render() {
@@ -37,15 +37,15 @@ class AvatarDropdown extends React.Component {
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         {menu && (
-          <Menu.Item key="center">
-            <Icon type="user" />
-            <FormattedMessage id="menu.account.center" defaultMessage="account center" />
+          <Menu.Item key="/remote-sensing">
+            <Icon type="schedule" />
+            <FormattedMessage id="menu.task.center" defaultMessage="account settings" />
           </Menu.Item>
         )}
         {menu && (
-          <Menu.Item key="settings">
-            <Icon type="setting" />
-            <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
+          <Menu.Item key="/account/center">
+            <Icon type="idcard" />
+            <FormattedMessage id="menu.account.center" defaultMessage="account center" />
           </Menu.Item>
         )}
         {menu && <Menu.Divider />}

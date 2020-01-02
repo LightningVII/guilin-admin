@@ -11,7 +11,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: '桂林执法',
+  title: '执法遥感监测平台',
   pwa: false,
   iconfontUrl: '',
 };

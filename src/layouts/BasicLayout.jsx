@@ -129,7 +129,7 @@ const BasicLayout = props => {
       logo={logo}
       menuHeaderRender={(logoDom, titleDom) => (
         <Link to="/">
-          {logoDom}
+          {/* {logoDom} */}
           {titleDom}
         </Link>
       )}
