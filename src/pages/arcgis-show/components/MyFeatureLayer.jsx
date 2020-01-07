@@ -24,7 +24,6 @@ const MyFeatureLayer = props => {
       .catch(err => console.error(err));
 
     return function cleanup() {
-      //   props.view.graphics.remove(graphic);
       props.view.map.remove(featureLayer);
     };
   }, []);

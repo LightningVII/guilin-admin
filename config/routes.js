@@ -46,7 +46,7 @@ export default [
             icon: 'smile',
             path: '/listsearchprojects',
             component: './ListSearchProjects',
-            hideInMenu: true,
+            // hideInMenu: true,
           },
           {
             icon: 'crown',

@@ -3,8 +3,9 @@ import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
 import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
-// import NoticeIconView from './NoticeIconView';
+import NoticeIconView from './NoticeIconView';
 import styles from './index.less';
+import router from 'umi/router';
 
 const GlobalHeaderRight = props => {
   const { theme, layout } = props;
@@ -38,9 +39,10 @@ const GlobalHeaderRight = props => {
         }}
         onPressEnter={value => {
           console.log('enter', value);
+          router.push('/listsearch');
         }}
       />
-      {/* <NoticeIconView /> */}
+      <NoticeIconView />
       <Avatar menu />
     </div>
   );
