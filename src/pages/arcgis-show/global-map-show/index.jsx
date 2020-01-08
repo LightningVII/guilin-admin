@@ -1,12 +1,14 @@
 import React, { Suspense } from 'react';
-import { Row, Col, Affix, Menu, Button, Dropdown, Icon, message } from 'antd';
+import { Row, Col, Affix, Menu, Button, Dropdown, Icon, message, Input, Card } from 'antd';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
 // import MyBasemap from '../components/MyBasemap';
 import MyFeatureLayer from '../components/MyFeatureLayer';
+// import Search from './components/Search';
 
 const MyBasemap = React.lazy(() => import('../components/MyBasemap'));
-
+const { Search } = Input;
+let layerTreeShow = false;
 // function handleButtonClick(e) {
 //   message.info('Click on left button.');
 //   console.log('click left button', e);
@@ -15,6 +17,10 @@ const MyBasemap = React.lazy(() => import('../components/MyBasemap'));
 function handleMenuClick(e) {
   message.info('Click on menu item.');
   console.log('click', e);
+}
+
+function handleLayerClick() {
+  layerTreeShow = !layerTreeShow;
 }
 
 const menu = (
@@ -49,12 +55,37 @@ export default () => (
         </Dropdown>
       </Button.Group>
     </Affix>
-    <Row style={{ margin: '0' }}>
+    <Affix style={{ position: 'absolute', left: 0 }} offsetTop={80}>
+
+      <Search
+        placeholder="输入查询内容..."
+        onSearch={value => message.info(value)}
+        style={{ width: 220 }}
+        allowClear
+        prefix={<Icon type="unordered-list" style={{ cursor: "pointer" }}
+          onClick={handleLayerClick} />}
+      >
+      </Search>
+      <div style={{ background: '#ECECEC', display: layerTreeShow?"block":"none" }}>
+        <Card bordered={false} style={{ width: 220 }}>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+        </Card>
+      </div>
+
+    </Affix>
+    <Row style={{ margin: '-24px' }}>
       <Col span={24}>
         <Suspense fallback="...loading">
-          <MyBasemap>
+          <MyBasemap
+            handleLoad={(map, view) => {
+              view.ui.remove("zoom");
+            }}
+          >
             <MyFeatureLayer />
           </MyBasemap>
+
         </Suspense>
       </Col>
     </Row>
