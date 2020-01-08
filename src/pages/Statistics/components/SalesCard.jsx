@@ -2,8 +2,9 @@ import { Tag, Table, Col, DatePicker, Row, Card, Tabs } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React from 'react';
 import styles from '../style.less';
-import MyBasemap from '../../arcgis-show/components/MyBasemap';
-import MyFeatureLayer from '../../arcgis-show/components/MyFeatureLayer';
+// import MyBasemap from '../../arcgis-show/components/MyBasemap';
+// import MyFeatureLayer from '../../arcgis-show/components/MyFeatureLayer';
+import MyEcharts from '../../arcgis-show/components/MyEcharts';
 
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
@@ -106,9 +107,9 @@ const SalesCard = ({
   >
     <Row type="flex" style={{ padding: '24px' }}>
       <Col style={{ paddingRight: '24px' }} xl={16} lg={12} md={12} sm={24} xs={24}>
-        <MyBasemap height="328px">
-          <MyFeatureLayer />
-        </MyBasemap>
+        <MyEcharts height="328px">
+          {/* <MyFeatureLayer /> */}
+        </MyEcharts>
       </Col>
       <Col xl={8} lg={12} md={12} sm={24} xs={24}>
         <h4
