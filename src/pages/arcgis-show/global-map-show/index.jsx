@@ -1,14 +1,15 @@
 import React, { Suspense } from 'react';
-import { Row, Col, Affix, Menu, Button, Dropdown, Icon, message, Input, Card } from 'antd';
+import { Row, Col, Affix, Menu, Button, Dropdown, Icon, message } from 'antd';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
 // import MyBasemap from '../components/MyBasemap';
-import MyFeatureLayer from '../components/MyFeatureLayer';
-// import Search from './components/Search';
+
+import SearchGIS from '../components/SearchGIS';
+import Compass from '../components/Compass';
 
 const MyBasemap = React.lazy(() => import('../components/MyBasemap'));
-const { Search } = Input;
-let layerTreeShow = false;
+
+
 // function handleButtonClick(e) {
 //   message.info('Click on left button.');
 //   console.log('click left button', e);
@@ -19,9 +20,6 @@ function handleMenuClick(e) {
   console.log('click', e);
 }
 
-function handleLayerClick() {
-  layerTreeShow = !layerTreeShow;
-}
 
 const menu = (
   <Menu onClick={handleMenuClick}>
@@ -56,24 +54,10 @@ export default () => (
       </Button.Group>
     </Affix>
     <Affix style={{ position: 'absolute', left: 0 }} offsetTop={80}>
-
-      <Search
-        placeholder="输入查询内容..."
-        onSearch={value => message.info(value)}
-        style={{ width: 220 }}
-        allowClear
-        prefix={<Icon type="unordered-list" style={{ cursor: "pointer" }}
-          onClick={handleLayerClick} />}
-      >
-      </Search>
-      <div style={{ background: '#ECECEC', display: layerTreeShow?"block":"none" }}>
-        <Card bordered={false} style={{ width: 220 }}>
-          <p>Card content</p>
-          <p>Card content</p>
-          <p>Card content</p>
-        </Card>
-      </div>
-
+      <SearchGIS />
+    </Affix>
+    <Affix style={{ position: 'absolute', right: 0 ,bottom :0}} offsetBottom={80}>
+      <Compass />
     </Affix>
     <Row style={{ margin: '-24px' }}>
       <Col span={24}>
@@ -83,7 +67,6 @@ export default () => (
               view.ui.remove("zoom");
             }}
           >
-            <MyFeatureLayer />
           </MyBasemap>
 
         </Suspense>

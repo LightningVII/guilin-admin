@@ -125,7 +125,7 @@ class LayoutImg extends Component {
     render() {
         return (
             // <div className="cloudhost-box">
-                <div id="map" style={{ width: '100%', height: '400px', mergeLeft: "0px" }} />
+                <div id="map" style={{ width: '100%', height: 328, mergeLeft: 0 }} />
             // </div>
         );
     }
