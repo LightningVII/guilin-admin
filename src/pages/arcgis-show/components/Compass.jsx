@@ -1,37 +1,53 @@
 import React from 'react';
-import {Icon } from 'antd';
+import { Icon, Tooltip } from 'antd';
+// import logo from "../../../../public/favicon.png"
 
-const compassStyle={
-    width:"60px",
-    height:"60px",
-    backgroundColor:"#CCC",
-    borderRadius:"50%"
+const compassStyle = {
+    width: 184,
+    height: 184,
+    borderRadius: 50,
+    backgroundImage: `url(https://webapi.amap.com/theme/v1.3/controlbar/ctb.png)`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "-44px -60px",
 }
 
-const zoomStyle={
+const compassPointerStyle = {
+    position: "absolute",
+    width: 60,
+    height: 96,
+    top: 46,
+    left: 60,
+    border: "none",
+    zIndex: 2,
+    backgroundImage: `url(https://webapi.amap.com/theme/v1.3/controlbar/ctb.png)`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "-562px -52px",
+}
+
+const zoomStyle = {
     width: "29px",
     height: "73px",
-    marginTop:"16px",
-    marginLeft:"16px",
-    textAlign:"center",
+    marginTop: "-38px",
+    marginLeft: "38px",
+    textAlign: "center",
     padding: "0 2px",
     background: "#fff",
     borderRadius: "3px"
 }
 
-const zoomInStyle={
+const zoomInStyle = {
     width: "24px",
     height: "36px",
-    margin:" 0 auto",
+    margin: " 0 auto",
     padding: "10px 0",
     cursor: "pointer",
     borderBottom: "1px #dfdfdf solid",
 }
 
-const zoomOutStyle={
+const zoomOutStyle = {
     width: "24px",
     height: "36px",
-    margin:" 0 auto",
+    margin: " 0 auto",
     padding: "10px 0",
     cursor: "pointer"
 }
@@ -51,17 +67,21 @@ class Compass extends React.Component {
 
     render() {
         return (
-            <div style={{width:40,height:"auto"}}>
-                <div style={compassStyle}>
-
+            <div style={{ width: 64, height: "auto" }}>
+                <div style={{ transform: "scale(0.35)" }}>
+                    <div style={compassStyle}>
+                        <div style={compassPointerStyle}></div>
+                    </div>
                 </div>
                 <div style={zoomStyle}>
-
-                    <Icon type="plus" style={zoomInStyle}/>
-                    <Icon type="minus" style={zoomOutStyle}/>
-      
+                    <Tooltip placement="left" title="放大">
+                        <Icon type="plus" style={zoomInStyle} />
+                    </Tooltip>
+                    <Tooltip placement="left" title="缩小">
+                        <Icon type="minus" style={zoomOutStyle} />
+                    </Tooltip>
                 </div>
-            </div>
+            </div >
         );
     }
 }
