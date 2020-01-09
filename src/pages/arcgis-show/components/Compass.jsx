@@ -1,25 +1,63 @@
 import React from 'react';
 import { Icon, Tooltip } from 'antd';
-// import logo from "../../../../public/favicon.png"
+import compassLogo from "../../../../public/compass/ctb.png"
 
 const compassStyle = {
     width: 184,
     height: 184,
     borderRadius: 50,
-    backgroundImage: `url(https://webapi.amap.com/theme/v1.3/controlbar/ctb.png)`,
+    backgroundImage: `url(${compassLogo})`,
     backgroundRepeat: "no-repeat",
     backgroundPosition: "-44px -60px",
+}
+
+const compassClockStyle = {
+    position: "absolute",
+    width: 96,
+    height: 96,
+    top: 92,
+    left: 92,
+    margin: -48,
+    zIndex: 0,
+    backgroundImage: `url(${compassLogo})`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "-462px -52px",
+}
+
+const compassRotateLeft = {
+    position: "absolute",
+    width: 42,
+    height: 104,
+    top: 38,
+    left: 4,
+    zIndex: 0,
+    backgroundImage: `url(${compassLogo})`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "-603px -154px",
+}
+
+
+const compassRotateRight = {
+    position: "absolute",
+    width: 42,
+    height: 104,
+    top: 38,
+    zIndex: 0,
+    backgroundImage: `url(${compassLogo})`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "-603px -154px",
+    left: 134,
+    transform: "rotateY(180deg)"
 }
 
 const compassPointerStyle = {
     position: "absolute",
     width: 60,
     height: 96,
-    top: 46,
-    left: 60,
+    left: 18,
     border: "none",
     zIndex: 2,
-    backgroundImage: `url(https://webapi.amap.com/theme/v1.3/controlbar/ctb.png)`,
+    backgroundImage: `url(${compassLogo})`,
     backgroundRepeat: "no-repeat",
     backgroundPosition: "-562px -52px",
 }
@@ -61,7 +99,6 @@ class Compass extends React.Component {
 
         };
 
-        // 这个绑定是必要的，使`this`在回调中起作用
 
     }
 
@@ -70,7 +107,16 @@ class Compass extends React.Component {
             <div style={{ width: 64, height: "auto" }}>
                 <div style={{ transform: "scale(0.35)" }}>
                     <div style={compassStyle}>
-                        <div style={compassPointerStyle}></div>
+                        <div style={compassClockStyle}>
+                            <div style={compassPointerStyle}></div>
+                        </div>
+                        <div style={compassRotateLeft}>
+
+                        </div>
+                        <div style={compassRotateRight}>
+
+                        </div>
+
                     </div>
                 </div>
                 <div style={zoomStyle}>
