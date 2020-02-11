@@ -52,7 +52,7 @@ class AccountSettings extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'userAndAccountSettings/fetchCurrent',
+      type: 'user/fetchCurrent',
     });
     window.addEventListener('resize', this.resize);
     this.resize();
@@ -161,6 +161,6 @@ class AccountSettings extends Component {
   }
 }
 
-export default connect(({ userAndAccountSettings }) => ({
-  currentUser: userAndAccountSettings.currentUser,
+export default connect(({ user }) => ({
+  currentUser: user.currentUser,
 }))(AccountSettings);

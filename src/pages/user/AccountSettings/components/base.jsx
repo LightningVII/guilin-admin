@@ -288,6 +288,6 @@ class BaseView extends Component {
   }
 }
 
-export default connect(({ userAndAccountSettings }) => ({
-  currentUser: userAndAccountSettings.currentUser,
+export default connect(({ user }) => ({
+  currentUser: user.currentUser,
 }))(Form.create()(BaseView));

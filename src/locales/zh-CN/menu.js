@@ -1,7 +1,7 @@
 export default {
   'menu.dashboard.zh-CN': '控制台',
   'menu.map-show': '遥感监测',
-  'menu.monitoring-results': '监测报告',
+  'menu.monitoring-results': '遥感监测列表',
   'menu.remote-sensing.data': '遥感数据',
   'menu.data.center': '数据中心',
   'menu.task.center': '任务审批',
