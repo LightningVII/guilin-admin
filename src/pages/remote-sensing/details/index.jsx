@@ -333,10 +333,10 @@ class Details extends Component {
                     progressDot={customDot}
                     current={1}
                   >
-                    <Step title="创建项目" description={desc1} />
-                    <Step title="部门初审" description={desc2} />
-                    <Step title="财务复核" />
-                    <Step title="完成" />
+                    <Step title="接收任务" description={desc1} />
+                    <Step title="任务下发" description={desc2} />
+                    <Step title="执行" />
+                    <Step title="关闭" />
                   </Steps>
                 )}
               </RouteContext.Consumer>

@@ -6,7 +6,7 @@ import PageLoading from './components/PageLoading';
 // const TopSearch = React.lazy(() => import('./components/TopSearch'));
 // const ProportionSales = React.lazy(() => import('./components/ProportionSales'));
 
-import { getTimeDistance } from './utils/utils';
+import { getTimeDistance } from '@/utils/utils';
 import styles from './style.less';
 
 const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
