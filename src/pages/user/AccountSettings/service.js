@@ -1,14 +1,12 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
 
-export async function queryCurrent() {
-  return request('/api/currentUser');
-}
 export async function queryProvince() {
-  return request('/api/geographic/province');
+  // return request('/api/geographic/province');
 }
 export async function queryCity(province) {
-  return request(`/api/geographic/city/${province}`);
+  console.log('province', province);
+  // return request(`/api/geographic/city/${province}`);
 }
 export async function query() {
-  return request('/api/users');
+  // return request('/api/users');
 }
