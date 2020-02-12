@@ -168,7 +168,7 @@ class Details extends Component {
       },
     ];
     return (
-      <PageHeaderWrapper>
+      <PageHeaderWrapper title={false}>
         <Card bordered={false}>
           <Descriptions
             title="退款申请"

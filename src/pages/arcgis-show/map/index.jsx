@@ -12,8 +12,8 @@ export default () => {
   let basemap1;
   let basemap2;
   return (
-    <PageHeaderWrapper content="遥感图斑对比">
-      <Card bodyStyle={{padding:0}}>
+    <PageHeaderWrapper title={false}>
+      <Card bodyStyle={{ padding: 0 }}>
         <Row>
           <Col span={12}>
             <MyBasemap
