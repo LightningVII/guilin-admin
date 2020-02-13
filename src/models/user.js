@@ -4,7 +4,7 @@ const UserModel = {
   namespace: 'user',
 
   state: {
-    currentUser: {},
+    currentUser: null,
   },
 
   effects: {

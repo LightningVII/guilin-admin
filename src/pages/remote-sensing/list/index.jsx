@@ -6,38 +6,43 @@ import {
   Button,
   Divider,
   Dropdown,
-  Form,
+  // Form,
   Input,
   Icon,
   Menu,
   // message,
   Radio,
   Modal,
-  DatePicker,
   Row,
   Col,
 } from 'antd';
 
 import React, { useState, useEffect } from 'react';
+import { connect } from 'dva';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { getTimeDistance } from '@/utils/utils';
 // import ProTable from '@ant-design/pro-table';
 import router from 'umi/router';
-import { FormattedMessage } from 'umi-plugin-react/locale';
+import RangeDataSelectDistance from '@/components/RangeDataSelectDistance';
+// import { FormattedMessage } from 'umi-plugin-react/locale';
 // import CreateForm from './components/CreateForm';
 // import UpdateForm from './components/UpdateForm';
 import FeedbackList from './components/FeedbackList';
-import { queryRule } from './service';
-// import { queryRule, updateRule, addRule, removeRule } from './service';
-import styles from './style.less';
+import EmployeeSelect from './components/EmployeeSelect';
 
-const { RangePicker } = DatePicker;
+// import { queryRemoteData } from './service';
+// import { queryRemoteData, updateRule, addRule, removeRule } from './service';
+
 const { TabPane } = Tabs;
-const { Group } = Radio;
+const { Group: RadioGroup } = Radio;
 const radioStyle = {
   display: 'block',
   height: '30px',
   lineHeight: '30px',
 };
+const initRangPickerValue = getTimeDistance('year');
+const defaultPageSize = 10;
+// let inputValue = '';
 
 const menu = (
   <Menu>
@@ -64,31 +69,13 @@ const menu = (
   </Menu>
 );
 
-const operations = (
-  <div className={styles.salesExtraWrap}>
-    <div className={styles.salesExtra}>
-      <Button type="link" style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
-        <FormattedMessage id="dashboardanalysis.analysis.all-day" defaultMessage="All Day" />
-      </Button>
-      <Button type="link" style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
-        <FormattedMessage id="dashboardanalysis.analysis.all-week" defaultMessage="All Week" />
-      </Button>
-      <Button type="link" style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
-        <FormattedMessage id="dashboardanalysis.analysis.all-month" defaultMessage="All Month" />
-      </Button>
-      <Button type="link" style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
-        <FormattedMessage id="dashboardanalysis.analysis.all-year" defaultMessage="All Year" />
-      </Button>
-    </div>
-    <RangePicker
-      // value={rangePickerValue}
-      // onChange={handleRangePickerChange}
-      style={{
-        width: 256,
-      }}
-    />
-  </div>
-);
+const TabsEnum = [
+  { tab: '全部', index: 0 },
+  { tab: '未开始', index: 1 },
+  { tab: '正在进行', index: 2 },
+  { tab: '已结束', index: 3 },
+];
+
 const valueEnum = {
   0: {
     text: '关闭',
@@ -150,6 +137,7 @@ const valueEnum = {
 //     return false;
 //   }
 // };
+
 /**
  *  删除节点
  * @param selectedRows
@@ -173,63 +161,67 @@ const valueEnum = {
 //   }
 // };
 
-const TableList = () => {
-  // const [createModalVisible, handleModalVisible] = useState(false);
-  // const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  // const [stepFormValues, setStepFormValues] = useState({});
-  // const [actionRef, setActionRef] = useState();
-  const [selectedRowKeys, setSelectedRowKeys] = useState([1042]);
-  const [data, setData] = useState([]);
-  const [pagination, setPagination] = useState({});
+const TableList = props => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [value, setValue] = useState(1);
+  const [radioValue, setRadioValue] = useState(1);
+  const [searchParams, setSearchParams] = useState({
+    current: 1,
+    pageSize: defaultPageSize,
+    status: '全部',
+    rangePickerValue: initRangPickerValue,
+    keywords: '',
+  });
+  const { totalCount, data, dispatch } = props;
 
-  const fetch = (params = {}) => {
-    setLoading(true);
-    queryRule(params).then(d => {
-      setPagination({
-        total: d.totalCount,
-      });
-      setLoading(false);
-      setData(d.data);
-    });
+  const fetchRemoteData = (params = {}) => {
+    if (dispatch) {
+      setLoading(true);
+      const payload = {
+        ...searchParams,
+        ...params,
+      };
+      setSearchParams(payload);
+      dispatch({
+        type: 'remoteSensing/fetchRemoteData',
+        payload,
+      }).then(() => setLoading(false));
+    }
   };
 
-  const handleTableChange = (p, filters, sorter) => {
-    console.log('pagination, filters, sorter :', p, filters, sorter);
-    // const pager = { ...this.state.pagination };
-    // pager.current = pagination.current;
-    // this.setState({
-    //   pagination: pager,
-    // });
-    // this.fetch({
-    //   results: pagination.pageSize,
-    //   page: pagination.current,
-    //   sortField: sorter.field,
-    //   sortOrder: sorter.order,
-    //   ...filters,
-    // });
-  };
+  // , filters, sorter
+  const handleTableChange = ({ total, ...params }) => fetchRemoteData(params);
 
   useEffect(() => {
-    fetch({ current: 1, pageSize: 10 });
+    fetchRemoteData({ current: 1 });
   }, []);
 
   const columns = [
     {
-      title: '规则名称',
-      dataIndex: 'name',
+      title: '批次号',
+      dataIndex: 'properties.BATCH',
     },
     {
-      title: '描述',
-      dataIndex: 'desc',
+      title: '县区',
+      dataIndex: 'properties.COUNTY',
     },
     {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
-      renderText: val => `${val} 万`,
+      title: '位置',
+      dataIndex: 'properties.LOCATION',
+    },
+    {
+      title: '变动前',
+      dataIndex: 'properties.QSXDLMC',
+    },
+    {
+      title: '变动后',
+      dataIndex: 'properties.HSXDLMC',
+    },
+    {
+      title: '占地面积',
+      dataIndex: 'properties.SHAPE_AREA',
+      render: val => `${val.toFixed(1)}平方米`,
     },
     {
       title: '状态',
@@ -238,12 +230,6 @@ const TableList = () => {
         const { text, status } = valueEnum[record];
         return <Badge text={text} status={status} />;
       },
-    },
-    {
-      title: '上次调度时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
-      valueType: 'dateTime',
     },
     {
       title: '操作',
@@ -255,8 +241,8 @@ const TableList = () => {
           <a onClick={() => router.push('/remote-sensing/details')}>查看详情</a>
           <Divider type="vertical" />
           <a onClick={() => router.push('/remote-sensing/details/arcgis-show')}>地图查看</a>
-          <Divider type="vertical" />
-          <a onClick={() => router.push('/feedback/create')}>填写报告</a>
+          {/* <Divider type="vertical" />
+          <a onClick={() => router.push('/feedback/create')}>填写报告</a> */}
         </>
       ),
     },
@@ -275,23 +261,50 @@ const TableList = () => {
       );
     },
     onSelectAll: (selected, selectedRows, changeRows) => {
-      console.log(selected, selectedRows, changeRows);
+      setSelectedRowKeys(
+        selected
+          ? [...selectedRowKeys, ...changeRows.map(i => i.key)]
+          : selectedRowKeys.filter(key => !changeRows.map(i => i.key).includes(key)),
+      );
     },
   };
 
+  // content="获取到的遥感数据, 功能分发（市操作员、县操作员），
+  // 查看详情（市操作员、县操作员），查看地图（市操作员、县操作员），查看反馈报告（市操作员、县操作员、具体勘查人员），归档（市操作员、县操作员），
+  // reopen（市操作员、县操作员），填写反馈报告（具体勘查人员）"
+
+  console.log('data :', data);
+
   return (
-    <PageHeaderWrapper
-      content="获取到的遥感数据, 功能分发（市操作员、县操作员），
-    查看详情（市操作员、县操作员），查看地图（市操作员、县操作员），查看反馈报告（市操作员、县操作员、具体勘查人员），归档（市操作员、县操作员），
-    reopen（市操作员、县操作员），填写反馈报告（具体勘查人员）"
-    >
+    <PageHeaderWrapper title={false}>
       <Card bordered={false} style={{ marginBottom: '24px' }}>
         <Row>
           <Col span={6}>
-            <Input
+            {/* <Input
+              loading={loading}
               placeholder="查询..."
-              prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={
+                <Icon
+                  onClick={() => fetchRemoteData({ current: 1, keywords: inputValue })}
+                  type="search"
+                  style={{ color: 'rgba(0,0,0,.25)' }}
+                />
+              }
               suffix={<Icon type="ellipsis" style={{ color: 'rgba(0,0,0,.45)' }} />}
+              onChange={({ target: { value: inputVal } }) => {
+                inputValue = inputVal;
+              }}
+              onPressEnter={({ target: { value: keywords } }) =>
+                fetchRemoteData({ current: 1, keywords })
+              }
+            /> */}
+            <Input.Search
+              loading={loading}
+              placeholder="查询..."
+              onSearch={keywords => fetchRemoteData({ current: 1, keywords })}
+              onPressEnter={({ target: { value: keywords } }) =>
+                fetchRemoteData({ current: 1, keywords })
+              }
             />
           </Col>
           <Col
@@ -315,26 +328,33 @@ const TableList = () => {
       </Card>
 
       <Card bordered={false}>
-        <Tabs tabBarExtraContent={operations}>
-          <TabPane tab="未开始" key="1">
-            <Table
-              loading={loading}
-              rowKey="key"
-              rowSelection={rowSelection}
-              expandedRowRender={record => <FeedbackList record={record} />}
-              pagination={pagination}
-              columns={columns}
-              dataSource={data}
-              onChange={handleTableChange}
+        <Tabs
+          tabBarExtraContent={
+            <RangeDataSelectDistance
+              initRangPickerValue={initRangPickerValue}
+              handleRangePickerChange={rangeValue => fetchRemoteData({ current: 1, rangeValue })}
             />
-          </TabPane>
-          <TabPane tab="正在进行" key="2">
-            正在开发中...
-          </TabPane>
-          <TabPane tab="已结束" key="3">
-            正在开发中...
-          </TabPane>
+          }
+          onChange={activeKey => fetchRemoteData({ current: 1, status: TabsEnum[+activeKey].tab })}
+        >
+          {TabsEnum.map(tabs => (
+            <TabPane tab={tabs.tab} key={tabs.index} />
+          ))}
         </Tabs>
+        <Table
+          loading={loading}
+          rowKey="key"
+          rowSelection={rowSelection}
+          expandedRowRender={record => <FeedbackList record={record} />}
+          pagination={{
+            current: searchParams.current,
+            defaultPageSize,
+            total: totalCount,
+          }}
+          columns={columns}
+          dataSource={data}
+          onChange={handleTableChange}
+        />
       </Card>
       <Modal
         title="审批"
@@ -342,102 +362,124 @@ const TableList = () => {
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
       >
-        <Group onChange={e => setValue(e.target.value)} value={value}>
-          <Radio style={radioStyle} value={1}>
-            根据行政区规划（默认）
-          </Radio>
-          <Radio style={radioStyle} value={2}>
-            自定义
-          </Radio>
-        </Group>
+        <RadioGroup onChange={e => setRadioValue(e.target.value)} value={radioValue}>
+          {[
+            { name: '第一大队', index: 0 },
+            { name: '第二大队', index: 1 },
+            { name: '第三大队', index: 2 },
+            { name: '自定义', index: 3 },
+          ].map(({ name, index }) => (
+            <Radio style={radioStyle} value={index} key={index}>
+              {name}
+            </Radio>
+          ))}
+        </RadioGroup>
+
+        {radioValue === 3 ? <EmployeeSelect /> : null}
+
+        {/* <EmployeeSelect /> */}
       </Modal>
-      {/* <ProTable
-        style={{ marginTop: '24px' }}
-        headerTitle={<FormattedMessage id="menu.list.table-list" defaultMessage="Sales Ranking" />}
-        onInit={setActionRef}
-        rowKey="key"
-        rowSelection={rowSelection}
-        expandedRowRender={record => <FeedbackList record={record} />}
-        toolBarRender={(action, { selectedRows }) => [
-          <Button icon="plus" type="primary" onClick={() => handleModalVisible(true)}>
-            新增
-          </Button>,
-          selectedRows && selectedRows.length > 0 && (
-            <Dropdown
-              overlay={
-                <Menu
-                  onClick={async e => {
-                    if (e.key === 'remove') {
-                      await handleRemove(selectedRows);
-                      action.reload();
-                    }
-                  }}
-                  selectedKeys={[]}
-                >
-                  <Menu.Item key="approval">批量归档</Menu.Item>
-                  <Menu.Item key="remove">批量分发</Menu.Item>
-                </Menu>
-              }
-            >
-              <Button>
-                批量操作 <Icon type="down" />
-              </Button>
-            </Dropdown>
-          ),
-        ]}
-        tableAlertRender={(keys, selectedRows) => (
-          <div>
-            已选择{' '}
-            <a
-              style={{
-                fontWeight: 600,
-              }}
-            >
-              {keys.length}
-            </a>{' '}
-            项&nbsp;&nbsp;
-            <span>
-              服务调用次数总计 {selectedRows.reduce((pre, item) => pre + item.callNo, 0)} 万
-            </span>
-          </div>
-        )}
-        request={params => queryRule(params)}
-        columns={columns}
-      /> */}
-
-      {/* <CreateForm
-        onSubmit={async value => {
-          const success = await handleAdd(value);
-
-          if (success) {
-            handleModalVisible(false);
-            actionRef.reload();
-          }
-        }}
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-      />
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async value => {
-            const success = await handleUpdate(value);
-
-            if (success) {
-              handleModalVisible(false);
-              setStepFormValues({});
-              actionRef.reload();
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null} */}
     </PageHeaderWrapper>
   );
 };
 
-export default Form.create()(TableList);
+export default connect(({ remoteSensing }) => {
+  const { totalCount, data } =
+    remoteSensing && remoteSensing.remoteData ? remoteSensing.remoteData : {};
+  return {
+    totalCount,
+    data,
+  };
+})(TableList);
+// })(Form.create()(TableList));
+
+// const [createModalVisible, handleModalVisible] = useState(false);
+// const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+// const [stepFormValues, setStepFormValues] = useState({});
+// const [actionRef, setActionRef] = useState();
+
+/* <ProTable
+  style={{ marginTop: '24px' }}
+  headerTitle={<FormattedMessage id="menu.list.table-list" defaultMessage="Sales Ranking" />}
+  onInit={setActionRef}
+  rowKey="key"
+  rowSelection={rowSelection}
+  expandedRowRender={record => <FeedbackList record={record} />}
+  toolBarRender={(action, { selectedRows }) => [
+    <Button icon="plus" type="primary" onClick={() => handleModalVisible(true)}>
+      新增
+    </Button>,
+    selectedRows && selectedRows.length > 0 && (
+      <Dropdown
+        overlay={
+          <Menu
+            onClick={async e => {
+              if (e.key === 'remove') {
+                await handleRemove(selectedRows);
+                action.reload();
+              }
+            }}
+            selectedKeys={[]}
+          >
+            <Menu.Item key="approval">批量归档</Menu.Item>
+            <Menu.Item key="remove">批量分发</Menu.Item>
+          </Menu>
+        }
+      >
+        <Button>
+          批量操作 <Icon type="down" />
+        </Button>
+      </Dropdown>
+    ),
+  ]}
+  tableAlertRender={(keys, selectedRows) => (
+    <div>
+      已选择{' '}
+      <a
+        style={{
+          fontWeight: 600,
+        }}
+      >
+        {keys.length}
+      </a>{' '}
+      项&nbsp;&nbsp;
+      <span>
+        服务调用次数总计 {selectedRows.reduce((pre, item) => pre + item.callNo, 0)} 万
+      </span>
+    </div>
+  )}
+  request={params => queryRemoteData(params)}
+  columns={columns}
+/> */
+
+/* <CreateForm
+  onSubmit={async value => {
+    const success = await handleAdd(value);
+
+    if (success) {
+      handleModalVisible(false);
+      actionRef.reload();
+    }
+  }}
+  onCancel={() => handleModalVisible(false)}
+  modalVisible={createModalVisible}
+/>
+{stepFormValues && Object.keys(stepFormValues).length ? (
+  <UpdateForm
+    onSubmit={async value => {
+      const success = await handleUpdate(value);
+
+      if (success) {
+        handleModalVisible(false);
+        setStepFormValues({});
+        actionRef.reload();
+      }
+    }}
+    onCancel={() => {
+      handleUpdateModalVisible(false);
+      setStepFormValues({});
+    }}
+    updateModalVisible={updateModalVisible}
+    values={stepFormValues}
+  />
+) : null} */

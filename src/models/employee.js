@@ -10,7 +10,6 @@ const EmployeeModel = {
   effects: {
     *fetchEmployeeData({ payload }, { call, put }) {
       const response = yield call(queryEmployeeData, payload);
-      console.log('response', response);
       yield put({
         type: 'saveEmployeeData',
         payload: response,

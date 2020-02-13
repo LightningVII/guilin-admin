@@ -320,12 +320,7 @@ class Details extends Component {
       >
         <div className={styles.main}>
           <GridContent>
-            <Card
-              title="流程进度"
-              style={{
-                marginBottom: 24,
-              }}
-            >
+            <Card bordered={false} title="流程进度" style={{ marginBottom: 24 }}>
               <RouteContext.Consumer>
                 {({ isMobile }) => (
                   <Steps
@@ -341,21 +336,11 @@ class Details extends Component {
                 )}
               </RouteContext.Consumer>
             </Card>
-            <Card>
+            <Card bordered={false}>
               <TimelineAlternate />
             </Card>
-            <Card
-              title="用户信息"
-              style={{
-                marginBottom: 24,
-              }}
-              bordered={false}
-            >
-              <Descriptions
-                style={{
-                  marginBottom: 24,
-                }}
-              >
+            <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
+              <Descriptions style={{ marginBottom: 24 }}>
                 <Descriptions.Item label="用户姓名">付小小</Descriptions.Item>
                 <Descriptions.Item label="会员卡号">32943898021309809423</Descriptions.Item>
                 <Descriptions.Item label="身份证">3321944288191034921</Descriptions.Item>
@@ -364,12 +349,7 @@ class Details extends Component {
                   曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口
                 </Descriptions.Item>
               </Descriptions>
-              <Descriptions
-                style={{
-                  marginBottom: 24,
-                }}
-                title="信息组"
-              >
+              <Descriptions style={{ marginBottom: 24 }} title="信息组">
                 <Descriptions.Item label="某某数据">725</Descriptions.Item>
                 <Descriptions.Item label="该数据更新时间">2017-08-08</Descriptions.Item>
                 <Descriptions.Item
@@ -393,13 +373,7 @@ class Details extends Component {
                 <Descriptions.Item label="该数据更新时间">2017-08-08</Descriptions.Item>
               </Descriptions>
             </Card>
-            <Card
-              title="反馈报告"
-              style={{
-                marginBottom: 24,
-              }}
-              bordered={false}
-            >
+            <Card title="反馈报告" style={{ marginBottom: 24 }} bordered={false}>
               <Empty />
             </Card>
             <Card

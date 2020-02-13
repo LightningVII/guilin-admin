@@ -23,11 +23,11 @@ export default [
       {
         path: '/',
         component: '../layouts/BasicLayout',
-        authority: ['admin', 'user'],
+        // authority: ['admin', 'user'],
         routes: [
           {
             path: '/',
-            redirect: '/remote-sensing',
+            redirect: '/statistics',
           },
           {
             path: '/feedback/list',
@@ -59,7 +59,7 @@ export default [
             icon: 'smile',
             path: '/remote-sensing',
             component: './remote-sensing/list',
-            authority: ['guest'],
+            // authority: ['guest'],
             hideInMenu: true,
           },
           {
