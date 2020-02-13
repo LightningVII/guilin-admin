@@ -64,7 +64,7 @@ const MyBasemap = props => {
 };
 
 MyBasemap.defaultProps = {
-  center: [110.290195, 25.273566],
+  center: [117.18, 34.27],
   zoom: 13,
   height: '100vh',
 };

@@ -31,8 +31,7 @@ class LayoutImg extends Component {
                 { name: '铜山区', value: 71, num: 10 },
                 { name: '邳州市', value: 64, num: 10 },
                 { name: '新沂市', value: 92, num: 10 },
-                { name: '睢宁县', value: 44, num: 10 },
-                
+                { name: '睢宁县', value: 44, num: 10 }
             ]
         }
     }

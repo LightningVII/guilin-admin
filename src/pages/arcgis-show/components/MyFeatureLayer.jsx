@@ -7,12 +7,12 @@ const MyFeatureLayer = props => {
     loadModules(['esri/core/urlUtils', 'esri/layers/FeatureLayer'])
       .then(([urlUtils, FeatureLayer]) => {
         urlUtils.addProxyRule({
-          urlPrefix: 'http://112.35.60.89:83/arcgis/rest/services',
+          urlPrefix: 'http://127.0.0.1:83/arcgis/rest/services',
           proxyUrl: 'http://112.35.60.89:82/resourceProxy',
         });
 
         const fl = new FeatureLayer({
-          url: 'http://112.35.60.89:83/arcgis/rest/services/CompreRegionService/FeatureServer',
+          url: 'http://127.0.0.1:83/arcgis/rest/services/CompreRegionService/FeatureServer',
           id: 'microGridFeatureLayer',
           outFields: ['*'],
           title: '综合业务区图层',
