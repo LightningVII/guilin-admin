@@ -134,7 +134,7 @@ export default class GlobeMapShow extends React.Component {
               <MyBasemap
                 handleLoad={(map, view) => {
                   this.setState({ mapView: view });
-                  // view.ui.remove("zoom");
+                  view.ui.remove("zoom");
                 }}
               >
               </MyBasemap>
