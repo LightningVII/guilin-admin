@@ -57,25 +57,12 @@ const errorHandler = error => {
  */
 const request = extend({
   errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  // credentials: 'include', // 默认请求是否带上cookie
 });
 
 request.interceptors.request.use((url, options) => {
   const token = localStorage.getItem('token');
   if (token) options.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
-  // else {
-  //   notification.error({
-  //     message: '请重新登陆',
-  //     description: codeMessage[401],
-  //   });
-  //   return {
-  //     url: `${url}&interceptors=yes`,
-  //     options: {
-  //       ...options,
-  //       interceptors: true,
-  //     },
-  //   };
-  // }
 
   return {
     url,
