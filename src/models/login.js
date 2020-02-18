@@ -23,6 +23,9 @@ const Model = {
         // payload: response.user,
         payload: response,
       });
+
+      if (response.role) router.replace('/remote-sensing');
+
       // Login successfully
       if (response.jwt) {
         const urlParams = new URL(window.location.href);
@@ -42,7 +45,7 @@ const Model = {
         }
         router.replace(redirect || '/');
       } else {
-        router.replace('/');
+        router.replace('/404');
       }
     },
 
@@ -66,7 +69,8 @@ const Model = {
   reducers: {
     changeLoginStatus(state, { payload }) {
       // setAuthority(payload.user.role.name);
-      setAuthority(payload.role.name);
+      console.log('object', payload);
+      setAuthority(payload.role);
       localStorage.setItem('token', payload.jwt);
       return {
         ...state,

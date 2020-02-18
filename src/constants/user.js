@@ -1,14 +1,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Random } from 'mockjs';
 
-export default {
+export default () => ({
   username: Random.cname(),
   age: 7,
   dogYears: 49,
-  id: 'c02c47fb44e6f4564952',
-  userid: 'c02c47fb44e6f4564952',
-  avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/dgclegg/128.jpg',
-  email: '_@yahoo.com',
+  userid: Random.guid(),
+  avatar: Random.image(),
+  email: Random.email(),
+  role: Random.pick(['admin', 'user', 'guest']),
   title: 'Senior Division Director',
   signature: 'Reprehenderit mollitia odit non laboriosam sunt explicabo ipsam sed voluptas.',
   group: 'Central',
@@ -27,4 +27,4 @@ export default {
     city: { label: '上 叶', key: '083584' },
   },
   address: '侯汉市, 绍辉 桥 8964 君浩 侬 藏',
-};
+});

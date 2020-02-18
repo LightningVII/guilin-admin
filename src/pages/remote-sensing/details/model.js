@@ -1,25 +1,24 @@
-import { queryAdvancedProfile } from './service';
+import { queryRemoteSensingDetail } from './service';
 
-const Model = {
-  namespace: 'remoteSensingAnddetails',
-  state: {
-    advancedOperation1: [],
-    advancedOperation2: [],
-    advancedOperation3: [],
-  },
+export default {
+  namespace: 'remoteSensingDetails',
+  state: { remoteSensingDetail: null },
   effects: {
-    *fetchAdvanced(_, { call, put }) {
-      const response = yield call(queryAdvancedProfile);
+    *findRemoteSensingDetail({ payload }, { call, put }) {
+      // const data = yield select(({ remoteSensing }) => remoteSensing?.remoteSensingData?.data.find(
+      //   item => payload?.TBBM === item?.properties?.TBBM
+      // ));
+      const data = yield call(queryRemoteSensingDetail, payload);
+      console.log(' remoteSensingDetails  data', data);
       yield put({
         type: 'show',
-        payload: response,
+        payload: data,
       });
     },
   },
   reducers: {
     show(state, { payload }) {
-      return { ...state, ...payload };
+      return { ...state, remoteSensingDetail: payload };
     },
   },
 };
-export default Model;

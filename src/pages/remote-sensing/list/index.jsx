@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   Badge,
   Card,
@@ -16,8 +17,8 @@ import {
   Row,
   Col,
 } from 'antd';
-
-import React, { useState, useEffect } from 'react';
+import { formatMessage } from 'umi-plugin-react/locale';
+import { statusEnum } from '@/constants/basic';
 import { connect } from 'dva';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { getTimeDistance } from '@/utils/utils';
@@ -76,24 +77,6 @@ const TabsEnum = [
   { tab: '已结束', index: 3 },
 ];
 
-const valueEnum = {
-  0: {
-    text: '关闭',
-    status: 'default',
-  },
-  1: {
-    text: '运行中',
-    status: 'processing',
-  },
-  2: {
-    text: '已上线',
-    status: 'success',
-  },
-  3: {
-    text: '异常',
-    status: 'error',
-  },
-};
 /**
  * 添加节点
  * @param fields
@@ -195,6 +178,7 @@ const TableList = props => {
 
   useEffect(() => {
     fetchRemoteData({ current: 1 });
+    dispatch({ type: 'feedback/fetchFeedbackData' });
   }, []);
 
   const columns = [
@@ -227,7 +211,7 @@ const TableList = props => {
       title: '状态',
       dataIndex: 'status',
       render: record => {
-        const { text, status } = valueEnum[record];
+        const { text, status } = statusEnum[record];
         return <Badge text={text} status={status} />;
       },
     },
@@ -236,13 +220,15 @@ const TableList = props => {
       dataIndex: 'option',
       valueType: 'option',
       align: 'right',
-      render: () => (
+      render: (record, item) => (
         <>
-          <a onClick={() => router.push('/remote-sensing/details')}>查看详情</a>
+          <a onClick={() => router.push(`/remote-sensing/details/${item.properties.TBBM}`)}>
+            查看详情
+          </a>
           <Divider type="vertical" />
           <a onClick={() => router.push('/remote-sensing/details/arcgis-show')}>地图查看</a>
           {/* <Divider type="vertical" />
-          <a onClick={() => router.push('/feedback/create')}>填写报告</a> */}
+      <a onClick={() => router.push('/feedback/create')}>填写报告</a> */}
         </>
       ),
     },
@@ -272,8 +258,6 @@ const TableList = props => {
   // content="获取到的遥感数据, 功能分发（市操作员、县操作员），
   // 查看详情（市操作员、县操作员），查看地图（市操作员、县操作员），查看反馈报告（市操作员、县操作员、具体勘查人员），归档（市操作员、县操作员），
   // reopen（市操作员、县操作员），填写反馈报告（具体勘查人员）"
-
-  console.log('data :', data);
 
   return (
     <PageHeaderWrapper title={false}>
@@ -314,8 +298,8 @@ const TableList = props => {
               textAlign: 'right',
             }}
           >
-            <Button type="primary" icon="plus" onClick={() => setVisible(true)}>
-              审批
+            <Button type="primary" onClick={() => setVisible(true)}>
+              {formatMessage({ id: 'remote-sensing.approval' })}
             </Button>
             <Divider type="vertical" />
             <Dropdown overlay={menu}>
@@ -343,7 +327,7 @@ const TableList = props => {
         </Tabs>
         <Table
           loading={loading}
-          rowKey="key"
+          rowKey={({ properties }) => properties.TBBM}
           rowSelection={rowSelection}
           expandedRowRender={record => <FeedbackList record={record} />}
           pagination={{
@@ -357,7 +341,7 @@ const TableList = props => {
         />
       </Card>
       <Modal
-        title="审批"
+        title={formatMessage({ id: 'remote-sensing.approval' })}
         visible={visible}
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
@@ -385,7 +369,7 @@ const TableList = props => {
 
 export default connect(({ remoteSensing }) => {
   const { totalCount, data } =
-    remoteSensing && remoteSensing.remoteData ? remoteSensing.remoteData : {};
+    remoteSensing && remoteSensing.remoteSensingData ? remoteSensing.remoteSensingData : {};
   return {
     totalCount,
     data,

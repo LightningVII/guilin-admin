@@ -4,7 +4,7 @@ const RemoteModel = {
   namespace: 'remoteSensing',
 
   state: {
-    remoteData: null,
+    remoteSensingData: null,
   },
 
   effects: {
@@ -21,7 +21,7 @@ const RemoteModel = {
     saveRemoteData(state, action) {
       return {
         ...state,
-        remoteData: action.payload || state.remoteData,
+        remoteSensingData: action.payload || state.remoteSensingData,
       };
     },
   },

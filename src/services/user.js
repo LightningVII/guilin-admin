@@ -11,7 +11,7 @@ export async function queryCurrent() {
   return request('https://randomapi.com/api/5gh173ft?key=GCCC-DTU1-0IMQ-939X').then(
     res => res.results[0],
   ); */
-  return new Promise(resolve => setTimeout(() => resolve(user), 1000));
+  return new Promise(resolve => setTimeout(() => resolve(user()), 1000));
 }
 
 export async function queryNotices() {

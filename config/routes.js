@@ -28,6 +28,7 @@ export default [
           {
             path: '/',
             redirect: '/statistics',
+            authority: ['admin'],
           },
           {
             path: '/feedback/list',
@@ -72,7 +73,7 @@ export default [
           {
             name: 'task.center',
             icon: 'smile',
-            path: '/remote-sensing/details',
+            path: '/remote-sensing/details/:TBBM',
             component: './remote-sensing/details',
             hideInMenu: true,
           },

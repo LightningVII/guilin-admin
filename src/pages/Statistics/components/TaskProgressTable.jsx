@@ -1,5 +1,6 @@
 import { Card, Menu, Dropdown, Icon, Table, Badge, Progress } from 'antd';
 import React from 'react';
+import { statusEnum } from '@/constants/basic';
 
 const menu = (
   <Menu>
@@ -14,25 +15,6 @@ const dropdownGroup = (
     </Dropdown>
   </span>
 );
-
-const valueEnum = {
-  0: {
-    text: '关闭',
-    status: 'default',
-  },
-  1: {
-    text: '运行中',
-    status: 'processing',
-  },
-  2: {
-    text: '已上线',
-    status: 'success',
-  },
-  3: {
-    text: '异常',
-    status: 'error',
-  },
-};
 
 const progressValueEnum = {
   0: {
@@ -72,7 +54,7 @@ const columns = [
     title: '正在执行',
     dataIndex: 'status',
     render: record => {
-      const { text, status } = valueEnum[record];
+      const { text, status } = statusEnum[record];
       return <Badge text={text} status={status} />;
     },
   },
