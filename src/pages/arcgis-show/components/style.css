@@ -85,3 +85,17 @@
     padding: 10px 0;
     cursor: pointer
 }
+
+.measureBtn{
+    /* margin: 0px 5px 10px 5px; */
+    border-radius:5px;
+    height: 31px;
+    width: 80px;
+    font-size: 13px;
+    border: white;
+    float: left;
+}
+.measureBtn:hover{
+    box-shadow:0 0 1px 1px #1890FF inset;
+    cursor: pointer;
+ }

@@ -5,9 +5,11 @@ import { loadScript, loadCss } from 'esri-loader';
 import defaultSettings from '../config/defaultSettings';
 
 loadScript({
-  url: 'http://112.35.60.89:82/api4.11/init.js',
+  // url: 'http://112.35.60.89:82/api4.11/init.js',
+  url: 'https://js.arcgis.com/4.11/',
 });
-loadCss('http://112.35.60.89:82/api4.11/esri/css/main.css');
+// loadCss('http://112.35.60.89:82/api4.11/esri/css/main.css');
+loadCss('https://js.arcgis.com/4.11/esri/themes/light/main.css');
 // setDefaultOptions({ css: true });
 
 const { pwa } = defaultSettings; // if pwa is true
