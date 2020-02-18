@@ -68,6 +68,9 @@ if (isAntDesignProPreview) {
 }
 
 export default {
+  publicPath: './',
+  outputPath: './gl',
+  history: 'hash',
   plugins,
   hash: true,
   targets: {

@@ -1,13 +1,15 @@
-import { Alert, Checkbox, Icon } from 'antd';
+// import { Alert, Checkbox, Icon } from 'antd';
+import { Alert } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 
-import Link from 'umi/link';
+// import Link from 'umi/link';
 import { connect } from 'dva';
 import LoginComponents from './components/Login';
 import styles from './style.less';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
+// const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
+const { UserName, Password, Submit } = LoginComponents;
 
 @connect(({ login, loading }) => ({
   userLogin: login,
@@ -18,14 +20,14 @@ class Login extends Component {
 
   state = {
     type: 'account',
-    autoLogin: true,
+    // autoLogin: true,
   };
 
-  changeAutoLogin = e => {
+  /* changeAutoLogin = e => {
     this.setState({
       autoLogin: e.target.checked,
     });
-  };
+  }; */
 
   handleSubmit = (err, values) => {
     const { type } = this.state;
@@ -75,7 +77,8 @@ class Login extends Component {
   render() {
     const { userLogin, submitting } = this.props;
     const { status, type: loginType } = userLogin;
-    const { type, autoLogin } = this.state;
+    // const { type, autoLogin } = this.state;
+    const { type } = this.state;
     return (
       <div className={styles.main}>
         <LoginComponents
@@ -86,41 +89,41 @@ class Login extends Component {
             this.loginForm = form;
           }}
         >
-          <Tab key="account" tab={formatMessage({ id: 'user-login.login.tab-login-credentials' })}>
-            {status === 'error' &&
-              loginType === 'account' &&
-              !submitting &&
-              this.renderMessage(
-                formatMessage({ id: 'user-login.login.message-invalid-credentials' }),
-              )}
-            <UserName
-              name="userName"
-              placeholder={`${formatMessage({ id: 'user-login.login.userName' })}: admin or user`}
-              rules={[
-                {
-                  required: true,
-                  message: formatMessage({ id: 'user-login.userName.required' }),
-                },
-              ]}
-            />
-            <Password
-              name="password"
-              placeholder={`${formatMessage({ id: 'user-login.login.password' })}: ant.design`}
-              rules={[
-                {
-                  required: true,
-                  message: formatMessage({ id: 'user-login.password.required' }),
-                },
-              ]}
-              onPressEnter={e => {
-                e.preventDefault();
-                if (this.loginForm) {
-                  this.loginForm.validateFields(this.handleSubmit);
-                }
-              }}
-            />
-          </Tab>
-          <Tab key="mobile" tab={formatMessage({ id: 'user-login.login.tab-login-mobile' })}>
+          {status === 'error' &&
+            loginType === 'account' &&
+            !submitting &&
+            this.renderMessage(
+              formatMessage({ id: 'user-login.login.message-invalid-credentials' }),
+            )}
+          <UserName
+            name="userName"
+            placeholder={`${formatMessage({ id: 'user-login.login.userName' })}`}
+            rules={[
+              {
+                required: true,
+                message: formatMessage({ id: 'user-login.userName.required' }),
+              },
+            ]}
+          />
+          <Password
+            name="password"
+            placeholder={`${formatMessage({ id: 'user-login.login.password' })}`}
+            rules={[
+              {
+                required: true,
+                message: formatMessage({ id: 'user-login.password.required' }),
+              },
+            ]}
+            onPressEnter={e => {
+              e.preventDefault();
+              if (this.loginForm) {
+                this.loginForm.validateFields(this.handleSubmit);
+              }
+            }}
+          />
+          {/* <Tab key="account" tab={formatMessage({ id: 'user-login.login.tab-login-credentials' })}>
+          </Tab> */}
+          {/* <Tab key="mobile" tab={formatMessage({ id: 'user-login.login.tab-login-mobile' })}>
             {status === 'error' &&
               loginType === 'mobile' &&
               !submitting &&
@@ -155,19 +158,19 @@ class Login extends Component {
                 },
               ]}
             />
-          </Tab>
-          <div>
+          </Tab> */}
+          {/* <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="user-login.login.remember-me" />
             </Checkbox>
             <a style={{ float: 'right' }} href="">
               <FormattedMessage id="user-login.login.forgot-password" />
             </a>
-          </div>
+          </div> */}
           <Submit loading={submitting}>
             <FormattedMessage id="user-login.login.login" />
           </Submit>
-          <div className={styles.other}>
+          {/* <div className={styles.other}>
             <FormattedMessage id="user-login.login.sign-in-with" />
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
@@ -175,7 +178,7 @@ class Login extends Component {
             <Link className={styles.register} to="/user/register">
               <FormattedMessage id="user-login.login.signup" />
             </Link>
-          </div>
+          </div> */}
         </LoginComponents>
       </div>
     );
