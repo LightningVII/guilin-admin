@@ -20,7 +20,8 @@ const Model = {
       });
       yield put({
         type: 'user/saveCurrentUser',
-        payload: response.user,
+        // payload: response.user,
+        payload: response,
       });
       // Login successfully
       if (response.jwt) {
@@ -40,6 +41,8 @@ const Model = {
           }
         }
         router.replace(redirect || '/');
+      } else {
+        router.replace('/');
       }
     },
 
@@ -62,7 +65,8 @@ const Model = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.user.role.name);
+      // setAuthority(payload.user.role.name);
+      setAuthority(payload.role.name);
       localStorage.setItem('token', payload.jwt);
       return {
         ...state,

@@ -312,10 +312,10 @@ class Details extends Component {
             key: 'detail',
             tab: '详情',
           },
-          {
+          /* {
             key: 'rule',
             tab: '规则',
-          },
+          }, */
         ]}
       >
         <div className={styles.main}>

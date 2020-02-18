@@ -5,7 +5,7 @@ export async function fakeAccountLogin(params) {
   console.log('params', params);
 
   return new Promise(resolve => {
-    console.log('queryNotices');
+    console.log('fakeAccountLogin');
     setTimeout(
       () =>
         resolve({
@@ -16,6 +16,9 @@ export async function fakeAccountLogin(params) {
           notifyCount: 12,
           unreadCount: 11,
           phone: '0752-268888888',
+          role: {
+            name: 'admin',
+          },
         }),
       1000,
     );
