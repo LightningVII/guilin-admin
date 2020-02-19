@@ -15,8 +15,7 @@ import {
 } from 'antd';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import React, { Component, Fragment } from 'react';
-import classNames from 'classnames';
-import { statusEnum } from '@/constants/basic';
+import { statusEnum, implementationEnum } from '@/constants/basicEnum';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -112,37 +111,7 @@ const description = item => (
     )}
   </RouteContext.Consumer>
 );
-const desc1 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    <Fragment>
-      曲丽丽
-      <Icon
-        type="dingding-o"
-        style={{
-          marginLeft: 8,
-        }}
-      />
-    </Fragment>
-    <div>2016-12-12 12:32</div>
-  </div>
-);
-const desc2 = (
-  <div className={styles.stepDescription}>
-    <Fragment>
-      周毛毛
-      <Icon
-        type="dingding-o"
-        style={{
-          color: '#00A0E9',
-          marginLeft: 8,
-        }}
-      />
-    </Fragment>
-    <div>
-      <a href="">催一下</a>
-    </div>
-  </div>
-);
+
 const popoverContent = (
   <div
     style={{
@@ -241,7 +210,8 @@ class Details extends Component {
   render() {
     // const { operationKey, tabActiveKey } = this.state;
     // const { remoteSensingDetails, loading } = this.props;
-    const { remoteSensingDetail } = this.props.remoteSensingDetails;
+    const { remoteSensingDetails, match } = this.props;
+    const { remoteSensingDetail } = remoteSensingDetails;
     console.log('remoteSensingDetail :', remoteSensingDetail);
     const { properties } = remoteSensingDetail || {};
 
@@ -266,18 +236,25 @@ class Details extends Component {
                   <Steps
                     direction={isMobile ? 'vertical' : 'horizontal'}
                     progressDot={customDot}
-                    current={1}
+                    current={remoteSensingDetail?.status}
                   >
-                    <Step title="接收任务" description={desc1} />
-                    <Step title="任务下发" description={desc2} />
-                    <Step title="执行" />
-                    <Step title="关闭" />
+                    {statusEnum.map(({ text, status }, index) => (
+                      <Step
+                        key={status}
+                        title={text}
+                        description={
+                          remoteSensingDetail?.status >= index
+                            ? implementationEnum[index](remoteSensingDetail)
+                            : ''
+                        }
+                      />
+                    ))}
                   </Steps>
                 )}
               </RouteContext.Consumer>
             </Card>
             <Card bordered={false}>
-              <TimelineAlternate />
+              <TimelineAlternate TBBM={match?.params?.TBBM} />
             </Card>
             <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
               <Descriptions style={{ marginBottom: 24 }}>

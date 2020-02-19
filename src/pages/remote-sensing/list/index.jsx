@@ -25,6 +25,7 @@ import { getTimeDistance } from '@/utils/utils';
 
 import RangeDataSelectDistance from '@/components/RangeDataSelectDistance';
 import { remoteSensingListColumns } from '@/constants/columns';
+import { TabsEnum } from '@/constants/basicEnum';
 // import { FormattedMessage } from 'umi-plugin-react/locale';
 // import CreateForm from './components/CreateForm';
 // import UpdateForm from './components/UpdateForm';
@@ -69,14 +70,6 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
-
-const TabsEnum = [
-  { tab: '全部', index: 0 },
-  { tab: '未开始', index: 1 },
-  { tab: '正在进行', index: 2 },
-  { tab: '已结束', index: 3 },
-];
-
 /**
  * 添加节点
  * @param fields

@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Random } from 'mockjs';
 import user from './user';
-//
-const TBBMs = [
+
+export const TBBMs = [
   'Y18103220192N10',
   'Y18103220073N01',
   'Y18103220204N02',

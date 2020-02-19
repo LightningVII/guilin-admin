@@ -1,6 +1,6 @@
 import { Card, Menu, Dropdown, Icon, Table, Badge, Progress } from 'antd';
 import React from 'react';
-import { statusEnum } from '@/constants/basic';
+import { statusEnum } from '@/constants/basicEnum';
 
 const menu = (
   <Menu>

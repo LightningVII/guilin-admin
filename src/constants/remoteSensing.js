@@ -1,8 +1,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Random } from 'mockjs';
+import user from './user';
 
 export const remoteSensing = () => ({
   type: 'Feature',
+  executor: user(),
+  originator: user(),
   status: Random.natural(0, 3),
   geometry: {
     type: 'Polygon',
@@ -64,6 +67,8 @@ export default {
   features: [
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -136,6 +141,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -190,6 +197,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -255,6 +264,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -299,6 +310,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -362,6 +375,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -408,6 +423,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -452,6 +469,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -496,6 +515,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -566,6 +587,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -610,6 +633,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -654,6 +679,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -698,6 +725,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -742,6 +771,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -786,6 +817,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -830,6 +863,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -880,6 +915,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -937,6 +974,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -995,6 +1034,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -1084,6 +1125,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -1179,6 +1222,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -1223,6 +1268,8 @@ export default {
     },
     {
       type: 'Feature',
+      executor: user(),
+      originator: user(),
       status: Random.natural(0, 3),
       geometry: {
         type: 'Polygon',
@@ -1278,4 +1325,6 @@ export default {
       },
     },
   ],
+  executor: user(),
+  originator: user(),
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { statusEnum } from '@/constants/basic';
+import { statusEnum } from '@/constants/basicEnum';
 import { Badge, Divider } from 'antd';
 import router from 'umi/router';
 
