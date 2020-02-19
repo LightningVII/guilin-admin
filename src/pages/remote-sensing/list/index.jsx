@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Badge,
   Card,
   Table,
   Tabs,
@@ -18,13 +17,14 @@ import {
   Col,
 } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
-import { statusEnum } from '@/constants/basic';
+
 import { connect } from 'dva';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { getTimeDistance } from '@/utils/utils';
 // import ProTable from '@ant-design/pro-table';
-import router from 'umi/router';
+
 import RangeDataSelectDistance from '@/components/RangeDataSelectDistance';
+import { remoteSensingListColumns } from '@/constants/columns';
 // import { FormattedMessage } from 'umi-plugin-react/locale';
 // import CreateForm from './components/CreateForm';
 // import UpdateForm from './components/UpdateForm';
@@ -181,59 +181,6 @@ const TableList = props => {
     dispatch({ type: 'feedback/fetchFeedbackData' });
   }, []);
 
-  const columns = [
-    {
-      title: '批次号',
-      dataIndex: 'properties.BATCH',
-    },
-    {
-      title: '县区',
-      dataIndex: 'properties.COUNTY',
-    },
-    {
-      title: '位置',
-      dataIndex: 'properties.LOCATION',
-    },
-    {
-      title: '变动前',
-      dataIndex: 'properties.QSXDLMC',
-    },
-    {
-      title: '变动后',
-      dataIndex: 'properties.HSXDLMC',
-    },
-    {
-      title: '占地面积',
-      dataIndex: 'properties.SHAPE_AREA',
-      render: val => `${val.toFixed(1)}平方米`,
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      render: record => {
-        const { text, status } = statusEnum[record];
-        return <Badge text={text} status={status} />;
-      },
-    },
-    {
-      title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      align: 'right',
-      render: (record, item) => (
-        <>
-          <a onClick={() => router.push(`/remote-sensing/details/${item.properties.TBBM}`)}>
-            查看详情
-          </a>
-          <Divider type="vertical" />
-          <a onClick={() => router.push('/remote-sensing/details/arcgis-show')}>地图查看</a>
-          {/* <Divider type="vertical" />
-      <a onClick={() => router.push('/feedback/create')}>填写报告</a> */}
-        </>
-      ),
-    },
-  ];
-
   const rowSelection = {
     selectedRowKeys,
     onChange: (keys, selectedRows) => {
@@ -335,7 +282,7 @@ const TableList = props => {
             defaultPageSize,
             total: totalCount,
           }}
-          columns={columns}
+          columns={remoteSensingListColumns()}
           dataSource={data}
           onChange={handleTableChange}
         />

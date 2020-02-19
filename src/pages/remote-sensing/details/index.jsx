@@ -16,6 +16,7 @@ import {
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
+import { statusEnum } from '@/constants/basic';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -87,24 +88,26 @@ const action = (
     }}
   </RouteContext.Consumer>
 );
-const extra = (
+const extra = item => (
   <div className={styles.moreInfo}>
-    <Statistic title="状态" value="待审批" />
-    <Statistic title="订单金额" value={568.08} prefix="¥" />
+    <Statistic title="状态" value={statusEnum[item?.status]?.text} />
+    <Statistic title="批次" value={item?.properties?.BATCH} />
   </div>
 );
-const description = (
+const description = item => (
   <RouteContext.Consumer>
     {({ isMobile }) => (
       <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
-        <Descriptions.Item label="创建人">曲丽丽</Descriptions.Item>
-        <Descriptions.Item label="订购产品">XX 服务</Descriptions.Item>
-        <Descriptions.Item label="创建时间">2017-07-07</Descriptions.Item>
-        <Descriptions.Item label="关联单据">
-          <a href="">12421</a>
-        </Descriptions.Item>
-        <Descriptions.Item label="生效日期">2017-07-07 ~ 2017-08-08</Descriptions.Item>
-        <Descriptions.Item label="备注">请于两个工作日内确认</Descriptions.Item>
+        <Descriptions.Item label="前时相">{item?.properties?.QSX}</Descriptions.Item>
+        <Descriptions.Item label="前时相地类名称">{item?.properties?.QSXDLMC}</Descriptions.Item>
+        <Descriptions.Item label="后时相">{item?.properties?.HSX}</Descriptions.Item>
+        <Descriptions.Item label="后时相地类名称">{item?.properties?.HSXDLMC}</Descriptions.Item>
+        <Descriptions.Item label="变化类型">{item?.properties?.BHLX}</Descriptions.Item>
+        <Descriptions.Item label="前时相变化地类">{item?.properties?.QSXBHDL}</Descriptions.Item>
+        <Descriptions.Item label="区县">{item?.properties?.COUNTY}</Descriptions.Item>
+        <Descriptions.Item label="后时相变化地类">{item?.properties?.HSXBHDL}</Descriptions.Item>
+        <Descriptions.Item label="位置">{item?.properties?.LOCATION}</Descriptions.Item>
+        <Descriptions.Item label="面积（亩）">{item?.properties?.AREA}</Descriptions.Item>
       </Descriptions>
     )}
   </RouteContext.Consumer>
@@ -188,21 +191,6 @@ const customDot = (dot, { status }) => {
 
   return dot;
 };
-
-const operationTabList = [
-  {
-    key: 'tab1',
-    tab: '操作日志一',
-  },
-  {
-    key: 'tab2',
-    tab: '操作日志二',
-  },
-  {
-    key: 'tab3',
-    tab: '操作日志三',
-  },
-];
 const columns = [
   {
     title: '操作类型',
@@ -239,60 +227,24 @@ const columns = [
 ];
 
 class Details extends Component {
-  state = {
-    operationKey: 'tab1',
-    tabActiveKey: 'detail',
-  };
+  state = {};
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, match } = this.props;
     dispatch({
-      type: 'remoteSensingAnddetails/fetchAdvanced',
+      type: 'remoteSensingDetails/findRemoteSensingDetail',
+      payload: match?.params,
     });
+    console.log('Details  this.props :', match.params);
   }
 
-  onOperationTabChange = key => {
-    this.setState({
-      operationKey: key,
-    });
-  };
-
-  onTabChange = tabActiveKey => {
-    this.setState({
-      tabActiveKey,
-    });
-  };
-
   render() {
-    const { operationKey, tabActiveKey } = this.state;
-    const { remoteSensingAnddetails, loading } = this.props;
-    const { advancedOperation1, advancedOperation2, advancedOperation3 } = remoteSensingAnddetails;
-    const contentList = {
-      tab1: (
-        <Table
-          pagination={false}
-          loading={loading}
-          dataSource={advancedOperation1}
-          columns={columns}
-        />
-      ),
-      tab2: (
-        <Table
-          pagination={false}
-          loading={loading}
-          dataSource={advancedOperation2}
-          columns={columns}
-        />
-      ),
-      tab3: (
-        <Table
-          pagination={false}
-          loading={loading}
-          dataSource={advancedOperation3}
-          columns={columns}
-        />
-      ),
-    };
+    // const { operationKey, tabActiveKey } = this.state;
+    // const { remoteSensingDetails, loading } = this.props;
+    const { remoteSensingDetail } = this.props.remoteSensingDetails;
+    console.log('remoteSensingDetail :', remoteSensingDetail);
+    const { properties } = remoteSensingDetail || {};
+
     return (
       <PageHeaderWrapper
         onBack={() => window.history.back()}
@@ -300,23 +252,11 @@ class Details extends Component {
           routes,
           itemRender,
         }}
-        title="单号：234231029431"
+        title={`单号：${properties?.TBBM}`}
         extra={action}
         className={styles.pageHeader}
-        content={description}
-        extraContent={extra}
-        tabActiveKey={tabActiveKey}
-        onTabChange={this.onTabChange}
-        tabList={[
-          {
-            key: 'detail',
-            tab: '详情',
-          },
-          /* {
-            key: 'rule',
-            tab: '规则',
-          }, */
-        ]}
+        content={description(remoteSensingDetail)}
+        extraContent={extra(remoteSensingDetail)}
       >
         <div className={styles.main}>
           <GridContent>
@@ -376,13 +316,13 @@ class Details extends Component {
             <Card title="反馈报告" style={{ marginBottom: 24 }} bordered={false}>
               <Empty />
             </Card>
-            <Card
-              className={styles.tabsCard}
-              bordered={false}
-              tabList={operationTabList}
-              onTabChange={this.onOperationTabChange}
-            >
-              {contentList[operationKey]}
+            <Card className={styles.tabsCard} bordered={false}>
+              <Table
+                pagination={false}
+                // loading={loading}
+                // dataSource={advancedOperation1}
+                columns={columns}
+              />
             </Card>
           </GridContent>
         </div>
@@ -391,7 +331,6 @@ class Details extends Component {
   }
 }
 
-export default connect(({ remoteSensingAnddetails, loading }) => ({
-  remoteSensingAnddetails,
-  loading: loading.effects['remoteSensingAnddetails/fetchAdvanced'],
+export default connect(({ remoteSensingDetails }) => ({
+  remoteSensingDetails,
 }))(Details);
