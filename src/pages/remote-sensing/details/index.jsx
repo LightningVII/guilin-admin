@@ -10,15 +10,15 @@ import {
   Popover,
   Steps,
   Table,
-  Tooltip,
-  Empty,
 } from 'antd';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import React, { Component, Fragment } from 'react';
 import { statusEnum, implementationEnum } from '@/constants/basicEnum';
+import { feedbackListColumns } from '@/constants/columns';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
+
 import styles from './style.less';
 import TimelineAlternate from './TimelineAlternate';
 
@@ -160,40 +160,6 @@ const customDot = (dot, { status }) => {
 
   return dot;
 };
-const columns = [
-  {
-    title: '操作类型',
-    dataIndex: 'type',
-    key: 'type',
-  },
-  {
-    title: '操作人',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '执行结果',
-    dataIndex: 'status',
-    key: 'status',
-    render: text => {
-      if (text === 'agree') {
-        return <Badge status="success" text="成功" />;
-      }
-
-      return <Badge status="error" text="驳回" />;
-    },
-  },
-  {
-    title: '操作时间',
-    dataIndex: 'updatedAt',
-    key: 'updatedAt',
-  },
-  {
-    title: '备注',
-    dataIndex: 'memo',
-    key: 'memo',
-  },
-];
 
 class Details extends Component {
   state = {};
@@ -204,16 +170,21 @@ class Details extends Component {
       type: 'remoteSensingDetails/findRemoteSensingDetail',
       payload: match?.params,
     });
+    dispatch({
+      type: 'feedback/fetchFeedbackTBBM',
+      payload: match?.params,
+    });
     console.log('Details  this.props :', match.params);
   }
 
   render() {
     // const { operationKey, tabActiveKey } = this.state;
     // const { remoteSensingDetails, loading } = this.props;
-    const { remoteSensingDetails, match } = this.props;
+    const { remoteSensingDetails, match, feedback } = this.props;
     const { remoteSensingDetail } = remoteSensingDetails;
-    console.log('remoteSensingDetail :', remoteSensingDetail);
     const { properties } = remoteSensingDetail || {};
+    console.log('feedback :', feedback);
+    const feedbackList = feedback?.feedbackTBBM?.filter(r => r.TBBM === match?.params?.TBBM);
 
     return (
       <PageHeaderWrapper
@@ -253,53 +224,34 @@ class Details extends Component {
                 )}
               </RouteContext.Consumer>
             </Card>
-            <Card bordered={false}>
+            <Card bordered={false} style={{ marginBottom: 24 }}>
               <TimelineAlternate TBBM={match?.params?.TBBM} />
             </Card>
-            <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
-              <Descriptions style={{ marginBottom: 24 }}>
-                <Descriptions.Item label="用户姓名">付小小</Descriptions.Item>
-                <Descriptions.Item label="会员卡号">32943898021309809423</Descriptions.Item>
-                <Descriptions.Item label="身份证">3321944288191034921</Descriptions.Item>
-                <Descriptions.Item label="联系方式">18112345678</Descriptions.Item>
-                <Descriptions.Item label="联系地址">
-                  曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口
-                </Descriptions.Item>
-              </Descriptions>
-              <Descriptions style={{ marginBottom: 24 }} title="信息组">
-                <Descriptions.Item label="某某数据">725</Descriptions.Item>
-                <Descriptions.Item label="该数据更新时间">2017-08-08</Descriptions.Item>
-                <Descriptions.Item
-                  label={
-                    <span>
-                      某某数据
-                      <Tooltip title="数据说明">
-                        <Icon
-                          style={{
-                            color: 'rgba(0, 0, 0, 0.43)',
-                            marginLeft: 4,
-                          }}
-                          type="info-circle-o"
-                        />
-                      </Tooltip>
-                    </span>
-                  }
-                >
-                  725
-                </Descriptions.Item>
-                <Descriptions.Item label="该数据更新时间">2017-08-08</Descriptions.Item>
-              </Descriptions>
-            </Card>
-            <Card title="反馈报告" style={{ marginBottom: 24 }} bordered={false}>
-              <Empty />
-            </Card>
-            <Card className={styles.tabsCard} bordered={false}>
+            <Card
+              bodyStyle={{ padding: 0 }}
+              title="反馈报告"
+              style={{ marginBottom: 24 }}
+              bordered={false}
+            >
               <Table
                 pagination={false}
-                // loading={loading}
-                // dataSource={advancedOperation1}
-                columns={columns}
+                dataSource={feedbackList}
+                rowKey="id"
+                columns={feedbackListColumns()}
               />
+            </Card>
+            <Card title="反馈人信息" style={{ marginBottom: 24 }} bordered={false}>
+              <Descriptions>
+                <Descriptions.Item label="姓名">
+                  {remoteSensingDetail?.executor.username}
+                </Descriptions.Item>
+                <Descriptions.Item label="联系方式">
+                  {remoteSensingDetail?.executor.phone}
+                </Descriptions.Item>
+                <Descriptions.Item label="联系地址">
+                  {remoteSensingDetail?.executor.address}
+                </Descriptions.Item>
+              </Descriptions>
             </Card>
           </GridContent>
         </div>
@@ -307,7 +259,8 @@ class Details extends Component {
     );
   }
 }
-
-export default connect(({ remoteSensingDetails }) => ({
+connect(({ feedback }) => ({ feedback }));
+export default connect(({ remoteSensingDetails, feedback }) => ({
   remoteSensingDetails,
+  feedback,
 }))(Details);

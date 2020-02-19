@@ -15,8 +15,6 @@ import { connect } from 'dva';
  */
 export default connect(({ feedback }) => ({ feedback }))(({ record, feedback }) => {
   const data = feedback?.feedbackData?.filter(r => r.TBBM === record?.properties?.TBBM);
-  console.log('record.TBBM :', data);
-
   return (
     <div id="components-list-demo-basic">
       <List

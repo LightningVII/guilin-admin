@@ -1,6 +1,8 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Random } from 'mockjs';
 import React from 'react';
 import { statusEnum } from '@/constants/basicEnum';
-import { Badge, Divider } from 'antd';
+import { Badge, Divider, Tag } from 'antd';
 import router from 'umi/router';
 
 export const remoteSensingListColumns = () => [
@@ -53,5 +55,41 @@ export const remoteSensingListColumns = () => [
         <a onClick={() => router.push('/feedback/create')}>填写报告</a> */}
       </>
     ),
+  },
+];
+
+export const feedbackListColumns = () => [
+  {
+    title: '',
+    dataIndex: 'isIllegal',
+    render: isIllegal => (isIllegal ? <Tag color="red">违法</Tag> : <Tag color="green">合法</Tag>),
+  },
+  {
+    title: '上传图片',
+    dataIndex: 'selectedImages',
+    width: 200,
+    render: () =>
+      [...Random.string(0, 4)].map((i, index) => (
+        <img
+          key={index.toString()}
+          alt=""
+          style={{ width: '30px', height: '30px', margin: '5px' }}
+          src={Random.image()}
+        />
+      )),
+  },
+  {
+    title: '反馈内容',
+    dataIndex: 'content',
+  },
+  {
+    title: '执行人',
+    width: 100,
+    dataIndex: 'executor["username"]',
+  },
+  {
+    title: '发起人',
+    width: 100,
+    dataIndex: 'originator["username"]',
   },
 ];
