@@ -64,7 +64,7 @@ export default [
             hideInMenu: true,
           },
           {
-            path: '/remote-sensing/details/arcgis-show',
+            path: '/remote-sensing/details/arcgis-show/:TBBM',
             name: 'map-show',
             icon: 'crown',
             component: './arcgis-show/map',

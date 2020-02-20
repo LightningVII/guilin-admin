@@ -1,18 +1,9 @@
 import React from 'react';
 // import { List, Avatar, Tag } from 'antd';
 import { List, Tag } from 'antd';
-import router from 'umi/router';
+// import router from 'umi/router';
 import { connect } from 'dva';
 
-/* const data = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-];
- */
 export default connect(({ feedback }) => ({ feedback }))(({ record, feedback }) => {
   const data = feedback?.feedbackData?.filter(r => r.TBBM === record?.properties?.TBBM);
   return (
@@ -22,10 +13,10 @@ export default connect(({ feedback }) => ({ feedback }))(({ record, feedback }) 
         dataSource={data}
         renderItem={item => (
           <List.Item
-            actions={[
+          /* actions={[
               <a onClick={() => router.push('/feedback/details')}>反馈报告</a>,
               <a key="list-loadmore-more">编辑</a>,
-            ]}
+            ]} */
           >
             <List.Item.Meta
               /* avatar={

@@ -1,16 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Statistic,
-  Descriptions,
-  Dropdown,
-  Icon,
-  Menu,
-  Popover,
-  Steps,
-  Table,
-} from 'antd';
+import { Button, Card, Statistic, Descriptions, Steps, Table } from 'antd';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import React, { Component, Fragment } from 'react';
 import { statusEnum, implementationEnum } from '@/constants/basicEnum';
@@ -19,8 +7,9 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
 
-import styles from './style.less';
+import ApprovalModal from '../components/ApprovalModal';
 import TimelineAlternate from './TimelineAlternate';
+import styles from './style.less';
 
 const { Step } = Steps;
 const ButtonGroup = Button.Group;
@@ -47,46 +36,19 @@ function itemRender(route, params, routeList, paths) {
   );
 }
 
-const mobileMenu = (
-  <Menu>
-    <Menu.Item key="1">操作一</Menu.Item>
-    <Menu.Item key="2">操作二</Menu.Item>
-    <Menu.Item key="3">选项一</Menu.Item>
-    <Menu.Item key="4">选项二</Menu.Item>
-    <Menu.Item key="">选项三</Menu.Item>
-  </Menu>
+const action = (handleApprovalClick, TBBM) => (
+  <Fragment>
+    <ButtonGroup>
+      <Button onClick={() => router.push(`/remote-sensing/details/arcgis-show/${TBBM}`)}>
+        进入地图
+      </Button>
+      <Button onClick={handleApprovalClick}>分发</Button>
+      <Button>归档</Button>
+    </ButtonGroup>
+    <Button type="primary">填写反馈报告</Button>
+  </Fragment>
 );
-const action = (
-  <RouteContext.Consumer>
-    {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
 
-      return (
-        <Fragment>
-          <ButtonGroup>
-            <Button onClick={() => router.push('/remote-sensing/details/arcgis-show')}>
-              进入地图
-            </Button>
-            <Button>分发</Button>
-            <Button>归档</Button>
-          </ButtonGroup>
-          <Button type="primary">填写反馈报告</Button>
-        </Fragment>
-      );
-    }}
-  </RouteContext.Consumer>
-);
 const extra = item => (
   <div className={styles.moreInfo}>
     <Statistic title="状态" value={statusEnum[item?.status]?.text} />
@@ -112,57 +74,11 @@ const description = item => (
   </RouteContext.Consumer>
 );
 
-const popoverContent = (
-  <div
-    style={{
-      width: 160,
-    }}
-  >
-    吴加号
-    <span
-      className={styles.textSecondary}
-      style={{
-        float: 'right',
-      }}
-    >
-      <Badge
-        status="default"
-        text={
-          <span
-            style={{
-              color: 'rgba(0, 0, 0, 0.45)',
-            }}
-          >
-            未响应
-          </span>
-        }
-      />
-    </span>
-    <div
-      className={styles.textSecondary}
-      style={{
-        marginTop: 4,
-      }}
-    >
-      耗时：2小时25分钟
-    </div>
-  </div>
-);
-
-const customDot = (dot, { status }) => {
-  if (status === 'process') {
-    return (
-      <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
-        {dot}
-      </Popover>
-    );
-  }
-
-  return dot;
-};
-
 class Details extends Component {
-  state = {};
+  state = {
+    visible: false,
+    radioValue: 0,
+  };
 
   componentDidMount() {
     const { dispatch, match } = this.props;
@@ -178,12 +94,10 @@ class Details extends Component {
   }
 
   render() {
-    // const { operationKey, tabActiveKey } = this.state;
-    // const { remoteSensingDetails, loading } = this.props;
+    const { visible, radioValue } = this.state;
     const { remoteSensingDetails, match, feedback } = this.props;
     const { remoteSensingDetail } = remoteSensingDetails;
     const { properties } = remoteSensingDetail || {};
-    console.log('feedback :', feedback);
     const feedbackList = feedback?.feedbackTBBM?.filter(r => r.TBBM === match?.params?.TBBM);
 
     return (
@@ -194,7 +108,7 @@ class Details extends Component {
           itemRender,
         }}
         title={`单号：${properties?.TBBM}`}
-        extra={action}
+        extra={action(v => this.setState({ visible: v }), match?.params?.TBBM)}
         className={styles.pageHeader}
         content={description(remoteSensingDetail)}
         extraContent={extra(remoteSensingDetail)}
@@ -206,7 +120,6 @@ class Details extends Component {
                 {({ isMobile }) => (
                   <Steps
                     direction={isMobile ? 'vertical' : 'horizontal'}
-                    progressDot={customDot}
                     current={remoteSensingDetail?.status}
                   >
                     {statusEnum.map(({ text, status }, index) => (
@@ -255,11 +168,17 @@ class Details extends Component {
             </Card>
           </GridContent>
         </div>
+        <ApprovalModal
+          visible={visible}
+          setVisible={v => this.setState({ visible: v })}
+          radioValue={radioValue}
+          setRadioValue={r => this.setState({ radioValue: r })}
+        />
       </PageHeaderWrapper>
     );
   }
 }
-connect(({ feedback }) => ({ feedback }));
+
 export default connect(({ remoteSensingDetails, feedback }) => ({
   remoteSensingDetails,
   feedback,

@@ -50,7 +50,11 @@ export const remoteSensingListColumns = () => [
           查看详情
         </a>
         <Divider type="vertical" />
-        <a onClick={() => router.push('/remote-sensing/details/arcgis-show')}>地图查看</a>
+        <a
+          onClick={() => router.push(`/remote-sensing/details/arcgis-show/${item.properties.TBBM}`)}
+        >
+          地图查看
+        </a>
         {/* <Divider type="vertical" />
         <a onClick={() => router.push('/feedback/create')}>填写报告</a> */}
       </>
