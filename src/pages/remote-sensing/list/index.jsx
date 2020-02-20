@@ -11,6 +11,7 @@ import { remoteSensingListColumns } from '@/constants/columns';
 import { TabsEnum } from '@/constants/basicEnum';
 import FeedbackList from '../components/FeedbackList';
 import ApprovalModal from '../components/ApprovalModal';
+import ImagesPreview from '../components/ImagesPreview';
 
 const { TabPane } = Tabs;
 const initRangPickerValue = getTimeDistance('year');
@@ -172,6 +173,7 @@ const TableList = props => {
         radioValue={radioValue}
         setRadioValue={setRadioValue}
       />
+      <ImagesPreview />
     </PageHeaderWrapper>
   );
 };
