@@ -62,7 +62,20 @@ export const remoteSensingListColumns = () => [
   },
 ];
 
-export const feedbackListColumns = () => [
+export const mockImages = handleImagesClick => {
+  const images = [...Random.string(0, 4)].map(() => Random.image());
+  return images.map((i, index) => (
+    <img
+      key={index.toString()}
+      alt=""
+      style={{ width: '30px', height: '40px', margin: '0 2px' }}
+      src={i}
+      onClick={() => handleImagesClick(images)}
+    />
+  ));
+};
+
+export const feedbackListColumns = handleImagesClick => [
   {
     title: '',
     dataIndex: 'isIllegal',
@@ -72,15 +85,7 @@ export const feedbackListColumns = () => [
     title: '上传图片',
     dataIndex: 'selectedImages',
     width: 200,
-    render: () =>
-      [...Random.string(0, 4)].map((i, index) => (
-        <img
-          key={index.toString()}
-          alt=""
-          style={{ width: '30px', height: '30px', margin: '5px' }}
-          src={Random.image()}
-        />
-      )),
+    render: () => mockImages(handleImagesClick),
   },
   {
     title: '反馈内容',

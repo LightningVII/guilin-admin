@@ -14,26 +14,30 @@
   :global {
     .ant-carousel .slick-prev,
     .ant-carousel .slick-next {
-      position: absolute;
-      top: 50%;
       z-index: 1;
-      display: block;
-      width: 32px;
-      height: 32px;
-      margin: -16px 30px 0 30px;
+      width: 30px;
+      margin: -16px 40px 0 40px;
       padding: 0;
       color: white;
-      font-size: initial;
+      font-size: 30px;
       line-height: initial;
-      background: @primary-color;
-      border: 1px solid;
+      border: 0;
       outline: none;
+      box-shadow: none;
       cursor: pointer;
+
+      --antd-wave-shadow-color: none;
 
       &:hover {
         color: white;
         background: @primary-color;
+        outline: none;
       }
     }
   }
+}
+
+.icon {
+  color: #fff;
+  font-size: 30px;
 }

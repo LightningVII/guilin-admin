@@ -44,8 +44,10 @@ const menu = (
 );
 const TableList = props => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [imagesViewShow, setImagesViewShow] = useState(false);
   const [radioValue, setRadioValue] = useState(0);
   const [searchParams, setSearchParams] = useState({
     current: 1,
@@ -156,7 +158,15 @@ const TableList = props => {
           loading={loading}
           rowKey={({ properties }) => properties.TBBM}
           rowSelection={rowSelection}
-          expandedRowRender={record => <FeedbackList record={record} />}
+          expandedRowRender={record => (
+            <FeedbackList
+              handleImagesClick={images => {
+                setSelectedImages(images);
+                setImagesViewShow(true);
+              }}
+              record={record}
+            />
+          )}
           pagination={{
             current: searchParams.current,
             defaultPageSize,
@@ -173,7 +183,11 @@ const TableList = props => {
         radioValue={radioValue}
         setRadioValue={setRadioValue}
       />
-      <ImagesPreview />
+      <ImagesPreview
+        images={selectedImages}
+        visible={imagesViewShow}
+        handleCloseClick={() => setImagesViewShow(false)}
+      />
     </PageHeaderWrapper>
   );
 };

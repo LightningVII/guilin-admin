@@ -1,43 +1,48 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Random } from 'mockjs';
 import React from 'react';
-import { Carousel, Modal, Button } from 'antd';
+import { Carousel, Empty, Modal, Icon, Button } from 'antd';
 import styles from './styles.less';
 
 const PrevArrow = ({ currentSlide, slideCount, ...arrowProps }) => (
-  <Button {...arrowProps} ghost type="primary" shape="circle" icon="left" />
+  <Button {...arrowProps} ghost type="primary" icon="left-circle" />
 );
 
 const NextArrow = ({ currentSlide, slideCount, ...arrowProps }) => (
-  <Button {...arrowProps} ghost type="primary" shape="circle" icon="right" />
+  <Button {...arrowProps} ghost type="primary" icon="right-circle" />
 );
 
-export default () => (
+export default ({ visible, handleCloseClick, images }) => (
   <Modal
     footer={null}
-    closeIcon={<Button ghost shape="circle" icon="close" />}
+    closeIcon={<Icon className={styles.icon} type="close" />}
     centered
     bodyStyle={{ padding: 0 }}
-    visible
+    visible={visible}
     className={styles.modalCarousel}
+    onCancel={handleCloseClick}
   >
     <Carousel arrows prevArrow={<PrevArrow />} nextArrow={<NextArrow />} effect="fade">
-      {[...Random.string(4, 4)].map((i, index) => (
-        <div key={index.toString()}>
-          <div
-            style={{
-              height: '100%',
-              width: '100%',
-              position: 'absolute',
-              top: 0,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundImage: `url(${Random.image()})`,
-            }}
-          ></div>
-        </div>
-      ))}
+      {images && images.length ? (
+        images.map((i, index) => (
+          <div key={index.toString()}>
+            <div
+              style={{
+                height: '100%',
+                width: '100%',
+                position: 'absolute',
+                top: 0,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundImage: `url(${Random.image()})`,
+              }}
+            ></div>
+          </div>
+        ))
+      ) : (
+        <Empty />
+      )}
     </Carousel>
   </Modal>
 );

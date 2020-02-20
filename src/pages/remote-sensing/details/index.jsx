@@ -8,6 +8,7 @@ import router from 'umi/router';
 import Link from 'umi/link';
 
 import ApprovalModal from '../components/ApprovalModal';
+import ImagesPreview from '../components/ImagesPreview';
 import TimelineAlternate from './TimelineAlternate';
 import styles from './style.less';
 
@@ -78,6 +79,8 @@ class Details extends Component {
   state = {
     visible: false,
     radioValue: 0,
+    selectedImages: [],
+    imagesViewShow: false,
   };
 
   componentDidMount() {
@@ -94,10 +97,12 @@ class Details extends Component {
   }
 
   render() {
-    const { visible, radioValue } = this.state;
+    const { visible, radioValue, selectedImages, imagesViewShow } = this.state;
     const { remoteSensingDetails, match, feedback } = this.props;
     const { remoteSensingDetail } = remoteSensingDetails;
     const { properties } = remoteSensingDetail || {};
+    const setSelectedImages = images => this.setState({ selectedImages: images });
+    const setImagesViewShow = show => this.setState({ imagesViewShow: show });
     const feedbackList = feedback?.feedbackTBBM?.filter(r => r.TBBM === match?.params?.TBBM);
 
     return (
@@ -150,7 +155,10 @@ class Details extends Component {
                 pagination={false}
                 dataSource={feedbackList}
                 rowKey="id"
-                columns={feedbackListColumns()}
+                columns={feedbackListColumns(images => {
+                  setSelectedImages(images);
+                  setImagesViewShow(true);
+                })}
               />
             </Card>
             <Card title="反馈人信息" style={{ marginBottom: 24 }} bordered={false}>
@@ -173,6 +181,11 @@ class Details extends Component {
           setVisible={v => this.setState({ visible: v })}
           radioValue={radioValue}
           setRadioValue={r => this.setState({ radioValue: r })}
+        />
+        <ImagesPreview
+          images={selectedImages}
+          visible={imagesViewShow}
+          handleCloseClick={() => setImagesViewShow(false)}
         />
       </PageHeaderWrapper>
     );
