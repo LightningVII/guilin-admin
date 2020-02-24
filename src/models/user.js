@@ -15,8 +15,9 @@ const UserModel = {
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    *fetchCurrent(_, { call, put, select }) {
+      const userid = yield select(state => state?.user?.currentUser?.userid);
+      const response = yield call(queryCurrent, { id: userid });
       yield put({
         type: 'saveCurrentUser',
         payload: response,

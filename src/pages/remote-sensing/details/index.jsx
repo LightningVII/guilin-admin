@@ -113,7 +113,7 @@ class Details extends Component {
           itemRender,
         }}
         title={`单号：${properties?.TBBM}`}
-        extra={action(v => this.setState({ visible: v }), match?.params?.TBBM)}
+        extra={action(() => this.setState({ visible: true }), match?.params?.TBBM)}
         className={styles.pageHeader}
         content={description(remoteSensingDetail)}
         extraContent={extra(remoteSensingDetail)}
@@ -178,7 +178,7 @@ class Details extends Component {
         </div>
         <ApprovalModal
           visible={visible}
-          setVisible={v => this.setState({ visible: v })}
+          setVisible={() => this.setState({ visible: false })}
           radioValue={radioValue}
           setRadioValue={r => this.setState({ radioValue: r })}
         />

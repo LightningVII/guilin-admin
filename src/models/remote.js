@@ -8,8 +8,12 @@ const RemoteModel = {
   },
 
   effects: {
-    *fetchRemoteData({ payload }, { call, put }) {
-      const response = yield call(queryRemoteData, payload);
+    *fetchRemoteData({ payload }, { call, put, select }) {
+      const userId = yield select(state => state?.user?.currentUser?.userid);
+      const response = yield call(queryRemoteData, {
+        ...payload,
+        userId,
+      });
       yield put({
         type: 'saveRemoteData',
         payload: response,

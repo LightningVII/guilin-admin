@@ -179,7 +179,7 @@ const TableList = props => {
       </Card>
       <ApprovalModal
         visible={visible}
-        setVisible={setVisible}
+        setVisible={() => setVisible(false)}
         radioValue={radioValue}
         setRadioValue={setRadioValue}
       />

@@ -16,7 +16,7 @@ const AuthComponent = ({
 }) => {
   const { currentUser } = user;
   const { routes = [] } = route;
-  const isLogin = currentUser && currentUser.id;
+  const isLogin = currentUser && currentUser.userid;
   return (
     <Authorized
       authority={getRouteAuthority(location.pathname, routes) || ''}

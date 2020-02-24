@@ -1,17 +1,20 @@
 import request from '@/utils/request';
-import user from '@/constants/user';
-// return new Promise(resolve => setTimeout(() => resolve(), 1000));
+import { stringify } from 'querystring';
+// import user from '@/constants/user';
 
 export async function query() {
   return request('/strapi/users');
 }
 
-export async function queryCurrent() {
-  /* return request.get('/strapi/users/me');
-  return request('https://randomapi.com/api/5gh173ft?key=GCCC-DTU1-0IMQ-939X').then(
-    res => res.results[0],
-  ); */
-  return new Promise(resolve => setTimeout(() => resolve(user()), 1000));
+export async function queryCurrent(payload) {
+  // return new Promise(resolve => setTimeout(() => resolve(user()), 1000));
+  return request(`http://qs.vipgz4.idcfengye.com/sys/user/info`, {
+    method: 'POST',
+    data: stringify(payload),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+  });
 }
 
 export async function queryNotices() {

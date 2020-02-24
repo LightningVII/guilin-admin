@@ -15,8 +15,8 @@ export default ({ visible, setVisible, radioValue, setRadioValue }) => (
   <Modal
     title={formatMessage({ id: 'remote-sensing.approval' })}
     visible={visible}
-    onOk={() => setVisible(false)}
-    onCancel={() => setVisible(false)}
+    onOk={setVisible}
+    onCancel={setVisible}
   >
     <RadioGroup onChange={e => setRadioValue(e.target.value)} value={radioValue}>
       {[
