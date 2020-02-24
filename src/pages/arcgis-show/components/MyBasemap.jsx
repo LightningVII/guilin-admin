@@ -49,7 +49,7 @@ const MyBasemap = props => {
   mapProperties.basemap = mapProperties.basemap || basemap;
   return (
     <Map
-      id="6627e1dd5f594160ac60f9dfc411673f"
+      id="hiugiuu"
       onLoad={handleLoad}
       mapProperties={mapProperties}
       viewProperties={{

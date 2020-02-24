@@ -19,8 +19,14 @@ export const treeData = [
           title: '2020年3月',
           key: '0-0-3',
           loadType: "tile",
-          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}"
+          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201810/MapServer/tile/{level}/{row}/{col}"
         },
+        {
+          title: '2020年4月',
+          key: '0-0-4',
+          loadType: "tile",
+          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}"
+        }
       ],
     },
     {

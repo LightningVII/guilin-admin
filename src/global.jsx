@@ -6,10 +6,10 @@ import defaultSettings from '../config/defaultSettings';
 
 loadScript({
   // url: 'http://112.35.60.89:82/api4.11/init.js',
-  url: 'https://js.arcgis.com/4.11/',
+  url: 'http://47.98.141.125/arcgis_js_v414_api/arcgis_js_v414_api/arcgis_js_api/library/4.14/init.js',
 });
 // loadCss('http://112.35.60.89:82/api4.11/esri/css/main.css');
-loadCss('https://js.arcgis.com/4.11/esri/themes/light/main.css');
+loadCss('http://47.98.141.125/arcgis_js_v414_api/arcgis_js_v414_api/arcgis_js_api/library/4.14/esri/css/main.css');
 // setDefaultOptions({ css: true });
 
 const { pwa } = defaultSettings; // if pwa is true
