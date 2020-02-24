@@ -28,6 +28,7 @@ export default [
           {
             path: '/',
             redirect: '/statistics',
+            authority: ['admin'],
           },
           {
             path: '/feedback/list',
@@ -63,7 +64,7 @@ export default [
             hideInMenu: true,
           },
           {
-            path: '/remote-sensing/details/arcgis-show',
+            path: '/remote-sensing/details/arcgis-show/:TBBM',
             name: 'map-show',
             icon: 'crown',
             component: './arcgis-show/map',
@@ -72,7 +73,7 @@ export default [
           {
             name: 'task.center',
             icon: 'smile',
-            path: '/remote-sensing/details',
+            path: '/remote-sensing/details/:TBBM',
             component: './remote-sensing/details',
             hideInMenu: true,
           },

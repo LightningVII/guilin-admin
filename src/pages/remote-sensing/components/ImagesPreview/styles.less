@@ -1,0 +1,43 @@
+@import '~antd/es/style/themes/default.less';
+.modalCarousel {
+  :global(.slick-slide) {
+    height: calc(100vh * 0.9);
+    overflow: hidden;
+    text-align: center;
+    background: #364d79;
+  }
+
+  :global(.ant-carousel .slick-dots li button) {
+    background: black;
+  }
+
+  :global {
+    .ant-carousel .slick-prev,
+    .ant-carousel .slick-next {
+      z-index: 1;
+      width: 30px;
+      margin: -16px 40px 0 40px;
+      padding: 0;
+      color: white;
+      font-size: 30px;
+      line-height: initial;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+      cursor: pointer;
+
+      --antd-wave-shadow-color: none;
+
+      &:hover {
+        color: white;
+        background: @primary-color;
+        outline: none;
+      }
+    }
+  }
+}
+
+.icon {
+  color: #fff;
+  font-size: 30px;
+}

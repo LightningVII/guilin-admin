@@ -1,14 +1,17 @@
 import request from '@/utils/request';
+import user from '@/constants/user';
+// return new Promise(resolve => setTimeout(() => resolve(), 1000));
 
 export async function query() {
   return request('/strapi/users');
 }
 
 export async function queryCurrent() {
-  // return request.get('/strapi/users/me');
+  /* return request.get('/strapi/users/me');
   return request('https://randomapi.com/api/5gh173ft?key=GCCC-DTU1-0IMQ-939X').then(
     res => res.results[0],
-  );
+  ); */
+  return new Promise(resolve => setTimeout(() => resolve(user()), 1000));
 }
 
 export async function queryNotices() {
