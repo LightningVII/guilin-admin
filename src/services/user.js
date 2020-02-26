@@ -8,7 +8,7 @@ export async function query() {
 
 export async function queryCurrent(payload) {
   // return new Promise(resolve => setTimeout(() => resolve(user()), 1000));
-  return request(`http://qs.vipgz4.idcfengye.com/sys/user/info`, {
+  return request(`/strapi/sys/user/info`, {
     method: 'POST',
     data: stringify(payload),
     headers: {

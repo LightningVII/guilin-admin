@@ -14,7 +14,7 @@ export async function queryRemoteData(params) {
   }
   console.log('object', params);
   return request(
-    `http://qs.vipgz4.idcfengye.com/changespot/list?${stringify({
+    `/strapi/changespot/list?${stringify({
       userId: '1',
     })}`,
   );

@@ -120,7 +120,7 @@ export default {
   // chainWebpack: webpackPlugin,
   proxy: {
     '/strapi': {
-      target: 'http://47.52.250.238:1337/',
+      target: 'http://qs.vipgz4.idcfengye.com/',
       // target: 'http://1bc20b9d.ngrok.io/',
       changeOrigin: true,
       pathRewrite: {
