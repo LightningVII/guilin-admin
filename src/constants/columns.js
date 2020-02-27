@@ -8,32 +8,32 @@ import router from 'umi/router';
 export const remoteSensingListColumns = () => [
   {
     title: '批次',
-    dataIndex: 'properties.BATCH',
+    dataIndex: 'batch',
   },
   {
     title: '区县',
-    dataIndex: 'properties.COUNTY',
+    dataIndex: 'county',
   },
   {
     title: '位置',
-    dataIndex: 'properties.LOCATION',
+    dataIndex: 'location',
   },
   {
     title: '前时相',
-    dataIndex: 'properties.QSXDLMC',
+    dataIndex: 'qsxdlmc',
   },
   {
     title: '后时相',
-    dataIndex: 'properties.HSXDLMC',
+    dataIndex: 'hsxdlmc',
   },
   {
     title: '占地面积',
-    dataIndex: 'properties.AREA',
-    render: val => `${val.toFixed(2)}亩`,
+    dataIndex: 'area',
+    render: val => `${parseFloat(val).toFixed(2)}亩`,
   },
   {
     title: '状态',
-    dataIndex: 'status',
+    dataIndex: 'state',
     render: record => {
       const { text, status } = statusEnum[record];
       return <Badge text={text} status={status} />;
@@ -46,13 +46,9 @@ export const remoteSensingListColumns = () => [
     align: 'right',
     render: (record, item) => (
       <>
-        <a onClick={() => router.push(`/remote-sensing/details/${item.properties.TBBM}`)}>
-          查看详情
-        </a>
+        <a onClick={() => router.push(`/remote-sensing/details/${item.tbbm}`)}>查看详情</a>
         <Divider type="vertical" />
-        <a
-          onClick={() => router.push(`/remote-sensing/details/arcgis-show/${item.properties.TBBM}`)}
-        >
+        <a onClick={() => router.push(`/remote-sensing/details/arcgis-show/${item.tbbm}`)}>
           地图查看
         </a>
         {/* <Divider type="vertical" />

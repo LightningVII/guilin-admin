@@ -7,6 +7,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
 
+import DistributeModal from '../components/DistributeModal';
 import ApprovalModal from '../components/ApprovalModal';
 import ImagesPreview from '../components/ImagesPreview';
 import TimelineAlternate from './TimelineAlternate';
@@ -37,13 +38,14 @@ function itemRender(route, params, routeList, paths) {
   );
 }
 
-const action = (handleApprovalClick, TBBM) => (
+const action = (handleApprovalClick, handleSubmitClick, TBBM) => (
   <Fragment>
     <ButtonGroup>
       <Button onClick={() => router.push(`/remote-sensing/details/arcgis-show/${TBBM}`)}>
         进入地图
       </Button>
       <Button onClick={handleApprovalClick}>分发</Button>
+      <Button onClick={handleSubmitClick}>执行审批</Button>
       <Button>归档</Button>
     </ButtonGroup>
     <Button type="primary">填写反馈报告</Button>
@@ -78,9 +80,12 @@ const description = item => (
 class Details extends Component {
   state = {
     visible: false,
-    radioValue: 0,
+    approvalShow: false,
+    deptid: 0,
+    userIds: 0,
     selectedImages: [],
     imagesViewShow: false,
+    approvalContent: '',
   };
 
   componentDidMount() {
@@ -97,7 +102,15 @@ class Details extends Component {
   }
 
   render() {
-    const { visible, radioValue, selectedImages, imagesViewShow } = this.state;
+    const {
+      approvalContent,
+      approvalShow,
+      userIds,
+      visible,
+      deptid,
+      selectedImages,
+      imagesViewShow,
+    } = this.state;
     const { remoteSensingDetails, match, feedback } = this.props;
     const { remoteSensingDetail } = remoteSensingDetails;
     const { properties } = remoteSensingDetail || {};
@@ -113,7 +126,11 @@ class Details extends Component {
           itemRender,
         }}
         title={`单号：${properties?.TBBM}`}
-        extra={action(() => this.setState({ visible: true }), match?.params?.TBBM)}
+        extra={action(
+          () => this.setState({ visible: true }),
+          () => this.setState({ approvalShow: true }),
+          match?.params?.TBBM,
+        )}
         className={styles.pageHeader}
         content={description(remoteSensingDetail)}
         extraContent={extra(remoteSensingDetail)}
@@ -176,16 +193,33 @@ class Details extends Component {
             </Card>
           </GridContent>
         </div>
-        <ApprovalModal
+        <DistributeModal
           visible={visible}
-          setVisible={() => this.setState({ visible: false })}
-          radioValue={radioValue}
-          setRadioValue={r => this.setState({ radioValue: r })}
+          handleOkClick={() => this.setState({ visible: false })}
+          handleCloseClick={() => this.setState({ visible: false })}
+          deptid={deptid}
+          setDeptid={r => this.setState({ deptid: r })}
+          userIds={userIds}
+          setUserIds={r => this.setState({ userIds: r })}
         />
         <ImagesPreview
           images={selectedImages}
           visible={imagesViewShow}
           handleCloseClick={() => setImagesViewShow(false)}
+        />
+        <ApprovalModal
+          visible={approvalShow}
+          handleYesClick={() => {
+            console.log('通过 ---------------:');
+            this.setState({ approvalShow: false });
+          }}
+          handleNoClick={() => {
+            console.log('不通过 ---------------:');
+            this.setState({ approvalShow: false });
+          }}
+          handleCloseClick={() => this.setState({ approvalShow: false })}
+          handleChange={e => this.setState({ approvalContent: e.target.value })}
+          content={approvalContent}
         />
       </PageHeaderWrapper>
     );

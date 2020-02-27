@@ -1,12 +1,7 @@
-// import request from '@/utils/request';
-import employeeList from '@/constants/employee';
+import request from '@/utils/request';
 
-export async function queryEmployeeData(params) {
-  /* return request('/api/rule', {
-      params,
-    }); */
-  return new Promise(resolve => {
-    console.log('queryEmployeeData', params);
-    setTimeout(() => resolve(employeeList), 1000);
-  });
+export async function queryEmployeeData() {
+  const dept = await request('/strapi/sys/dept/all');
+  const deptUser = await request('/strapi/sys/dept/deptUser');
+  return { dept, deptUser };
 }

@@ -5,11 +5,13 @@ const EmployeeModel = {
 
   state: {
     employeeList: [],
+    deptList: [],
   },
 
   effects: {
     *fetchEmployeeData({ payload }, { call, put }) {
       const response = yield call(queryEmployeeData, payload);
+
       yield put({
         type: 'saveEmployeeData',
         payload: response,
@@ -21,7 +23,12 @@ const EmployeeModel = {
     saveEmployeeData(state, action) {
       return {
         ...state,
-        employeeList: action.payload || state.employeeList,
+        employeeList:
+          action.payload.deptUser.map(item => ({
+            ...item,
+            checkable: item.checkable === 'true',
+          })) || state.employeeList,
+        deptList: action.payload.dept,
       };
     },
   },

@@ -100,7 +100,6 @@ const Model = {
   effects: {
     *login({ payload }, { call, put }) {
       const { content } = yield call(fakeAccountLogin, payload);
-      console.log('object', content);
       yield put({
         type: 'changeLoginStatus',
         payload: content,
@@ -109,6 +108,8 @@ const Model = {
         type: 'user/saveCurrentUser',
         payload: content?.user,
       });
+
+      sessionStorage.setItem('user', JSON.stringify(content?.user));
 
       // Login successfully
       if (content?.user?.roles?.[0]) {
@@ -151,7 +152,6 @@ const Model = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      console.log('changeLoginStatus', payload);
       const { user, menus } = payload;
       setAuthority(user?.roles?.[0]?.rolecode);
       // localStorage.setItem('token', payload.jwt);

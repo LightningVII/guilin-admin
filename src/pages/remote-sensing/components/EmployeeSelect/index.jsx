@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { connect } from 'dva';
 import { TreeSelect } from 'antd';
 /* import { Select } from 'antd';
@@ -28,18 +28,7 @@ const { SHOW_PARENT } = TreeSelect;
 
 export default connect(({ employee }) => ({
   employeeList: employee.employeeList,
-}))(({ employeeList, dispatch }) => {
-  const [value, setValue] = useState();
-
-  useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'employee/fetchEmployeeData',
-        // payload,
-      });
-    }
-  }, []);
-
+}))(({ value, setValue, employeeList }) => {
   const tProps = {
     treeData: employeeList,
     value,

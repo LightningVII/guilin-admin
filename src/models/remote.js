@@ -1,4 +1,4 @@
-import { queryRemoteData } from '@/services/remote';
+import { queryRemoteData, queryChangespotIssue } from '@/services/remote';
 
 const RemoteModel = {
   namespace: 'remoteSensing',
@@ -14,10 +14,18 @@ const RemoteModel = {
         ...payload,
         userId,
       });
-      yield put({
-        type: 'saveRemoteData',
-        payload: response,
-      });
+      if (response?.code === 200 && response?.content) {
+        yield put({
+          type: 'saveRemoteData',
+          payload: {
+            totalCount: response?.content?.total,
+            data: response?.content?.list,
+          },
+        });
+      }
+    },
+    *fetchChangespotIssue({ payload }, { call }) {
+      return yield call(queryChangespotIssue, payload);
     },
   },
 

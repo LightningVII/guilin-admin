@@ -2,32 +2,36 @@ import request from '@/utils/request';
 import { stringify } from 'querystring';
 import { TabsEnum } from '@/constants/basicEnum';
 
-// import remoteSensing from '@/constants/remoteSensing';
-
 export async function queryRemoteData(params) {
-  console.log('object', params);
   const status = TabsEnum.map(({ tab }) => tab).indexOf(params.status);
   if (status > 0) {
     params.status = status - 1;
   } else {
     delete params.status;
   }
-  console.log('object', params);
-  return request(
-    `/strapi/changespot/list?${stringify({
-      userId: '1',
-    })}`,
-  );
 
-  // console.log('queryRemoteData', params);
-  // return new Promise(resolve =>
-  //   setTimeout(
-  //     () =>
-  //       resolve({
-  //         totalCount: 100,
-  //         data: remoteSensing.features,
-  //       }),
-  //     1000,
-  //   ),
-  // );
+  const payload = {
+    pageSize: params.pageSize,
+    pageNum: params.current,
+    term: params.keywords,
+    startTime: params.rangePickerValue[0].format('YYYY-MM-DD'),
+    endTime: params.rangePickerValue[1].format('YYYY-MM-DD'),
+    userId: params.userId,
+    state: params.status,
+  };
+
+  // if (!payload.status) delete payload.status;
+  console.log('queryRemoteData', payload);
+
+  return request(`/strapi/changespot/list?${stringify(payload)}`);
+}
+
+export async function queryChangespotIssue(params) {
+  return request(`/strapi/changespot/issue`, {
+    method: 'POST',
+    data: stringify(params),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+  });
 }

@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, Tabs, Button, Divider, Dropdown, Input, Icon, Menu, Row, Col } from 'antd';
+import {
+  Card,
+  Table,
+  Tabs,
+  Button,
+  Divider,
+  Dropdown,
+  Input,
+  Icon,
+  Menu,
+  Row,
+  Col,
+  message,
+} from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
-
 import { connect } from 'dva';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { getTimeDistance } from '@/utils/utils';
@@ -10,7 +22,7 @@ import RangeDataSelectDistance from '@/components/RangeDataSelectDistance';
 import { remoteSensingListColumns } from '@/constants/columns';
 import { TabsEnum } from '@/constants/basicEnum';
 import FeedbackList from '../components/FeedbackList';
-import ApprovalModal from '../components/ApprovalModal';
+import DistributeModal from '../components/DistributeModal';
 import ImagesPreview from '../components/ImagesPreview';
 
 const { TabPane } = Tabs;
@@ -43,12 +55,13 @@ const menu = (
   </Menu>
 );
 const TableList = props => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [spotIds, setSpotIds] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [imagesViewShow, setImagesViewShow] = useState(false);
-  const [radioValue, setRadioValue] = useState(0);
+  const [deptid, setDeptid] = useState(null);
+  const [userIds, setUserIds] = useState([]);
   const [searchParams, setSearchParams] = useState({
     current: 1,
     pageSize: defaultPageSize,
@@ -82,22 +95,21 @@ const TableList = props => {
   }, []);
 
   const rowSelection = {
-    selectedRowKeys,
+    spotIds,
     onChange: (keys, selectedRows) => {
-      console.log(`keys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      console.log(`keys: ${spotIds}`, 'selectedRows: ', selectedRows);
     },
     onSelect: (record, selected) => {
-      setSelectedRowKeys(
-        selected
-          ? [...selectedRowKeys, record.key]
-          : selectedRowKeys.filter(key => key !== record.key),
+      console.log('record.key :', record, selected);
+      setSpotIds(
+        selected ? [...spotIds, record.spotid] : spotIds.filter(spotid => spotid !== record.spotid),
       );
     },
     onSelectAll: (selected, selectedRows, changeRows) => {
-      setSelectedRowKeys(
+      setSpotIds(
         selected
-          ? [...selectedRowKeys, ...changeRows.map(i => i.key)]
-          : selectedRowKeys.filter(key => !changeRows.map(i => i.key).includes(key)),
+          ? [...spotIds, ...changeRows.map(i => i.spotid)]
+          : spotIds.filter(spotid => !changeRows.map(i => i.spotid).includes(spotid)),
       );
     },
   };
@@ -120,14 +132,8 @@ const TableList = props => {
               }
             />
           </Col>
-          <Col
-            span={10}
-            offset={8}
-            style={{
-              textAlign: 'right',
-            }}
-          >
-            <Button type="primary" onClick={() => setVisible(true)}>
+          <Col span={10} offset={8} style={{ textAlign: 'right' }}>
+            <Button type="primary" disabled={!!spotIds?.length} onClick={() => setVisible(true)}>
               {formatMessage({ id: 'remote-sensing.approval' })}
             </Button>
             <Divider type="vertical" />
@@ -145,7 +151,9 @@ const TableList = props => {
           tabBarExtraContent={
             <RangeDataSelectDistance
               initRangPickerValue={initRangPickerValue}
-              handleRangePickerChange={rangeValue => fetchRemoteData({ current: 1, rangeValue })}
+              handleRangePickerChange={rangeValue =>
+                fetchRemoteData({ current: 1, rangePickerValue: rangeValue })
+              }
             />
           }
           onChange={activeKey => fetchRemoteData({ current: 1, status: TabsEnum[+activeKey].tab })}
@@ -156,7 +164,7 @@ const TableList = props => {
         </Tabs>
         <Table
           loading={loading}
-          rowKey={({ properties }) => properties.TBBM}
+          rowKey={({ spotid }) => spotid}
           rowSelection={rowSelection}
           expandedRowRender={record => (
             <FeedbackList
@@ -177,11 +185,30 @@ const TableList = props => {
           onChange={handleTableChange}
         />
       </Card>
-      <ApprovalModal
+      <DistributeModal
         visible={visible}
-        setVisible={() => setVisible(false)}
-        radioValue={radioValue}
-        setRadioValue={setRadioValue}
+        handleOkClick={() => {
+          dispatch({
+            type: 'remoteSensing/fetchChangespotIssue',
+            payload: {
+              spotIds,
+              deptId: deptid === 'customdeptid' ? null : deptid,
+              userIds,
+            },
+          }).then(res => {
+            if (res?.code === 200) {
+              fetchRemoteData();
+              setVisible(false);
+            } else {
+              message.warning('数据异常');
+            }
+          });
+        }}
+        handleCloseClick={() => setVisible(false)}
+        deptid={deptid}
+        setDeptid={setDeptid}
+        userIds={userIds}
+        setUserIds={setUserIds}
       />
       <ImagesPreview
         images={selectedImages}
