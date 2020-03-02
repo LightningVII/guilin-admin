@@ -106,7 +106,7 @@ export default class GlobeMapShow extends React.Component {
                     卷帘
                   </Menu.Item>
                   <Menu.Item key="2">
-                    <LegacyIcon type="dp" />
+                    {/* <LegacyIcon type="dp" /> */}
                     多屏
                   </Menu.Item>
                   <Menu.Item key="3">

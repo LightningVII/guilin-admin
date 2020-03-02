@@ -181,14 +181,9 @@ const TableList = props => {
           rowKey={({ spotid }) => spotid}
           rowSelection={rowSelection}
           expandRowByClick
-          // expandedRowRender={}
-          rowExpandable={record => {
-            console.log(
-              'feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length :',
-              !!feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length,
-            );
-            return feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length;
-          }}
+          rowExpandable={record =>
+            feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length
+          }
           expandedRowRender={record => {
             const feedbackData = feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm);
             return feedbackData?.length ? (
