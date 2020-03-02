@@ -37,20 +37,27 @@ export const treeData = [
           title: '2020年第1期',
           key: '0-1-0',
           loadType: "feature",
-          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/BHTuBan/MS_SL_BHTuBan_201801/MapServer/0"
+          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0"
         },
         {
           title: '2020年第2期',
           key: '0-1-1',
           loadType: "feature",
-          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/BHTuBan/MS_SL_BHTuBan_201806/MapServer/0"
+          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0"
         },
         {
           title: '2020年第3期',
           key: '0-1-2',
-          loadType: "feature",
-          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/BHTuBan/MS_SL_BHTuBan_201812/MapServer/0"
+          loadType: "feature", 
+          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0"
         },
+        {
+          title: '2020年第4期',
+          key: '0-1-3',
+          loadType: "feature",
+          layerUrl: "http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0"
+          
+        }
       ],
     },
     {

@@ -11,11 +11,12 @@ import ModalSwipeTree from '../components/ModalSwipeTree';
 import MapSwipe from '../components/MapSwipe';
 import ModalCompareTree from '../components/ModalCompareTree';
 import MapCompare from '../components/MapCompare';
-import MapBottom from  '../components/MapBottom';
+import MapBottom from '../components/MapBottom';
 
 import style from './style.css'
 
 const MyBasemap = React.lazy(() => import('../components/MyBasemap'));
+
 
 
 export default class GlobeMapShow extends React.Component {
@@ -29,8 +30,16 @@ export default class GlobeMapShow extends React.Component {
       showSwipeModal: false, // Swipe Model选择框
       renderCompare: false, // Compare 内容框
       compareLayersArray: [], // Compare选择的图层列表
-      showCompareModal: false // Compare Model选择框
+      showCompareModal: false,// Compare Model选择框
+      featrueGraphic: null // 传入Featrue的图斑编码
     };
+  }
+
+  addFeature2Cmp = graphic => {
+    this.setState({
+      renderCompare: true,
+      featrueGraphic: graphic
+    })
   }
 
   handleMenuClick = ({ key }) => {
@@ -113,7 +122,7 @@ export default class GlobeMapShow extends React.Component {
                   <Icon type="user" />
                   截图
                </Menu.Item>
-               <Menu.Item key="43">
+                <Menu.Item key="43">
                   <Icon type="user" />
                   打印
                </Menu.Item>
@@ -148,7 +157,7 @@ export default class GlobeMapShow extends React.Component {
           </Button.Group>
         </Affix>
         <Affix className={style.search} offsetTop={80}>
-          <SearchGIS view={this.state.mapView} />
+          <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
         </Affix>
         <Affix className={style.compass} offsetBottom={50} >
           <Compass view={this.state.mapView} />
@@ -195,10 +204,11 @@ export default class GlobeMapShow extends React.Component {
             <Affix className={style.mapCompare} offsetTop={80}>
               <Card size="small" title="多屏工具" extra={<a onClick={
                 () => this.setState({
-                  renderCompare: false
+                  renderCompare: false,
+                  featrueGraphic:null
                 })
               }>X</a>}>
-                <MapCompare layersArray={this.state.compareLayersArray} />
+                <MapCompare featrueGraphic={this.state.featrueGraphic} layersArray={this.state.compareLayersArray} />
               </Card>
             </Affix>
           ) : null
@@ -207,7 +217,7 @@ export default class GlobeMapShow extends React.Component {
         {
           this.state.mapView ? (
             <Affix className={style.mapBottom}>
-              <MapBottom mapView = {this.state.mapView}/>
+              <MapBottom mapView={this.state.mapView} />
             </Affix>
           ) : null
         }

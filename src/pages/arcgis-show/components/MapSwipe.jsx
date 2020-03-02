@@ -10,6 +10,7 @@ import MyBasemap from './MyBasemap';
 let EsriSwipe;
 let EsriWebTileLayer;
 let EsriFeatureLayer;
+let mapView;
 
 class MapSwipe extends React.Component {
     constructor(props) {
@@ -21,19 +22,23 @@ class MapSwipe extends React.Component {
             RT: ""
         };
 
+    }
+
+    loadGIS=()=>{
         loadModules(['esri/widgets/Swipe', 'esri/layers/WebTileLayer', 'esri/layers/FeatureLayer'])
             .then(([Swipe, WebTileLayer, FeatureLayer]) => {
                 EsriSwipe = Swipe;
                 EsriWebTileLayer = WebTileLayer;
                 EsriFeatureLayer = FeatureLayer;
+                this.initSwipe();
             })
-
     }
 
-    initSwipe = (map, mapView, layersArray) => {
+
+    initSwipe = () => {
         const rLayers = [];
         const fLayers = [];
-        layersArray.forEach(node => {
+        this.props.layersArray.forEach(node => {
             const type = node.props.loadType;
             if (type) {
                 switch (type) {
@@ -63,7 +68,7 @@ class MapSwipe extends React.Component {
                 urlTemplate: rLayers[1].props.layerUrl
             })
 
-            map.addMany([layer1, layer2])
+            mapView.map.addMany([layer1, layer2])
 
             const swipe = new EsriSwipe({
                 view: mapView,
@@ -75,7 +80,7 @@ class MapSwipe extends React.Component {
             mapView.ui.add(swipe)
 
             fLayers.forEach(fLayer => {
-                map.add(new EsriFeatureLayer({ url: fLayer.props.layerUrl, id: fLayer.key }))
+                mapView.map.add(new EsriFeatureLayer({ url: fLayer.props.layerUrl, id: fLayer.key }))
             })
 
 
@@ -88,22 +93,24 @@ class MapSwipe extends React.Component {
     }
 
     render() {
-        const heightStyle = 'calc(100vh - 180px)'
-        const layerArray = this.props.layersArray
+
         return (
             <>
 
                 <MyBasemap
-                    height={heightStyle}
+                    height='calc(100vh - 180px)'
                     handleLoad={(map, view) => {
-                        this.initSwipe(map, view, layerArray)
+                        mapView = view;
+                        setTimeout(() => {
+                            this.loadGIS();
+                        }, 600);
                     }}
                 />
+
                 <Button style={{ position: 'absolute', bottom: 30, right: 12, zIndex: 9 }}
                     onClick={this.handleOpenModal}>{this.state.LT}</Button>
                 <Button style={{ position: 'absolute', bottom: 30, left: 12, zIndex: 9 }}
                     onClick={this.handleOpenModal}>{this.state.RT}</Button>
-
 
             </>
         )

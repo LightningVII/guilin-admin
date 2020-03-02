@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadModules } from 'esri-loader';
+import { template } from './featureTemplate.js';
 
 const MyFeatureLayer = props => {
   const [featureLayer, setFeatureLayer] = useState(null);
@@ -12,10 +13,11 @@ const MyFeatureLayer = props => {
         });
 
         const fl = new FeatureLayer({
-          url: 'http://127.0.0.1:83/arcgis/rest/services/CompreRegionService/FeatureServer',
-          id: 'microGridFeatureLayer',
+          url: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0',
+          id: 'bhtb1',
           outFields: ['*'],
-          title: '综合业务区图层',
+          popupTemplate:template,
+          title: '202001',
         });
 
         setFeatureLayer(fl);

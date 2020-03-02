@@ -1,7 +1,10 @@
 import React from 'react';
 import { Icon, Input, Tree, Tooltip, List, Typography } from 'antd';
 import { loadModules } from 'esri-loader';
+// import router from 'umi/router';
+
 import { treeData } from './treeData.js';
+import { template } from './featureTemplate.js';
 import style from "./style.css";
 
 
@@ -11,40 +14,7 @@ let EsriFeatureLayer;
 let EsriWebTileLayer;
 let EsriQueryTask;
 let EsriQuery;
-const popupTemplate2 = {
-  title: "{hxmc}",
-  content: [
-    {
-      type: "fields",
-      fieldInfos: [
-        {
-          fieldName: "wz",
-          label: "管控级别"
-        },
-        {
-          fieldName: "rtype",
-          label: "变化类型"
-        },
-        {
-          fieldName: "cun",
-          label: "村"
-        },
-        {
-          fieldName: "pc",
-          label: "批次"
-        },
-        {
-          fieldName: "qsxtime",
-          label: "前时相"
-        },
-        {
-          fieldName: "hsxtime",
-          label: "后时相"
-        }
-      ]
-    }
-  ]
-};
+let flag = false;
 
 class SearchGIS extends React.Component {
   constructor(props) {
@@ -65,14 +35,31 @@ class SearchGIS extends React.Component {
         EsriWebTileLayer = WebTileLayer;
         EsriQueryTask = QueryTask;
         EsriQuery = Query;
+        flag = false;
       })
 
   }
 
   onCheck = (checkedKeys, e) => {
     this.loadToMap(checkedKeys, e);
-    // window.console.log(checkedKeys);
+    this.triggerAction();
   };
+
+  triggerAction = () => {
+    if (!flag) {
+      flag = true;
+      this.props.view.popup.on("trigger-action", evt => {
+        const featureGraphic = evt.target.content.graphic;
+        if (evt.action.id === "show-detail") {
+          window.open(`#/remote-sensing/details/${featureGraphic.attributes.TBBM}`)
+        } else if (evt.action.id === "show-compare") {
+          this.props.addFeature(featureGraphic)
+        }
+      });
+    }
+
+  }
+
 
   loadToMap = (checkedKeys, e) => {
     this.props.view.map.removeAll();
@@ -86,8 +73,7 @@ class SearchGIS extends React.Component {
             this.props.view.map.add(new EsriWebTileLayer({ urlTemplate: nodeUrl, id: nodeId }));
             break;
           case "feature":
-            this.props.view.map.add(new EsriFeatureLayer({ url: nodeUrl, id: nodeId ,popupTemplate:popupTemplate2}));
-            
+            this.props.view.map.add(new EsriFeatureLayer({ url: nodeUrl, id: nodeId, popupTemplate: template }));
             break;
 
           default:
@@ -95,6 +81,7 @@ class SearchGIS extends React.Component {
         }
       }
     });
+
   }
 
   inputValChange = evt => {
@@ -112,7 +99,7 @@ class SearchGIS extends React.Component {
         url: "http://218.3.176.6:6080/arcgis/rest/services/BHTuBan/MS_SL_BHTuBan_201812/MapServer/0"
       })
       const query = new EsriQuery()
-      // query.returnGeometry = true
+      query.returnGeometry = true
       query.outFields = ["*"]
       query.where = `hxmc like '%${str}%'`
       queryTask.execute(query).then(results => {
@@ -123,10 +110,10 @@ class SearchGIS extends React.Component {
           obj.type = "变化图斑"
           temp.push(obj)
         })
-        if(temp.length>0)
-        that.setState({
-          searchData: temp
-        })
+        if (temp.length > 0)
+          that.setState({
+            searchData: temp
+          })
       })
 
     } else {
@@ -139,7 +126,7 @@ class SearchGIS extends React.Component {
     }
   }
 
-  handleClick=()=> {
+  handleClick = () => {
     this.setState(prevState => ({
       isToggleOn: !prevState.isToggleOn,
       marginTop: !prevState.isToggleOn ? -20 : 0,
@@ -176,7 +163,7 @@ class SearchGIS extends React.Component {
           }
         >
         </Search>
-        <div className={style.searchList} style={{  visibility: this.state.searchPanelVisiable }}>
+        <div className={style.searchList} style={{ visibility: this.state.searchPanelVisiable }}>
           <List
             style={{ maxHeight: '35vh', overflowY: 'scroll' }}
             bordered
@@ -195,7 +182,7 @@ class SearchGIS extends React.Component {
             showIcon
             checkable
             onCheck={this.onCheck}
-            defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer','base-layer']}
+            defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer', 'base-layer']}
             style={{ overflow: "hidden" }}
           >
             <TreeNode

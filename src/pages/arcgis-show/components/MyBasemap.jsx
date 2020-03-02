@@ -38,7 +38,7 @@ const MyBasemap = props => {
           new Basemap({
             baseLayers: [tiandituLayerVec,tiandituLabelLayer],
             title: '天地图卫星',
-            id: 'tianditu_img',
+            id: 'tiandituLayer_vec',
             thumbnailUrl: `http://t1.tianditu.com/DataServer?T=img_w&x=13&y=6&l=4&tk=${token}`,
           }),
         );

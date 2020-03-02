@@ -2,7 +2,6 @@ import React from 'react';
 import { loadModules } from 'esri-loader';
 import { Button, Divider, Icon } from 'antd';
 import style from "./style.css";
-import { Map } from '@esri/react-arcgis';
 
 
 let EsriDistanceMesurement;
