@@ -1,8 +1,11 @@
 import React from 'react';
-import { CarryOutOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { Input, Tree, Tooltip, List, Typography } from 'antd';
+import { Icon, Input, Tree, Tooltip, List, Typography } from 'antd';
 import { loadModules } from 'esri-loader';
+// import router from 'umi/router';
+
 import { treeData } from './treeData.js';
+import { template } from './featureTemplate.js';
+import style from './style.css';
 
 const { Search } = Input;
 const { TreeNode } = Tree;
@@ -10,6 +13,7 @@ let EsriFeatureLayer;
 let EsriWebTileLayer;
 let EsriQueryTask;
 let EsriQuery;
+let flag = false;
 
 class SearchGIS extends React.Component {
   constructor(props) {
@@ -23,9 +27,6 @@ class SearchGIS extends React.Component {
       searchData: [],
     };
 
-    // 这个绑定是必要的，使`this`在回调中起作用
-    this.handleClick = this.handleClick.bind(this);
-
     loadModules([
       'esri/layers/FeatureLayer',
       'esri/layers/WebTileLayer',
@@ -36,12 +37,27 @@ class SearchGIS extends React.Component {
       EsriWebTileLayer = WebTileLayer;
       EsriQueryTask = QueryTask;
       EsriQuery = Query;
+      flag = false;
     });
   }
 
   onCheck = (checkedKeys, e) => {
     this.loadToMap(checkedKeys, e);
-    window.console.log(checkedKeys);
+    this.triggerAction();
+  };
+
+  triggerAction = () => {
+    if (!flag) {
+      flag = true;
+      this.props.view.popup.on('trigger-action', evt => {
+        const featureGraphic = evt.target.content.graphic;
+        if (evt.action.id === 'show-detail') {
+          window.open(`#/remote-sensing/details/${featureGraphic.attributes.TBBM}`);
+        } else if (evt.action.id === 'show-compare') {
+          this.props.addFeature(featureGraphic);
+        }
+      });
+    }
   };
 
   loadToMap = (checkedKeys, e) => {
@@ -56,7 +72,9 @@ class SearchGIS extends React.Component {
             this.props.view.map.add(new EsriWebTileLayer({ urlTemplate: nodeUrl, id: nodeId }));
             break;
           case 'feature':
-            this.props.view.map.add(new EsriFeatureLayer({ url: nodeUrl, id: nodeId }));
+            this.props.view.map.add(
+              new EsriFeatureLayer({ url: nodeUrl, id: nodeId, popupTemplate: template }),
+            );
             break;
 
           default:
@@ -82,7 +100,7 @@ class SearchGIS extends React.Component {
           'http://218.3.176.6:6080/arcgis/rest/services/BHTuBan/MS_SL_BHTuBan_201812/MapServer/0',
       });
       const query = new EsriQuery();
-      // query.returnGeometry = true
+      query.returnGeometry = true;
       query.outFields = ['*'];
       query.where = `hxmc like '%${str}%'`;
       queryTask.execute(query).then(results => {
@@ -108,13 +126,13 @@ class SearchGIS extends React.Component {
     }
   };
 
-  handleClick() {
+  handleClick = () => {
     this.setState(prevState => ({
       isToggleOn: !prevState.isToggleOn,
       marginTop: !prevState.isToggleOn ? -20 : 0,
       height: !prevState.isToggleOn ? 0 : 600,
     }));
-  }
+  };
 
   renderTreeNodes = data =>
     data.map(item => {
@@ -135,23 +153,19 @@ class SearchGIS extends React.Component {
           placeholder="输入查询关键字..."
           onChange={this.inputValChange}
           onClick={this.handleClick}
-          style={{ width: 240 }}
+          className={style.search}
           allowClear
           prefix={
             <Tooltip placement="bottom" title="图层">
-              <UnorderedListOutlined style={{ cursor: 'pointer' }} onClick={this.handleClick} />
+              <Icon
+                type="unordered-list"
+                style={{ cursor: 'pointer' }}
+                onClick={this.handleClick}
+              />
             </Tooltip>
           }
         />
-        <div
-          style={{
-            width: 240,
-            position: 'absolute',
-            backgroundColor: 'white',
-            zIndex: 9,
-            visibility: this.state.searchPanelVisiable,
-          }}
-        >
+        <div className={style.searchList} style={{ visibility: this.state.searchPanelVisiable }}>
           <List
             style={{ maxHeight: '35vh', overflowY: 'scroll' }}
             bordered
@@ -181,7 +195,7 @@ class SearchGIS extends React.Component {
                 marginTop: this.state.marginTop,
                 transition: '.3s all ease-in',
               }}
-              icon={<CarryOutOutlined />}
+              icon={<Icon type="carry-out" />}
               title="所有图层"
               key="0-0"
             >

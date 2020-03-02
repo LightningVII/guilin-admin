@@ -1,7 +1,6 @@
 import React from 'react';
 import { loadModules } from 'esri-loader';
-import { BorderOutlined, DeleteOutlined, LineOutlined } from '@ant-design/icons';
-import { Button, Divider } from 'antd';
+import { Button, Divider, Icon } from 'antd';
 import style from './style.css';
 
 let EsriDistanceMesurement;
@@ -24,8 +23,7 @@ class MapMeasure extends React.Component {
   }
 
   componentWillReceiveProps() {
-    // if (this.props.showMeasure2)
-    this.destroyWidget();
+    if (this.props.showMeasure) this.destroyWidget();
   }
 
   lineMeasure = () => {
@@ -66,18 +64,22 @@ class MapMeasure extends React.Component {
   render() {
     return (
       <>
-        <Button className={style.measureBtn} onClick={this.lineMeasure}>
-          <LineOutlined /> 线测量
-        </Button>
-        <Button className={style.measureBtn} onClick={this.areaMeasure}>
-          <BorderOutlined /> 面测量
-        </Button>
-        <div style={{ float: 'left' }}>
-          <Divider type="vertical" style={{ margin: 5, height: 18 }} />
-        </div>
-        <Button className={style.measureBtn} onClick={this.destroyWidget}>
-          <DeleteOutlined /> 清除
-        </Button>
+        {this.props.showMeasure ? (
+          <>
+            <Button className={style.measureBtn} onClick={this.lineMeasure}>
+              <Icon type="line" /> 线测量
+            </Button>
+            <Button className={style.measureBtn} onClick={this.areaMeasure}>
+              <Icon type="border" /> 面测量
+            </Button>
+            <div style={{ float: 'left' }}>
+              <Divider type="vertical" style={{ margin: 5, height: 18 }} />
+            </div>
+            <Button className={style.measureBtn} onClick={this.destroyWidget}>
+              <Icon type="delete" /> 清除
+            </Button>
+          </>
+        ) : null}
       </>
     );
   }

@@ -1,101 +1,151 @@
-.compassStyle{
-    width: 184px;
-    height:184px;
-    border-radius: 50%;
-    background:url(../../../../public/compass/ctb.png) -44px -60px no-repeat ;
+.compassStyle {
+  width: 184px;
+  height: 184px;
+  border-radius: 50%;
+  background: url(../../../../public/compass/ctb.png) -44px -60px no-repeat;
 }
 
-
-.compassClockStyle{
-    position: absolute;
-    width: 96px;
-    height: 96px;
-    top: 92px;
-    left: 92px;
-    margin: -48px;
-    z-index: 0;
-    background:url(../../../../public/compass/ctb.png) -462px -52px no-repeat;
+.compassClockStyle {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  top: 92px;
+  left: 92px;
+  margin: -48px;
+  z-index: 0;
+  background: url(../../../../public/compass/ctb.png) -462px -52px no-repeat;
 }
 
-.compassRotateLeft{
-    position: absolute;
-    width: 42px;
-    height: 104px;
-    top: 38px;
-    left: 4px;
-    z-index: 0;
-    cursor:pointer;
-    background:url(../../../../public/compass/ctb.png) -603px -154px no-repeat;
+.compassRotateLeft {
+  position: absolute;
+  width: 42px;
+  height: 104px;
+  top: 38px;
+  left: 4px;
+  z-index: 0;
+  cursor: pointer;
+  background: url(../../../../public/compass/ctb.png) -603px -154px no-repeat;
 }
 
-.compassRotateLeft:hover{
-    background:url(../../../../public/compass/ctb.png) -557px -153px no-repeat;
+.compassRotateLeft:hover {
+  background: url(../../../../public/compass/ctb.png) -557px -153px no-repeat;
 }
 
-.compassRotateRight{
-    position: absolute;
-    width: 42px;
-    height: 104px;
-    top: 38px;
-    z-index: 0;
-    left: 134px;
-    transform: rotateY(180deg);
-    cursor:pointer;
-    background:url(../../../../public/compass/ctb.png) -603px -154px no-repeat;
+.compassRotateRight {
+  position: absolute;
+  width: 42px;
+  height: 104px;
+  top: 38px;
+  z-index: 0;
+  left: 134px;
+  transform: rotateY(180deg);
+  cursor: pointer;
+  background: url(../../../../public/compass/ctb.png) -603px -154px no-repeat;
 }
 
-.compassRotateRight:hover{
-    background:url(../../../../public/compass/ctb.png) -557px -153px no-repeat;
+.compassRotateRight:hover {
+  background: url(../../../../public/compass/ctb.png) -557px -153px no-repeat;
 }
 
-.compassPointerStyle{
-    position: absolute;
-    width: 60px;
-    height: 96px;
-    left: 18px;
-    border: none;
-    z-index: 2;
-    background:url(../../../../public/compass/ctb.png) -562px -52px no-repeat;
+.compassPointerStyle {
+  position: absolute;
+  width: 60px;
+  height: 96px;
+  left: 18px;
+  border: none;
+  z-index: 2;
+  background: url(../../../../public/compass/ctb.png) -562px -52px no-repeat;
 }
 
-.zoomStyle{
-    width: 29px;
-    height: 73px;
-    margin-top: -38px;
-    margin-left: 38px;
-    text-align: center;
-    padding: 0 2px;
-    background: #fff;
-    border-radius: 3px
+.zoomStyle {
+  width: 29px;
+  height: 73px;
+  margin-top: -38px;
+  margin-left: 38px;
+  text-align: center;
+  padding: 0 2px;
+  background: #fff;
+  border-radius: 3px;
 }
 
-.zoomInStyle{
-    width: 24px;
-    height: 36px;
-    margin: 0 auto;
-    padding: 10px 0;
-    cursor: pointer;
-    border-bottom: 1px #dfdfdf solid
+.zoomInStyle {
+  width: 24px;
+  height: 36px;
+  margin: 0 auto;
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 1px #dfdfdf solid;
 }
 
 .zoomOutStyle {
-    width: 24px;
-    height: 36px;
-    margin: 0 auto;
-    padding: 10px 0;
-    cursor: pointer
+  width: 24px;
+  height: 36px;
+  margin: 0 auto;
+  padding: 10px 0;
+  cursor: pointer;
 }
 
-.measureBtn{
-    /* margin: 0px 5px 10px 5px; */
-    border-radius:5px;
-    height: 31px;
-    width: 80px;
-    font-size: 13px;
-    border: white;
-    float: left;
+.measureBtn {
+  /* margin: 0px 5px 10px 5px; */
+  border-radius: 5px;
+  height: 31px;
+  width: 80px;
+  font-size: 13px;
+  border: white;
+  float: left;
 }
-.measureBtn:hover{
-    box-shadow:0 0 1px 1px #1890FF inset;
-    cursor: pointer;
- }
+
+.measureBtn:hover {
+  box-shadow: 0 0 1px 1px #1890ff inset;
+  cursor: pointer;
+}
+
+.search {
+  width: 240px;
+}
+
+.searchList {
+  width: 240px;
+  position: absolute;
+  background-color: white;
+  z-index: 9;
+}
+
+.mapBottomCard {
+  position: absolute;
+  bottom: 20px;
+  right: 150px;
+  width: 330px;
+  height: 290px;
+}
+
+.baseMapCol{
+  cursor: pointer;
+}
+
+.baseMapImg{
+  width: 90px;
+  height: 60px;
+  background-size: cover;
+  text-align: center;
+}
+
+.baseMapText{
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.baseMapTextToggle{
+  font-size: 12px;
+  text-align: center;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.baseMapTitle{
+  font-size: 14px;
+  margin: 4px 12px;
+
+}
+
