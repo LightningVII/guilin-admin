@@ -16,7 +16,7 @@ export async function queryRemoteData(params) {
     term: params.keywords,
     startTime: params.rangePickerValue[0].format('YYYY-MM-DD'),
     endTime: params.rangePickerValue[1].format('YYYY-MM-DD'),
-    userId: params.userId,
+    userid: params.userid,
     state: params.status,
   };
 
@@ -34,4 +34,18 @@ export async function queryChangespotIssue(params) {
       'Content-Type': 'application/x-www-form-urlencoded;',
     },
   });
+}
+
+export async function queryChangespotApproval(params) {
+  return request(`/strapi/changespot/approval`, {
+    method: 'POST',
+    data: stringify(params),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+  });
+}
+
+export async function queryRemoteSensingDetail(payload) {
+  return request(`/strapi/changespot/info?${stringify(payload)}`);
 }

@@ -1,21 +1,27 @@
-import { queryRemoteData, queryChangespotIssue } from '@/services/remote';
+import {
+  queryRemoteData,
+  queryChangespotIssue,
+  queryChangespotApproval,
+  queryRemoteSensingDetail,
+} from '@/services/remote';
 
 const RemoteModel = {
   namespace: 'remoteSensing',
 
   state: {
     remoteSensingData: null,
+    remoteSensingDetail: null,
   },
 
   effects: {
     *fetchRemoteData({ payload }, { call, put, select }) {
-      const userId = yield select(state => state?.user?.currentUser?.userid);
+      const userid = yield select(state => state?.user?.currentUser?.userid);
       const response = yield call(queryRemoteData, {
         ...payload,
-        userId,
+        userid,
       });
       if (response?.code === 200 && response?.content) {
-        yield put({
+        return yield put({
           type: 'saveRemoteData',
           payload: {
             totalCount: response?.content?.total,
@@ -23,9 +29,21 @@ const RemoteModel = {
           },
         });
       }
+      return {};
     },
     *fetchChangespotIssue({ payload }, { call }) {
       return yield call(queryChangespotIssue, payload);
+    },
+    *fetchChangespotApproval({ payload }, { call }) {
+      return yield call(queryChangespotApproval, payload);
+    },
+    *findRemoteSensingDetail({ payload }, { call, put }) {
+      const data = yield call(queryRemoteSensingDetail, payload);
+      console.log('findRemoteSensingDetail  data', data);
+      yield put({
+        type: 'show',
+        payload: data,
+      });
     },
   },
 
@@ -35,6 +53,9 @@ const RemoteModel = {
         ...state,
         remoteSensingData: action.payload || state.remoteSensingData,
       };
+    },
+    show(state, { payload }) {
+      return { ...state, remoteSensingDetail: payload };
     },
   },
 };

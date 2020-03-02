@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Random } from 'mockjs';
+// import { Random } from 'mockjs';
 import React from 'react';
 import { statusEnum } from '@/constants/basicEnum';
 import { Badge, Divider, Tag } from 'antd';
@@ -58,9 +58,9 @@ export const remoteSensingListColumns = () => [
   },
 ];
 
-export const mockImages = handleImagesClick => {
-  const images = [...Random.string(0, 4)].map(() => Random.image());
-  return images.map((i, index) => (
+export const mockImages = (images, handleImagesClick) =>
+  // const images = [...Random.string(0, 4)].map(() => Random.image());
+  images.map((i, index) => (
     <img
       key={index.toString()}
       alt=""
@@ -69,7 +69,6 @@ export const mockImages = handleImagesClick => {
       onClick={() => handleImagesClick(images)}
     />
   ));
-};
 
 export const feedbackListColumns = handleImagesClick => [
   {

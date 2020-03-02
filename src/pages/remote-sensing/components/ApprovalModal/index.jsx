@@ -3,7 +3,14 @@ import { Modal, Input, Button } from 'antd';
 
 const { TextArea } = Input;
 
-export default ({ visible, handleYesClick, handleNoClick, handleCloseClick, handleChange }) => (
+export default ({
+  visible,
+  content,
+  handleYesClick,
+  handleNoClick,
+  handleCloseClick,
+  handleChange,
+}) => (
   <Modal
     title="审核"
     visible={visible}
@@ -18,6 +25,11 @@ export default ({ visible, handleYesClick, handleNoClick, handleCloseClick, hand
       </Button>,
     ]}
   >
-    <TextArea onChange={handleChange} style={{ height: '200px' }} placeholder="审核意见" />
+    <TextArea
+      value={content}
+      onChange={handleChange}
+      style={{ height: '200px' }}
+      placeholder="审核意见"
+    />
   </Modal>
 );

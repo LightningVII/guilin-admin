@@ -6,8 +6,18 @@ import { mockImages } from '@/constants/columns';
 import { connect } from 'dva';
 
 export default connect(({ feedback }) => ({ feedback }))(
-  ({ record, feedback, handleImagesClick }) => {
-    const data = feedback?.feedbackData?.filter(r => r.TBBM === record?.properties?.TBBM);
+  ({ record, feedback, handleImagesClick, handleReportClick }) => {
+    const data = feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm);
+    console.log('data :', data);
+    console.log('feedback?.feedbackData :', feedback?.feedbackData);
+    const Description = props => (
+      <>
+        <span>{props.czyj}</span>
+        <br />
+        <span>{props.remark}</span>
+      </>
+    );
+
     return (
       <div id="components-list-demo-basic">
         <List
@@ -15,23 +25,19 @@ export default connect(({ feedback }) => ({ feedback }))(
           dataSource={data}
           renderItem={item => (
             <List.Item
-            /* actions={[
-              <a onClick={() => router.push('/feedback/details')}>反馈报告</a>,
-              <a key="list-loadmore-more">编辑</a>,
-            ]} */
+              actions={[
+                <a onClick={() => handleReportClick(item)}>反馈报告</a>,
+                // <a key="list-loadmore-more">编辑</a>,
+              ]}
             >
               <List.Item.Meta
-                /* avatar={
-                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-              } */
-                avatar={
-                  item.isIllegal ? <Tag color="red">违法</Tag> : <Tag color="green">合法</Tag>
-                }
-                title={item.executor.username}
-                description={item.content}
+                avatar={<Tag>{item.czry}</Tag>}
+                // avatar={item.czry}
+                title={item.czsj}
+                description={<Description {...item} />}
               />
 
-              {mockImages(handleImagesClick)}
+              {mockImages(item.fjs, handleImagesClick)}
             </List.Item>
           )}
         />

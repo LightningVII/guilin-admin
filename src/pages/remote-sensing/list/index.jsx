@@ -24,6 +24,7 @@ import { TabsEnum } from '@/constants/basicEnum';
 import FeedbackList from '../components/FeedbackList';
 import DistributeModal from '../components/DistributeModal';
 import ImagesPreview from '../components/ImagesPreview';
+import ApprovalModal from '../components/ApprovalModal';
 
 const { TabPane } = Tabs;
 const initRangPickerValue = getTimeDistance('year');
@@ -54,11 +55,16 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
+let implementId;
 const TableList = props => {
   const [spotIds, setSpotIds] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [approvalContent, setApprovalContent] = useState('');
+
+  const [approvalShow, setApprovalShow] = useState(false);
+
   const [imagesViewShow, setImagesViewShow] = useState(false);
   const [deptid, setDeptid] = useState(null);
   const [userIds, setUserIds] = useState([]);
@@ -69,7 +75,7 @@ const TableList = props => {
     rangePickerValue: initRangPickerValue,
     keywords: '',
   });
-  const { totalCount, data, dispatch } = props;
+  const { totalCount, data, user, dispatch } = props;
 
   const fetchRemoteData = (params = {}) => {
     if (dispatch) {
@@ -82,7 +88,17 @@ const TableList = props => {
       dispatch({
         type: 'remoteSensing/fetchRemoteData',
         payload,
-      }).then(() => setLoading(false));
+      }).then(res => {
+        if (res?.payload?.data?.length) {
+          res.payload.data.forEach(async record => {
+            await dispatch({
+              type: 'feedback/fetchFeedbackTBBM',
+              payload: record?.tbbm,
+            });
+          });
+        }
+        setLoading(false);
+      });
     }
   };
 
@@ -91,7 +107,7 @@ const TableList = props => {
 
   useEffect(() => {
     fetchRemoteData({ current: 1 });
-    dispatch({ type: 'feedback/fetchFeedbackData' });
+    // dispatch({ type: 'feedback/fetchFeedbackData' });
   }, []);
 
   const rowSelection = {
@@ -168,7 +184,14 @@ const TableList = props => {
           rowSelection={rowSelection}
           expandedRowRender={record => (
             <FeedbackList
+              handleReportClick={r => {
+                setApprovalContent('');
+                setApprovalShow(true);
+                implementId = r.id;
+                console.log('record :', r);
+              }}
               handleImagesClick={images => {
+                console.log('handleImagesClick :', images);
                 setSelectedImages(images);
                 setImagesViewShow(true);
               }}
@@ -215,16 +238,61 @@ const TableList = props => {
         visible={imagesViewShow}
         handleCloseClick={() => setImagesViewShow(false)}
       />
+      <ApprovalModal
+        visible={approvalShow}
+        handleYesClick={() => {
+          dispatch({
+            type: 'remoteSensing/fetchChangespotApproval',
+            payload: {
+              implementId,
+              spjg: 1,
+              spbz: approvalContent,
+              spr: user.currentUser.userid,
+            },
+          }).then(res => {
+            if (res?.code === 200) {
+              // fetchRemoteData();
+              setApprovalShow(false);
+            } else {
+              message.warning('数据异常');
+            }
+          });
+        }}
+        handleNoClick={() => {
+          dispatch({
+            type: 'remoteSensing/fetchChangespotApproval',
+            payload: {
+              implementId,
+              spjg: 2,
+              spbz: approvalContent,
+              spr: user.currentUser.userid,
+            },
+          }).then(res => {
+            if (res?.code === 200) {
+              // fetchRemoteData();
+              setApprovalShow(false);
+            } else {
+              message.warning('数据异常');
+            }
+          });
+          console.log('不通过 ---------------:');
+          // setApprovalShow(false);
+        }}
+        handleCloseClick={() => setApprovalShow(false)}
+        handleChange={e => setApprovalContent(e.target.value)}
+        content={approvalContent}
+      />
     </PageHeaderWrapper>
   );
 };
 
-export default connect(({ remoteSensing }) => {
+export default connect(({ remoteSensing, user }) => {
   const { totalCount, data } =
     remoteSensing && remoteSensing.remoteSensingData ? remoteSensing.remoteSensingData : {};
   return {
     totalCount,
     data,
+    user,
   };
 })(TableList);
 // })(Form.create()(TableList));
