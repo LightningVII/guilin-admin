@@ -1,5 +1,8 @@
 // import { Layout, Card, Form, List, Typography, Row, Col, Select } from 'antd';
-import { Layout, Card, Form, List, Typography } from 'antd';
+import { Form } from '@ant-design/compatible';
+
+import '@ant-design/compatible/assets/index.css';
+import { Layout, Card, List, Typography } from 'antd';
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';

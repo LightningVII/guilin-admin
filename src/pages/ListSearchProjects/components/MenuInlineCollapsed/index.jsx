@@ -1,6 +1,7 @@
 import React from 'react';
+import { DesktopOutlined, InboxOutlined, PieChartOutlined } from '@ant-design/icons';
 // import { Menu, Icon, Button } from 'antd';
-import { Menu, Icon } from 'antd';
+import { Menu } from 'antd';
 
 // const { SubMenu } = Menu;
 
@@ -36,23 +37,23 @@ class App extends React.Component {
           // inlineCollapsed={this.state.collapsed}
         >
           <Menu.Item key="a">
-            <Icon type="pie-chart" />
+            <PieChartOutlined />
             <span>影像数据</span>
           </Menu.Item>
           <Menu.Item key="b">
-            <Icon type="desktop" />
+            <DesktopOutlined />
             <span>变化图斑</span>
           </Menu.Item>
           <Menu.Item key="c">
-            <Icon type="inbox" />
+            <InboxOutlined />
             <span>多媒体数据</span>
           </Menu.Item>
           <Menu.Item key="d">
-            <Icon type="inbox" />
+            <InboxOutlined />
             <span>报告</span>
           </Menu.Item>
           <Menu.Item key="e">
-            <Icon type="inbox" />
+            <InboxOutlined />
             <span>基础地理数据</span>
           </Menu.Item>
         </Menu>

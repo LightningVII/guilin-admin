@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
-import { Form, Input, Tooltip, Icon, Select, Button } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Tooltip, Select, Button } from 'antd';
 
 const { Option } = Select;
 
@@ -127,7 +130,7 @@ class RegistrationForm extends Component {
             <span>
               {formatMessage({ id: 'app.settings.basic.nickname' })}&nbsp;
               <Tooltip title="What do you want others to call you?">
-                <Icon type="question-circle-o" />
+                <QuestionCircleOutlined />
               </Tooltip>
             </span>
           }

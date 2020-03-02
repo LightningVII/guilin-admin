@@ -1,5 +1,5 @@
-// import { Avatar, Icon, Menu, Spin } from 'antd';
-import { Icon, Menu, Spin } from 'antd';
+import { IdcardOutlined, LogoutOutlined, ScheduleOutlined, UserOutlined } from '@ant-design/icons';
+import { Menu, Spin } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
 import { connect } from 'dva';
@@ -39,20 +39,20 @@ class AvatarDropdown extends React.Component {
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         {menu && (
           <Menu.Item key="/remote-sensing">
-            <Icon type="schedule" />
+            <ScheduleOutlined />
             <FormattedMessage id="menu.task.center" defaultMessage="account settings" />
           </Menu.Item>
         )}
         {menu && (
           <Menu.Item key="/account/center">
-            <Icon type="idcard" />
+            <IdcardOutlined />
             <FormattedMessage id="menu.account.center" defaultMessage="account center" />
           </Menu.Item>
         )}
         {menu && <Menu.Divider />}
 
         <Menu.Item key="logout">
-          <Icon type="logout" />
+          <LogoutOutlined />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
         </Menu.Item>
       </Menu>
@@ -66,7 +66,7 @@ class AvatarDropdown extends React.Component {
             src="http://47.52.250.238:1337/uploads/a0abf382c5ef4ca58226eb5b194a828c.jpg"
             alt="avatar"
           /> */}
-          <Icon type="user" />
+          <UserOutlined />
           <span className={styles.name}>{currentUser.username}</span>
         </span>
       </HeaderDropdown>

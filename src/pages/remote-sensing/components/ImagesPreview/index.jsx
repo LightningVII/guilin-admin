@@ -1,20 +1,21 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
-import { Carousel, Empty, Modal, Icon, Button } from 'antd';
+import { CloseOutlined, LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
+import { Carousel, Empty, Modal, Button } from 'antd';
 import styles from './styles.less';
 
 const PrevArrow = ({ currentSlide, slideCount, ...arrowProps }) => (
-  <Button {...arrowProps} ghost type="primary" icon="left-circle" />
+  <Button {...arrowProps} ghost type="primary" icon={<LeftCircleOutlined />} />
 );
 
 const NextArrow = ({ currentSlide, slideCount, ...arrowProps }) => (
-  <Button {...arrowProps} ghost type="primary" icon="right-circle" />
+  <Button {...arrowProps} ghost type="primary" icon={<RightCircleOutlined />} />
 );
 
 export default ({ visible, handleCloseClick, images }) => (
   <Modal
     footer={null}
-    closeIcon={<Icon className={styles.icon} type="close" />}
+    closeIcon={<CloseOutlined className={styles.icon} />}
     centered
     bodyStyle={{ padding: 0 }}
     visible={visible}
@@ -36,7 +37,7 @@ export default ({ visible, handleCloseClick, images }) => (
                 backgroundPosition: 'center',
                 backgroundImage: `url(${i})`,
               }}
-            ></div>
+            />
           </div>
         ))
       ) : (

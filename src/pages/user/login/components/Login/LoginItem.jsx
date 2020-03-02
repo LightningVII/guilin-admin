@@ -1,9 +1,12 @@
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Input, Row } from 'antd';
 import React, { Component } from 'react';
 import omit from 'omit.js';
 import ItemMap from './map';
 import LoginContext from './LoginContext';
 import styles from './index.less';
+
 const FormItem = Form.Item;
 
 class WrapFormItem extends Component {
@@ -11,6 +14,7 @@ class WrapFormItem extends Component {
     getCaptchaButtonText: 'captcha',
     getCaptchaSecondText: 'second',
   };
+
   interval = undefined;
 
   constructor(props) {
@@ -46,6 +50,7 @@ class WrapFormItem extends Component {
       this.runGetCaptchaCountDown();
     }
   };
+
   getFormItemOptions = ({ onChange, defaultValue, customProps = {}, rules }) => {
     const options = {
       rules: rules || customProps.rules,
@@ -61,6 +66,7 @@ class WrapFormItem extends Component {
 
     return options;
   };
+
   runGetCaptchaCountDown = () => {
     const { countDown } = this.props;
     let count = countDown || 59;
