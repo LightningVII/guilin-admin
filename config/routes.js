@@ -69,7 +69,7 @@ export default [
             hideInMenu: true,
           },
           {
-            path: '/remote-sensing/details/arcgis-show/:TBBM',
+            path: '/remote-sensing/details/arcgis-show/:tbbm',
             name: 'map-show',
             icon: 'crown',
             component: './arcgis-show/map',
@@ -78,7 +78,7 @@ export default [
           {
             name: 'task.center',
             icon: 'smile',
-            path: '/remote-sensing/details/:TBBM',
+            path: '/remote-sensing/details/:tbbm',
             component: './remote-sensing/details',
             hideInMenu: true,
           },
