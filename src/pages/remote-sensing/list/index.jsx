@@ -75,7 +75,7 @@ const TableList = props => {
     rangePickerValue: initRangPickerValue,
     keywords: '',
   });
-  const { totalCount, data, user, dispatch } = props;
+  const { totalCount, data, user, feedback, dispatch } = props;
 
   const fetchRemoteData = (params = {}) => {
     if (dispatch) {
@@ -93,7 +93,7 @@ const TableList = props => {
           res.payload.data.forEach(async record => {
             await dispatch({
               type: 'feedback/fetchFeedbackTBBM',
-              payload: record?.tbbm,
+              payload: { tbbm: record?.tbbm },
             });
           });
         }
@@ -182,22 +182,32 @@ const TableList = props => {
           loading={loading}
           rowKey={({ spotid }) => spotid}
           rowSelection={rowSelection}
-          expandedRowRender={record => (
-            <FeedbackList
-              handleReportClick={r => {
-                setApprovalContent('');
-                setApprovalShow(true);
-                implementId = r.id;
-                console.log('record :', r);
-              }}
-              handleImagesClick={images => {
-                console.log('handleImagesClick :', images);
-                setSelectedImages(images);
-                setImagesViewShow(true);
-              }}
-              record={record}
-            />
-          )}
+          expandRowByClick
+          // expandedRowRender={}
+          rowExpandable={record => {
+            console.log(
+              'feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length :',
+              !!feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length,
+            );
+            return feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length;
+          }}
+          expandedRowRender={record => {
+            const feedbackData = feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm);
+            return feedbackData?.length ? (
+              <FeedbackList
+                handleReportClick={r => {
+                  setApprovalContent('');
+                  setApprovalShow(true);
+                  implementId = r.implementid;
+                }}
+                handleImagesClick={images => {
+                  setSelectedImages(images);
+                  setImagesViewShow(true);
+                }}
+                record={feedbackData}
+              />
+            ) : null;
+          }}
           pagination={{
             current: searchParams.current,
             defaultPageSize,
@@ -251,7 +261,7 @@ const TableList = props => {
             },
           }).then(res => {
             if (res?.code === 200) {
-              // fetchRemoteData();
+              fetchRemoteData();
               setApprovalShow(false);
             } else {
               message.warning('数据异常');
@@ -269,14 +279,12 @@ const TableList = props => {
             },
           }).then(res => {
             if (res?.code === 200) {
-              // fetchRemoteData();
+              fetchRemoteData();
               setApprovalShow(false);
             } else {
               message.warning('数据异常');
             }
           });
-          console.log('不通过 ---------------:');
-          // setApprovalShow(false);
         }}
         handleCloseClick={() => setApprovalShow(false)}
         handleChange={e => setApprovalContent(e.target.value)}
@@ -286,13 +294,14 @@ const TableList = props => {
   );
 };
 
-export default connect(({ remoteSensing, user }) => {
+export default connect(({ remoteSensing, user, feedback }) => {
   const { totalCount, data } =
     remoteSensing && remoteSensing.remoteSensingData ? remoteSensing.remoteSensingData : {};
   return {
     totalCount,
     data,
     user,
+    feedback,
   };
 })(TableList);
 // })(Form.create()(TableList));

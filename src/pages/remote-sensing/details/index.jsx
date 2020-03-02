@@ -1,17 +1,25 @@
-import { Button, Card, Statistic, Descriptions, Steps, Table } from 'antd';
+import { Button, Card, Statistic, Descriptions, Steps, Table, message } from 'antd';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import React, { Component, Fragment } from 'react';
-import { statusEnum, implementationEnum } from '@/constants/basicEnum';
+import { statusEnum } from '@/constants/basicEnum';
 import { feedbackListColumns } from '@/constants/columns';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
+import moment from 'moment';
 
 import DistributeModal from '../components/DistributeModal';
 import ApprovalModal from '../components/ApprovalModal';
 import ImagesPreview from '../components/ImagesPreview';
 import TimelineAlternate from './TimelineAlternate';
 import styles from './style.less';
+
+const processingAction = item => (
+  <>
+    <Fragment>{item?.username}</Fragment>
+    <div>{moment(item?.time).format('YYYY-MM-DD')}</div>
+  </>
+);
 
 const { Step } = Steps;
 const ButtonGroup = Button.Group;
@@ -38,14 +46,13 @@ function itemRender(route, params, routeList, paths) {
   );
 }
 
-const action = (handleApprovalClick, handleSubmitClick, TBBM) => (
+const action = (handleApprovalClick, tbbm) => (
   <Fragment>
     <ButtonGroup>
-      <Button onClick={() => router.push(`/remote-sensing/details/arcgis-show/${TBBM}`)}>
+      <Button onClick={() => router.push(`/remote-sensing/details/arcgis-show/${tbbm}`)}>
         进入地图
       </Button>
       <Button onClick={handleApprovalClick}>分发</Button>
-      <Button onClick={handleSubmitClick}>执行审批</Button>
       <Button>归档</Button>
     </ButtonGroup>
     <Button type="primary">填写反馈报告</Button>
@@ -54,28 +61,30 @@ const action = (handleApprovalClick, handleSubmitClick, TBBM) => (
 
 const extra = item => (
   <div className={styles.moreInfo}>
-    <Statistic title="状态" value={statusEnum[item?.status]?.text} />
-    <Statistic title="批次" value={item?.properties?.BATCH} />
+    <Statistic title="状态" value={statusEnum[item?.state]?.text} />
+    <Statistic title="批次" value={item?.batch} />
   </div>
 );
 const description = item => (
   <RouteContext.Consumer>
-    {({ isMobile }) => (
-      <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
-        <Descriptions.Item label="前时相">{item?.properties?.QSX}</Descriptions.Item>
-        <Descriptions.Item label="前时相地类名称">{item?.properties?.QSXDLMC}</Descriptions.Item>
-        <Descriptions.Item label="后时相">{item?.properties?.HSX}</Descriptions.Item>
-        <Descriptions.Item label="后时相地类名称">{item?.properties?.HSXDLMC}</Descriptions.Item>
-        <Descriptions.Item label="变化类型">{item?.properties?.BHLX}</Descriptions.Item>
-        <Descriptions.Item label="前时相变化地类">{item?.properties?.QSXBHDL}</Descriptions.Item>
-        <Descriptions.Item label="区县">{item?.properties?.COUNTY}</Descriptions.Item>
-        <Descriptions.Item label="后时相变化地类">{item?.properties?.HSXBHDL}</Descriptions.Item>
-        <Descriptions.Item label="位置">{item?.properties?.LOCATION}</Descriptions.Item>
-        <Descriptions.Item label="面积（亩）">{item?.properties?.AREA}</Descriptions.Item>
+    {() => (
+      <Descriptions className={styles.headerList} size="small" column={2}>
+        <Descriptions.Item label="前时相">{item?.qsx}</Descriptions.Item>
+        <Descriptions.Item label="前时相地类名称">{item?.qsxdlmc}</Descriptions.Item>
+        <Descriptions.Item label="后时相">{item?.HSX}</Descriptions.Item>
+        <Descriptions.Item label="后时相地类名称">{item?.hsxdlmc}</Descriptions.Item>
+        <Descriptions.Item label="变化类型">{item?.BHLX}</Descriptions.Item>
+        <Descriptions.Item label="前时相变化地类">{item?.qsxbhdl}</Descriptions.Item>
+        <Descriptions.Item label="区县">{item?.COUNTY}</Descriptions.Item>
+        <Descriptions.Item label="后时相变化地类">{item?.hsxbhdl}</Descriptions.Item>
+        <Descriptions.Item label="位置">{item?.location}</Descriptions.Item>
+        <Descriptions.Item label="面积（亩）">{item?.area}</Descriptions.Item>
       </Descriptions>
     )}
   </RouteContext.Consumer>
 );
+
+let implementId;
 
 class Details extends Component {
   state = {
@@ -91,14 +100,13 @@ class Details extends Component {
   componentDidMount() {
     const { dispatch, match } = this.props;
     dispatch({
-      type: 'remoteSensingDetails/findRemoteSensingDetail',
+      type: 'remoteSensing/fetchRemoteSensingDetail',
       payload: match?.params,
     });
-    dispatch({
+    /* dispatch({
       type: 'feedback/fetchFeedbackTBBM',
       payload: match?.params,
-    });
-    console.log('Details  this.props :', match.params);
+    }); */
   }
 
   render() {
@@ -111,12 +119,11 @@ class Details extends Component {
       selectedImages,
       imagesViewShow,
     } = this.state;
-    const { remoteSensingDetails, match, feedback } = this.props;
-    const { remoteSensingDetail } = remoteSensingDetails;
-    const { properties } = remoteSensingDetail || {};
+    const { remoteSensing, match, dispatch, user } = this.props;
+    const { changespot, procedureInfo, procedureList = [], spotImplements } = remoteSensing;
     const setSelectedImages = images => this.setState({ selectedImages: images });
     const setImagesViewShow = show => this.setState({ imagesViewShow: show });
-    const feedbackList = feedback?.feedbackTBBM?.filter(r => r.TBBM === match?.params?.TBBM);
+    // const feedbackList = feedback?.feedbackTBBM?.filter(r => r.tbbm === match?.params?.tbbm);
 
     return (
       <PageHeaderWrapper
@@ -125,15 +132,11 @@ class Details extends Component {
           routes,
           itemRender,
         }}
-        title={`单号：${properties?.TBBM}`}
-        extra={action(
-          () => this.setState({ visible: true }),
-          () => this.setState({ approvalShow: true }),
-          match?.params?.TBBM,
-        )}
+        title={`单号：${changespot?.tbbm}`}
+        extra={action(() => this.setState({ visible: true }), match?.params?.tbbm)}
         className={styles.pageHeader}
-        content={description(remoteSensingDetail)}
-        extraContent={extra(remoteSensingDetail)}
+        content={description(changespot)}
+        extraContent={extra(changespot)}
       >
         <div className={styles.main}>
           <GridContent>
@@ -142,17 +145,13 @@ class Details extends Component {
                 {({ isMobile }) => (
                   <Steps
                     direction={isMobile ? 'vertical' : 'horizontal'}
-                    current={remoteSensingDetail?.status}
+                    current={changespot?.state}
                   >
-                    {statusEnum.map(({ text, status }, index) => (
+                    {procedureList.map((item, index) => (
                       <Step
-                        key={status}
-                        title={text}
-                        description={
-                          remoteSensingDetail?.status >= index
-                            ? implementationEnum[index](remoteSensingDetail)
-                            : ''
-                        }
+                        key={item?.status}
+                        title={item.text}
+                        description={changespot?.state >= index ? processingAction(item) : ''}
                       />
                     ))}
                   </Steps>
@@ -160,37 +159,40 @@ class Details extends Component {
               </RouteContext.Consumer>
             </Card>
             <Card bordered={false} style={{ marginBottom: 24 }}>
-              <TimelineAlternate TBBM={match?.params?.TBBM} />
+              <TimelineAlternate tbbm={match?.params?.tbbm} logsInfo={procedureInfo} />
             </Card>
             <Card
               bodyStyle={{ padding: 0 }}
-              title="反馈报告"
+              title="执行报告"
               style={{ marginBottom: 24 }}
               bordered={false}
             >
               <Table
                 pagination={false}
-                dataSource={feedbackList}
-                rowKey="id"
-                columns={feedbackListColumns(images => {
-                  setSelectedImages(images);
-                  setImagesViewShow(true);
-                })}
+                dataSource={spotImplements}
+                rowKey="implementid"
+                columns={feedbackListColumns(
+                  images => {
+                    setSelectedImages(images);
+                    setImagesViewShow(true);
+                  },
+                  r => {
+                    this.setState({
+                      approvalShow: true,
+                      approvalContent: '',
+                    });
+                    implementId = r.implementid;
+                  },
+                )}
               />
             </Card>
-            <Card title="反馈人信息" style={{ marginBottom: 24 }} bordered={false}>
+            {/* <Card title="反馈人信息" style={{ marginBottom: 24 }} bordered={false}>
               <Descriptions>
-                <Descriptions.Item label="姓名">
-                  {remoteSensingDetail?.executor.username}
-                </Descriptions.Item>
-                <Descriptions.Item label="联系方式">
-                  {remoteSensingDetail?.executor.phone}
-                </Descriptions.Item>
-                <Descriptions.Item label="联系地址">
-                  {remoteSensingDetail?.executor.address}
-                </Descriptions.Item>
+                <Descriptions.Item label="姓名">{changespot?.username}</Descriptions.Item>
+                <Descriptions.Item label="联系方式">{changespot?.phone}</Descriptions.Item>
+                <Descriptions.Item label="联系地址">{changespot?.address}</Descriptions.Item>
               </Descriptions>
-            </Card>
+            </Card> */}
           </GridContent>
         </div>
         <DistributeModal
@@ -210,12 +212,48 @@ class Details extends Component {
         <ApprovalModal
           visible={approvalShow}
           handleYesClick={() => {
-            console.log('通过 ---------------:');
-            this.setState({ approvalShow: false });
+            dispatch({
+              type: 'remoteSensing/fetchChangespotApproval',
+              payload: {
+                implementId,
+                spjg: 1,
+                spbz: approvalContent,
+                spr: user.currentUser.userid,
+              },
+            }).then(res => {
+              if (res?.code === 200) {
+                dispatch({
+                  type: 'remoteSensing/fetchRemoteSensingDetail',
+                  payload: match?.params,
+                });
+                this.setState({ approvalShow: false });
+              } else {
+                message.warning('数据异常');
+              }
+            });
           }}
           handleNoClick={() => {
+            dispatch({
+              type: 'remoteSensing/fetchChangespotApproval',
+              payload: {
+                implementId,
+                spjg: 2,
+                spbz: approvalContent,
+                spr: user.currentUser.userid,
+              },
+            }).then(res => {
+              if (res?.code === 200) {
+                dispatch({
+                  type: 'remoteSensing/fetchRemoteSensingDetail',
+                  payload: match?.params,
+                });
+                this.setState({ approvalShow: false });
+              } else {
+                message.warning('数据异常');
+              }
+            });
             console.log('不通过 ---------------:');
-            this.setState({ approvalShow: false });
+            // setApprovalShow(false);
           }}
           handleCloseClick={() => this.setState({ approvalShow: false })}
           handleChange={e => this.setState({ approvalContent: e.target.value })}
@@ -226,7 +264,8 @@ class Details extends Component {
   }
 }
 
-export default connect(({ remoteSensingDetails, feedback }) => ({
-  remoteSensingDetails,
+export default connect(({ remoteSensing, feedback, user }) => ({
+  remoteSensing,
   feedback,
+  user,
 }))(Details);

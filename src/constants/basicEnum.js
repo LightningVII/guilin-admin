@@ -19,21 +19,19 @@ export const statusEnum = [
   },
 ];
 
-const defaultAction = item => (
-  <>
-    <Fragment>{item?.originator?.username}</Fragment>
-    <div>2016-12-12 12:32</div>
-  </>
-);
-
 const processingAction = item => (
   <>
-    <Fragment>{item?.executor?.username}</Fragment>
-    <div>2016-12-12 12:32</div>
+    <Fragment>{item?.username}</Fragment>
+    <div>{item?.time}</div>
   </>
 );
 
-export const implementationEnum = [defaultAction, defaultAction, processingAction, defaultAction];
+export const implementationEnum = [
+  processingAction,
+  processingAction,
+  processingAction,
+  processingAction,
+];
 
 export const TabsEnum = [
   { tab: '全部', index: 0 },

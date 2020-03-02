@@ -46,6 +46,7 @@ export async function queryChangespotApproval(params) {
   });
 }
 
-export async function queryRemoteSensingDetail(payload) {
-  return request(`/strapi/changespot/info?${stringify(payload)}`);
+export async function queryRemoteSensingDetail(tbbm) {
+  console.log('queryRemoteSensingDetail tbbm', tbbm);
+  return request(`/strapi/changespot/info?${stringify(tbbm)}`);
 }

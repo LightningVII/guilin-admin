@@ -3,6 +3,7 @@
 import React from 'react';
 import { statusEnum } from '@/constants/basicEnum';
 import { Badge, Divider, Tag } from 'antd';
+import moment from 'moment';
 import router from 'umi/router';
 
 export const remoteSensingListColumns = () => [
@@ -70,30 +71,37 @@ export const mockImages = (images, handleImagesClick) =>
     />
   ));
 
-export const feedbackListColumns = handleImagesClick => [
+export const feedbackListColumns = (handleImagesClick, handleReportClick) => [
   {
     title: '',
-    dataIndex: 'isIllegal',
-    render: isIllegal => (isIllegal ? <Tag color="red">违法</Tag> : <Tag color="green">合法</Tag>),
+    dataIndex: 'czry',
+    render: czry => <Tag>{czry}</Tag>,
   },
   {
     title: '上传图片',
-    dataIndex: 'selectedImages',
+    dataIndex: 'fjs',
     width: 200,
-    render: () => mockImages(handleImagesClick),
+    render: fjs => mockImages(fjs || [], handleImagesClick),
   },
   {
-    title: '反馈内容',
-    dataIndex: 'content',
+    title: '执行报告',
+    dataIndex: 'czyj',
   },
   {
-    title: '执行人',
-    width: 100,
-    dataIndex: 'executor["username"]',
+    title: '备注',
+    dataIndex: 'remark',
   },
   {
-    title: '发起人',
-    width: 100,
-    dataIndex: 'originator["username"]',
+    title: '执行时间',
+    dataIndex: 'czsj',
+    width: 200,
+    render: czsj => moment(czsj).format('YYYY-MM-DD'),
+  },
+  {
+    title: '操作',
+    dataIndex: 'option',
+    valueType: 'option',
+    align: 'right',
+    render: (record, item) => <a onClick={() => handleReportClick(item)}>执行审批</a>,
   },
 ];

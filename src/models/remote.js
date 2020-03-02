@@ -10,7 +10,7 @@ const RemoteModel = {
 
   state: {
     remoteSensingData: null,
-    remoteSensingDetail: null,
+    changespot: null,
   },
 
   effects: {
@@ -37,12 +37,12 @@ const RemoteModel = {
     *fetchChangespotApproval({ payload }, { call }) {
       return yield call(queryChangespotApproval, payload);
     },
-    *findRemoteSensingDetail({ payload }, { call, put }) {
+    *fetchRemoteSensingDetail({ payload }, { call, put }) {
       const data = yield call(queryRemoteSensingDetail, payload);
-      console.log('findRemoteSensingDetail  data', data);
+      console.log('fetchRemoteSensingDetail  data', data);
       yield put({
         type: 'show',
-        payload: data,
+        payload: data?.content,
       });
     },
   },
@@ -55,7 +55,7 @@ const RemoteModel = {
       };
     },
     show(state, { payload }) {
-      return { ...state, remoteSensingDetail: payload };
+      return { ...state, ...payload };
     },
   },
 };

@@ -9,5 +9,5 @@ export async function queryFeedbackData(params) {
 
 export async function queryFeedbackTBBM(tbbm) {
   console.log('queryFeedbackTBBM', tbbm);
-  return request(`/strapi/changespot/implementInfo?${stringify({ tbbm })}`);
+  return request(`/strapi/changespot/implementInfo?${stringify(tbbm)}`);
 }
