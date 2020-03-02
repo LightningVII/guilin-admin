@@ -147,7 +147,7 @@ const TableList = props => {
             />
           </Col>
           <Col span={10} offset={8} style={{ textAlign: 'right' }}>
-            <Button type="primary" disabled={!!spotIds?.length} onClick={() => setVisible(true)}>
+            <Button type="primary" disabled={!spotIds?.length} onClick={() => setVisible(true)}>
               {formatMessage({ id: 'remote-sensing.approval' })}
             </Button>
             <Divider type="vertical" />
@@ -220,6 +220,7 @@ const TableList = props => {
               spotIds,
               deptId: deptid === 'customdeptid' ? null : deptid,
               userIds,
+              userid: user.currentUser.userid,
             },
           }).then(res => {
             if (res?.code === 200) {

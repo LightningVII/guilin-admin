@@ -12,8 +12,9 @@ const radioStyle = {
   lineHeight: '30px',
 };
 
-export default connect(({ employee }) => ({
+export default connect(({ employee, user }) => ({
   deptList: employee.deptList,
+  user: user.currentUser,
 }))(
   ({
     handleCloseClick,
@@ -21,6 +22,7 @@ export default connect(({ employee }) => ({
     handleOkClick,
     deptid,
     setDeptid,
+    user,
     userIds,
     setUserIds,
     dispatch,
@@ -34,6 +36,10 @@ export default connect(({ employee }) => ({
       }
     }, []);
 
+    // console.log('roles :', user.roles[0]);
+
+    const isXTGLY = user.roles[0].rolecode === 'XTGLY';
+
     return (
       <Modal
         title={formatMessage({ id: 'remote-sensing.approval' })}
@@ -41,19 +47,24 @@ export default connect(({ employee }) => ({
         onOk={handleOkClick}
         onCancel={handleCloseClick}
       >
-        <RadioGroup onChange={e => setDeptid(e.target.value)} value={deptid}>
-          {[...deptList, { deptname: '自定义', deptid: 'customdeptid' }].map(
-            ({ deptname, deptid: id }) => (
-              <Radio style={radioStyle} value={id} key={id}>
-                {deptname}
-              </Radio>
-            ),
-          )}
-        </RadioGroup>
-        {deptid === 'customdeptid' ? (
-          <EmployeeSelect value={userIds} setValue={setUserIds} />
-        ) : null}
-        {/* <EmployeeSelect /> */}
+        {isXTGLY ? (
+          <>
+            <RadioGroup onChange={e => setDeptid(e.target.value)} value={deptid}>
+              {[...deptList, { deptname: '自定义', deptid: 'customdeptid' }].map(
+                ({ deptname, deptid: id }) => (
+                  <Radio style={radioStyle} value={id} key={id}>
+                    {deptname}
+                  </Radio>
+                ),
+              )}
+            </RadioGroup>
+            {deptid === 'customdeptid' ? (
+              <EmployeeSelect value={userIds} setValue={setUserIds} />
+            ) : null}
+          </>
+        ) : (
+          <EmployeeSelect />
+        )}
       </Modal>
     );
   },

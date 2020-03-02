@@ -3,19 +3,17 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-// import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
 import ProLayout from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
-// import { Icon, Result, Button } from 'antd';
-import { Result, Button } from 'antd';
+import { Result, Button, Layout } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-// import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import { getAuthorityFromRouter } from '@/utils/utils';
-import logo from '../assets/logo.svg';
+
+const { Footer } = Layout;
 
 const noMatch = (
   <Result
@@ -129,13 +127,7 @@ const BasicLayout = props => {
   };
   return (
     <ProLayout
-      logo={logo}
-      menuHeaderRender={(logoDom, titleDom) => (
-        <Link to="/">
-          {/* {logoDom} */}
-          {titleDom}
-        </Link>
-      )}
+      menuHeaderRender={(logoDom, titleDom) => <Link to="/">{titleDom}</Link>}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl || menuItemProps.children) {
@@ -162,7 +154,9 @@ const BasicLayout = props => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      // footerRender={footerRender}
+      footerRender={() => (
+        <Footer style={{ textAlign: 'center' }}>北京航天泰坦科技股份有限公司</Footer>
+      )}
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={() => <RightContent />}
