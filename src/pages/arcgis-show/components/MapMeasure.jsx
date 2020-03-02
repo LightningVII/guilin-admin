@@ -62,26 +62,22 @@ class MapMeasure extends React.Component {
   };
 
   render() {
-    return (
+    return this.props.showMeasure ? (
       <>
-        {this.props.showMeasure ? (
-          <>
-            <Button className={style.measureBtn} onClick={this.lineMeasure}>
-              <Icon type="line" /> 线测量
-            </Button>
-            <Button className={style.measureBtn} onClick={this.areaMeasure}>
-              <Icon type="border" /> 面测量
-            </Button>
-            <div style={{ float: 'left' }}>
-              <Divider type="vertical" style={{ margin: 5, height: 18 }} />
-            </div>
-            <Button className={style.measureBtn} onClick={this.destroyWidget}>
-              <Icon type="delete" /> 清除
-            </Button>
-          </>
-        ) : null}
+        <Button className={style.measureBtn} onClick={this.lineMeasure}>
+          <Icon type="line" /> 线测量
+        </Button>
+        <Button className={style.measureBtn} onClick={this.areaMeasure}>
+          <Icon type="border" /> 面测量
+        </Button>
+        <div style={{ float: 'left' }}>
+          <Divider type="vertical" style={{ margin: 5, height: 18 }} />
+        </div>
+        <Button className={style.measureBtn} onClick={this.destroyWidget}>
+          <Icon type="delete" /> 清除
+        </Button>
       </>
-    );
+    ) : null;
   }
 }
 

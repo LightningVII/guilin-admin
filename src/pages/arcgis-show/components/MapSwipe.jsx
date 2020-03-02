@@ -1,7 +1,6 @@
 import React from 'react';
 import { loadModules } from 'esri-loader';
 import { message, Button } from 'antd';
-
 import MyBasemap from './MyBasemap';
 
 let EsriSwipe;
