@@ -15,11 +15,15 @@ const UserModel = {
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    *fetchCurrent(_, { call, put, select }) {
+      if (!sessionStorage.getItem('user') || sessionStorage.getItem('user') === 'undefined')
+        sessionStorage.setItem('user', '{}');
+      const { userid } = JSON.parse(sessionStorage.getItem('user'));
+      const id = yield select(state => state?.user?.currentUser?.userid || userid);
+      const response = yield call(queryCurrent, { id });
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: response.content,
       });
     },
   },

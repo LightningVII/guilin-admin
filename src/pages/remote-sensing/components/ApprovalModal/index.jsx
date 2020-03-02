@@ -1,36 +1,35 @@
 import React from 'react';
-import { Radio, Modal } from 'antd';
-import { formatMessage } from 'umi-plugin-react/locale';
-import EmployeeSelect from '../EmployeeSelect';
+import { Modal, Input, Button } from 'antd';
 
-const { Group: RadioGroup } = Radio;
+const { TextArea } = Input;
 
-const radioStyle = {
-  display: 'block',
-  height: '30px',
-  lineHeight: '30px',
-};
-
-export default ({ visible, setVisible, radioValue, setRadioValue }) => (
+export default ({
+  visible,
+  content,
+  handleYesClick,
+  handleNoClick,
+  handleCloseClick,
+  handleChange,
+}) => (
   <Modal
-    title={formatMessage({ id: 'remote-sensing.approval' })}
+    title="审核"
     visible={visible}
-    onOk={() => setVisible(false)}
-    onCancel={() => setVisible(false)}
+    //   onOk={handleOkClick}
+    onCancel={handleCloseClick}
+    footer={[
+      <Button key="back" onClick={handleNoClick}>
+        不通过
+      </Button>,
+      <Button key="submit" type="primary" onClick={handleYesClick}>
+        通过
+      </Button>,
+    ]}
   >
-    <RadioGroup onChange={e => setRadioValue(e.target.value)} value={radioValue}>
-      {[
-        { name: '第一大队', index: 0 },
-        { name: '第二大队', index: 1 },
-        { name: '第三大队', index: 2 },
-        { name: '自定义', index: 3 },
-      ].map(({ name, index }) => (
-        <Radio style={radioStyle} value={index} key={index}>
-          {name}
-        </Radio>
-      ))}
-    </RadioGroup>
-    {radioValue === 3 ? <EmployeeSelect /> : null}
-    {/* <EmployeeSelect /> */}
+    <TextArea
+      value={content}
+      onChange={handleChange}
+      style={{ height: '200px' }}
+      placeholder="审核意见"
+    />
   </Modal>
 );

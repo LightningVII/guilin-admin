@@ -1,39 +1,40 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Random } from 'mockjs';
+// import { Random } from 'mockjs';
 import React from 'react';
 import { statusEnum } from '@/constants/basicEnum';
 import { Badge, Divider, Tag } from 'antd';
+import moment from 'moment';
 import router from 'umi/router';
 
 export const remoteSensingListColumns = () => [
   {
     title: '批次',
-    dataIndex: 'properties.BATCH',
+    dataIndex: 'batch',
   },
   {
     title: '区县',
-    dataIndex: 'properties.COUNTY',
+    dataIndex: 'county',
   },
   {
     title: '位置',
-    dataIndex: 'properties.LOCATION',
+    dataIndex: 'location',
   },
   {
     title: '前时相',
-    dataIndex: 'properties.QSXDLMC',
+    dataIndex: 'qsxdlmc',
   },
   {
     title: '后时相',
-    dataIndex: 'properties.HSXDLMC',
+    dataIndex: 'hsxdlmc',
   },
   {
     title: '占地面积',
-    dataIndex: 'properties.AREA',
-    render: val => `${val.toFixed(2)}亩`,
+    dataIndex: 'area',
+    render: val => `${parseFloat(val).toFixed(2)}亩`,
   },
   {
     title: '状态',
-    dataIndex: 'status',
+    dataIndex: 'state',
     render: record => {
       const { text, status } = statusEnum[record];
       return <Badge text={text} status={status} />;
@@ -46,13 +47,9 @@ export const remoteSensingListColumns = () => [
     align: 'right',
     render: (record, item) => (
       <>
-        <a onClick={() => router.push(`/remote-sensing/details/${item.properties.TBBM}`)}>
-          查看详情
-        </a>
+        <a onClick={() => router.push(`/remote-sensing/details/${item.tbbm}`)}>查看详情</a>
         <Divider type="vertical" />
-        <a
-          onClick={() => router.push(`/remote-sensing/details/arcgis-show/${item.properties.TBBM}`)}
-        >
+        <a onClick={() => router.push(`/remote-sensing/details/arcgis-show/${item.tbbm}`)}>
           地图查看
         </a>
         {/* <Divider type="vertical" />
@@ -62,9 +59,9 @@ export const remoteSensingListColumns = () => [
   },
 ];
 
-export const mockImages = handleImagesClick => {
-  const images = [...Random.string(0, 4)].map(() => Random.image());
-  return images.map((i, index) => (
+export const mockImages = (images, handleImagesClick) =>
+  // const images = [...Random.string(0, 4)].map(() => Random.image());
+  images.map((i, index) => (
     <img
       key={index.toString()}
       alt=""
@@ -73,32 +70,38 @@ export const mockImages = handleImagesClick => {
       onClick={() => handleImagesClick(images)}
     />
   ));
-};
 
-export const feedbackListColumns = handleImagesClick => [
+export const feedbackListColumns = (handleImagesClick, handleReportClick) => [
   {
     title: '',
-    dataIndex: 'isIllegal',
-    render: isIllegal => (isIllegal ? <Tag color="red">违法</Tag> : <Tag color="green">合法</Tag>),
+    dataIndex: 'czry',
+    render: czry => <Tag>{czry}</Tag>,
   },
   {
     title: '上传图片',
-    dataIndex: 'selectedImages',
+    dataIndex: 'fjs',
     width: 200,
-    render: () => mockImages(handleImagesClick),
+    render: fjs => mockImages(fjs || [], handleImagesClick),
   },
   {
-    title: '反馈内容',
-    dataIndex: 'content',
+    title: '执行报告',
+    dataIndex: 'czyj',
   },
   {
-    title: '执行人',
-    width: 100,
-    dataIndex: 'executor["username"]',
+    title: '备注',
+    dataIndex: 'remark',
   },
   {
-    title: '发起人',
-    width: 100,
-    dataIndex: 'originator["username"]',
+    title: '执行时间',
+    dataIndex: 'czsj',
+    width: 200,
+    render: czsj => moment(czsj).format('YYYY-MM-DD'),
+  },
+  {
+    title: '操作',
+    dataIndex: 'option',
+    valueType: 'option',
+    align: 'right',
+    render: (record, item) => <a onClick={() => handleReportClick(item)}>执行审批</a>,
   },
 ];

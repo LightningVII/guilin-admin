@@ -1,5 +1,4 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Random } from 'mockjs';
 import React from 'react';
 import { Carousel, Empty, Modal, Icon, Button } from 'antd';
 import styles from './styles.less';
@@ -35,7 +34,7 @@ export default ({ visible, handleCloseClick, images }) => (
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'contain',
                 backgroundPosition: 'center',
-                backgroundImage: `url(${Random.image()})`,
+                backgroundImage: `url(${i})`,
               }}
             ></div>
           </div>

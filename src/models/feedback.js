@@ -4,7 +4,7 @@ export default {
   namespace: 'feedback',
 
   state: {
-    feedbackData: null,
+    feedbackData: [],
     feedbackTBBM: null,
   },
 
@@ -17,10 +17,10 @@ export default {
       });
     },
     *fetchFeedbackTBBM({ payload }, { call, put }) {
-      const response = yield call(queryFeedbackTBBM, payload);
-      yield put({
+      const content = yield call(queryFeedbackTBBM, payload);
+      return yield put({
         type: 'saveTBBMData',
-        payload: response,
+        payload: content,
       });
     },
   },
@@ -35,6 +35,13 @@ export default {
     saveTBBMData(state, action) {
       return {
         ...state,
+        feedbackData:
+          state.feedbackData.indexOf(r => r?.tbbm === action?.payload?.[0].tbbm) < 0
+            ? [...state.feedbackData, ...action?.payload]
+            : [
+                ...state.feedbackData.filter(r => r.tbbm !== action?.payload?.[0].tbbm),
+                ...action?.payload,
+              ],
         feedbackTBBM: action.payload || state.feedbackTBBM,
       };
     },

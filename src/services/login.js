@@ -1,18 +1,21 @@
 import request from '@/utils/request';
-import user from '@/constants/user';
+// import user from '@/constants/user';
+import { stringify } from 'querystring';
+// import { stringify as qstr } from 'qs';
 
 export async function fakeAccountLogin(params) {
-  // const { userName: identifier, password } = params;
-  console.log('params', params);
-  return new Promise(resolve => setTimeout(() => resolve(user()), 1000));
+  const { userName: username, password } = params;
 
-  /* return request('/strapi/auth/local', {
+  return request(`/strapi/login`, {
     method: 'POST',
-    data: {
-      identifier,
+    data: stringify({
+      username,
       password,
+    }),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
     },
-  }); */
+  });
 }
 
 export async function getFakeCaptcha(mobile) {

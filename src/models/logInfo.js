@@ -5,8 +5,6 @@ export default {
   state: { logsInfo: [] },
   effects: {
     *fetchlogsInfo({ payload }, { call, put }) {
-      console.log('payload', payload);
-      // { payload },
       const response = yield call(querylogsInfo, payload);
       yield put({
         type: 'savelogsInfo',
