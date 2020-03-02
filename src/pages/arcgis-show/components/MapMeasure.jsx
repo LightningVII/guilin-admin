@@ -7,21 +7,14 @@ let EsriDistanceMesurement;
 let EsriAreaMeasurement;
 let MeasurementModel = null;
 
+loadModules(['esri/widgets/DistanceMeasurement2D', 'esri/widgets/AreaMeasurement2D']).then(
+  ([DistanceMeasurement2D, AreaMeasurement2D]) => {
+    EsriDistanceMesurement = DistanceMeasurement2D;
+    EsriAreaMeasurement = AreaMeasurement2D;
+  },
+);
+
 class MapMeasure extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // 设置 initial state
-    this.state = {};
-
-    loadModules(['esri/widgets/DistanceMeasurement2D', 'esri/widgets/AreaMeasurement2D']).then(
-      ([DistanceMeasurement2D, AreaMeasurement2D]) => {
-        EsriDistanceMesurement = DistanceMeasurement2D;
-        EsriAreaMeasurement = AreaMeasurement2D;
-      },
-    );
-  }
-
   componentWillReceiveProps() {
     if (this.props.showMeasure) this.destroyWidget();
   }
