@@ -233,8 +233,8 @@ export default class GlobeMapShow extends React.Component {
                   this.setState({ mapView: view });
                   view.ui.remove("zoom");
                 }}
-              >
-              </MyBasemap>
+              />
+              
 
             </Suspense>
           </Col>

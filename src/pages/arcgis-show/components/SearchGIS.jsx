@@ -161,8 +161,8 @@ class SearchGIS extends React.Component {
               <Icon type="unordered-list" style={{ cursor: "pointer" }} onClick={this.handleClick} />
             </Tooltip>
           }
-        >
-        </Search>
+        />
+        
         <div className={style.searchList} style={{ visibility: this.state.searchPanelVisiable }}>
           <List
             style={{ maxHeight: '35vh', overflowY: 'scroll' }}

@@ -28,8 +28,8 @@ class Compass extends React.Component {
         }));
     }
 
-    RotateMap(){
-        this.props.view.rotation=this.state.rotateDegree;
+    RotateMap() {
+        this.props.view.rotation = this.state.rotateDegree;
     }
 
     render() {
@@ -43,19 +43,14 @@ class Compass extends React.Component {
                                 style={{
                                     transform: `rotate(${this.state.rotateDegree}deg)`
                                 }}
-                            ></div>
+                            />
                         </div>
                         <div className={style.compassRotateLeft}
                             onClick={this.RotateLeftDegree}
-                        >
-
-                        </div>
+                        />
                         <div className={style.compassRotateRight}
                             onClick={this.RotateRightDegree}
-                        >
-
-                        </div>
-
+                        />
                     </div>
                 </div>
                 <div className={style.zoomStyle}>

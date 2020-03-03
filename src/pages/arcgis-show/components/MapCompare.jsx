@@ -45,8 +45,6 @@ class MapCompare extends React.Component {
         if (this.props.featrueGraphic) {
             const graphic1 = {};
             const graphic2 = {};
-            // graphic1=this.props.featrueGraphic
-            // const graphic2 = this.props.featrueGraphic;
             graphic1.props = {}
             graphic1.props.title = this.props.featrueGraphic.attributes.QSX
             graphic1.props.layerUrl = 'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}'
@@ -136,7 +134,8 @@ class MapCompare extends React.Component {
         mapList.forEach(mItem => {
             const map = mItem;
             if (mItem.key !== item.key) {
-                map.view.extent = item.view.extent
+                map.view.extent = item.view.extent;
+                map.view.rotation = item.view.rotation;
             }
         })
     }
