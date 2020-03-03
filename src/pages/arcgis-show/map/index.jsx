@@ -44,7 +44,7 @@ export default () => {
             >
               <MyImageLayer imgLayer={img1} />
               <MyFeatureLayer />
-
+              
             </MyBasemap>
           </Col>
           <Col span={12}>

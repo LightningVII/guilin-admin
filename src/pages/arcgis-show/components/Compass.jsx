@@ -1,36 +1,59 @@
 import React from 'react';
+import { debounce } from 'lodash'
 import { Icon, Tooltip } from 'antd';
 import style from "./style.css";
 
 class Compass extends React.Component {
     constructor(props) {
         super(props);
-
+        this.setRotateDegree = debounce(this.setRotateDegree, 50);// 防抖函数
         // 设置 initial state
         this.state = {
             rotateDegree: 0
-        };
-
-        this.RotateLeftDegree = this.RotateLeftDegree.bind(this);
-        this.RotateRightDegree = this.RotateRightDegree.bind(this);
+        }
     }
 
-    RotateLeftDegree() {
+    componentDidMount() {
+        this.props.view.watch('rotation', this.setRotateDegree)
+    }
+
+    setRotateDegree = newVal => {
+        this.setState({
+            rotateDegree: newVal,
+        })
+    }
+
+
+    rotateLeftDegree = () => {
+        this.rotateMap(this.state.rotateDegree - 10);
         this.setState(prevState => ({
             rotateDegree: prevState.rotateDegree - 10,
         }));
-        this.RotateMap();
     }
 
-    RotateRightDegree() {
+    rotateRightDegree = () => {
+        this.rotateMap(this.state.rotateDegree + 10);
         this.setState(prevState => ({
             rotateDegree: prevState.rotateDegree + 10,
         }));
     }
 
-    RotateMap() {
-        this.props.view.rotation = this.state.rotateDegree;
+    rotateMap = rotateDegree => {
+        this.props.view.rotation = rotateDegree;
     }
+
+    zoomIn = () => {
+        this.props.view.goTo({
+            zoom: this.props.view.zoom + 1
+        });
+    }
+
+    zoomOut = () => {
+        this.props.view.goTo({
+            zoom: this.props.view.zoom - 1
+        });
+    }
+
 
     render() {
 
@@ -46,19 +69,19 @@ class Compass extends React.Component {
                             />
                         </div>
                         <div className={style.compassRotateLeft}
-                            onClick={this.RotateLeftDegree}
+                            onClick={() => this.rotateLeftDegree}
                         />
                         <div className={style.compassRotateRight}
-                            onClick={this.RotateRightDegree}
+                            onClick={() => this.rotateRightDegree}
                         />
                     </div>
                 </div>
                 <div className={style.zoomStyle}>
                     <Tooltip placement="left" title="放大">
-                        <Icon type="plus" className={style.zoomInStyle} />
+                        <Icon type="plus" className={style.zoomInStyle} onClick={() => this.zoomIn()} />
                     </Tooltip>
                     <Tooltip placement="left" title="缩小">
-                        <Icon type="minus" className={style.zoomOutStyle} />
+                        <Icon type="minus" className={style.zoomOutStyle} onClick={() => this.zoomOut()} />
                     </Tooltip>
                 </div>
             </div >

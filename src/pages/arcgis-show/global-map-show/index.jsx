@@ -12,6 +12,7 @@ import MapSwipe from '../components/MapSwipe';
 import ModalCompareTree from '../components/ModalCompareTree';
 import MapCompare from '../components/MapCompare';
 import MapBottom from '../components/MapBottom';
+import Print from '../components/PrintWidget';
 
 import style from './style.css'
 
@@ -25,6 +26,7 @@ export default class GlobeMapShow extends React.Component {
     this.state = {
       mapView: null,
       renderMeasure: false,
+      renderPrint: false,// Print对话框
       renderSwipe: false, // Swipe内容框
       swipeLayersArray: [], // Swipe选择的图层列表
       showSwipeModal: false, // Swipe Model选择框
@@ -57,6 +59,11 @@ export default class GlobeMapShow extends React.Component {
       case 'dp':
         this.setState(prevState => ({
           showCompareModal: !prevState.showCompareModal
+        }));
+        break;
+      case 'dy':
+        this.setState(prevState => ({
+          renderPrint: !prevState.renderPrint
         }));
         break;
       default:
@@ -122,7 +129,7 @@ export default class GlobeMapShow extends React.Component {
                   <Icon type="user" />
                   截图
                </Menu.Item>
-                <Menu.Item key="43">
+                <Menu.Item key="dy">
                   <Icon type="user" />
                   打印
                </Menu.Item>
@@ -156,12 +163,7 @@ export default class GlobeMapShow extends React.Component {
             </Dropdown>
           </Button.Group>
         </Affix>
-        <Affix className={style.search} offsetTop={80}>
-          <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
-        </Affix>
-        <Affix className={style.compass} offsetBottom={50} >
-          <Compass view={this.state.mapView} />
-        </Affix>
+
         <Affix className={style.measureCard} style={{ visibility: this.state.renderMeasure ? 'visible' : 'hidden' }} offsetTop={150}>
           <Card size="small" title="选择测量工具" extra={<a onClick={
             () => this.setState({
@@ -171,6 +173,13 @@ export default class GlobeMapShow extends React.Component {
             <MapMeasure view={this.state.mapView} showMeasure={this.state.renderMeasure} />
           </Card>
         </Affix>
+
+        {
+          this.state.renderPrint ?
+            <Affix className={style.print} offsetTop={80}>
+              <Print view={this.state.mapView}/>
+            </Affix> : null
+        }
 
         {
           this.state.showSwipeModal ? (
@@ -205,7 +214,7 @@ export default class GlobeMapShow extends React.Component {
               <Card size="small" title="多屏工具" extra={<a onClick={
                 () => this.setState({
                   renderCompare: false,
-                  featrueGraphic:null
+                  featrueGraphic: null
                 })
               }>X</a>}>
                 <MapCompare featrueGraphic={this.state.featrueGraphic} layersArray={this.state.compareLayersArray} />
@@ -216,9 +225,17 @@ export default class GlobeMapShow extends React.Component {
 
         {
           this.state.mapView ? (
-            <Affix className={style.mapBottom}>
-              <MapBottom mapView={this.state.mapView} />
-            </Affix>
+            <>
+              <Affix className={style.mapBottom}>
+                <MapBottom mapView={this.state.mapView} />
+              </Affix>
+              <Affix className={style.compass} offsetBottom={50} >
+                <Compass view={this.state.mapView} />
+              </Affix>
+              <Affix className={style.search} offsetTop={80}>
+                <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
+              </Affix>
+            </>
           ) : null
         }
 
@@ -234,7 +251,7 @@ export default class GlobeMapShow extends React.Component {
                   view.ui.remove("zoom");
                 }}
               />
-              
+
 
             </Suspense>
           </Col>

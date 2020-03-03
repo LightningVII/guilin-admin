@@ -1,4 +1,5 @@
 import React from 'react';
+import { debounce } from 'lodash'
 import { Icon, Input, Tree, Tooltip, List, Typography } from 'antd';
 import { loadModules } from 'esri-loader';
 // import router from 'umi/router';
@@ -19,6 +20,7 @@ let flag = false;
 class SearchGIS extends React.Component {
   constructor(props) {
     super(props);
+    this.inputValChange = debounce(this.inputValChange, 20)
     // 设置 initial state
     this.state = {
       isToggleOn: true,
@@ -40,6 +42,11 @@ class SearchGIS extends React.Component {
 
   }
 
+  handleInputSearch = e => {
+    this.inputValChange(e.target.value)
+  }
+
+
   onCheck = (checkedKeys, e) => {
     this.loadToMap(checkedKeys, e);
     this.triggerAction();
@@ -57,7 +64,6 @@ class SearchGIS extends React.Component {
         }
       });
     }
-
   }
 
 
@@ -81,12 +87,11 @@ class SearchGIS extends React.Component {
         }
       }
     });
-
   }
 
-  inputValChange = evt => {
+  inputValChange = value => {
     const that = this
-    const str = evt.target.value.replace(/\s*/g, '')
+    const str = value.replace(/\s*/g, '')
     if (str !== '') {
       this.setState({
         isToggleOn: false,
@@ -152,7 +157,7 @@ class SearchGIS extends React.Component {
 
         <Search
           placeholder="输入查询关键字..."
-          onChange={this.inputValChange}
+          onChange={this.handleInputSearch}
           onClick={this.handleClick}
           className={style.search}
           allowClear
@@ -162,7 +167,7 @@ class SearchGIS extends React.Component {
             </Tooltip>
           }
         />
-        
+
         <div className={style.searchList} style={{ visibility: this.state.searchPanelVisiable }}>
           <List
             style={{ maxHeight: '35vh', overflowY: 'scroll' }}

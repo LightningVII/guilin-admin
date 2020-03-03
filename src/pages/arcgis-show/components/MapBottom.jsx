@@ -1,4 +1,5 @@
 import React from 'react';
+import { debounce } from 'lodash'
 import { Card, Col, Row } from 'antd';
 import { loadModules } from 'esri-loader';
 import style from './style.css'
@@ -11,7 +12,7 @@ let EsriBasemap;
 class MapBottom extends React.Component {
     constructor(props) {
         super(props);
-
+        this.getXY = debounce(this.getXY, 20);// 防抖函数
         // 设置 initial state
         this.state = {
             X: "117.1812",
@@ -34,7 +35,12 @@ class MapBottom extends React.Component {
     }
 
     componentDidMount() {
-        this.getXY();
+        // this.getXY();
+
+        this.props.mapView.on('pointer-move', evt => {
+            this.getXY(evt);
+        })
+
     }
 
     setToggleClass = (item, index, type) => {
@@ -71,14 +77,12 @@ class MapBottom extends React.Component {
     }
 
 
-    getXY = () => {
-        this.props.mapView.on('pointer-move', evt => {
-            const point = this.props.mapView.toMap({ x: evt.x, y: evt.y });
-            this.setState({
-                X: point.longitude.toFixed(4),
-                Y: point.latitude.toFixed(4),
-                zoom: this.props.mapView.zoom
-            })
+    getXY = evt => {
+        const point = this.props.mapView.toMap({ x: evt.x, y: evt.y });
+        this.setState({
+            X: point.longitude.toFixed(4),
+            Y: point.latitude.toFixed(4),
+            zoom: this.props.mapView.zoom
         })
     }
 
