@@ -15,6 +15,7 @@ const radioStyle = {
 export default connect(({ employee, user }) => ({
   deptList: employee.deptList,
   user: user.currentUser,
+  employeeList: employee.employeeList,
 }))(
   ({
     handleCloseClick,
@@ -27,6 +28,7 @@ export default connect(({ employee, user }) => ({
     setUserIds,
     dispatch,
     deptList,
+    employeeList,
   }) => {
     useEffect(() => {
       if (dispatch) {
@@ -36,9 +38,8 @@ export default connect(({ employee, user }) => ({
       }
     }, []);
 
-    // console.log('roles :', user.roles[0]);
-
     const isXTGLY = user.roles[0].rolecode === 'XTGLY';
+    const isZFDDZ = user.roles[0].rolecode === 'ZFDDZ';
 
     return (
       <Modal
@@ -47,23 +48,27 @@ export default connect(({ employee, user }) => ({
         onOk={handleOkClick}
         onCancel={handleCloseClick}
       >
-        {isXTGLY ? (
-          <>
-            <RadioGroup onChange={e => setDeptid(e.target.value)} value={deptid}>
-              {[...deptList, { deptname: '自定义', deptid: 'customdeptid' }].map(
-                ({ deptname, deptid: id }) => (
-                  <Radio style={radioStyle} value={id} key={id}>
-                    {deptname}
-                  </Radio>
-                ),
-              )}
-            </RadioGroup>
-            {deptid === 'customdeptid' ? (
-              <EmployeeSelect value={userIds} setValue={setUserIds} />
-            ) : null}
-          </>
-        ) : (
-          <EmployeeSelect />
+        {isXTGLY && (
+          <RadioGroup onChange={e => setDeptid(e.target.value)} value={deptid}>
+            {[...deptList, { deptname: '自定义', deptid: 'customdeptid' }].map(
+              ({ deptname, deptid: id }) => (
+                <Radio style={radioStyle} value={id} key={id}>
+                  {deptname}
+                </Radio>
+              ),
+            )}
+          </RadioGroup>
+        )}
+        {(!isXTGLY || deptid === 'customdeptid') && (
+          <EmployeeSelect
+            employeeList={
+              isZFDDZ
+                ? employeeList.filter(({ value }) => value === user?.depts?.[0]?.deptid)
+                : employeeList
+            }
+            value={userIds}
+            setValue={setUserIds}
+          />
         )}
       </Modal>
     );

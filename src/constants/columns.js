@@ -73,7 +73,7 @@ export const mockImages = (images, handleImagesClick) =>
 
 export const feedbackListColumns = (handleImagesClick, handleReportClick) => [
   {
-    title: '',
+    title: '执行人',
     dataIndex: 'czry',
     render: czry => <Tag>{czry}</Tag>,
   },
