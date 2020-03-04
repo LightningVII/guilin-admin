@@ -130,6 +130,7 @@ const Model = {
         }
         if (content?.menus.find(({ perms }) => perms === 'HOME')) router.replace('/');
       } else {
+        console.log('404', content?.user?.roles?.[0]);
         router.replace('/404');
       }
     },
@@ -153,6 +154,7 @@ const Model = {
   reducers: {
     changeLoginStatus(state, { payload }) {
       const { user, menus } = payload;
+      console.log('user?.roles?.[0]?.rolecode', user?.roles?.[0]?.rolecode);
       setAuthority(user?.roles?.[0]?.rolecode);
       // localStorage.setItem('token', payload.jwt);
       return {

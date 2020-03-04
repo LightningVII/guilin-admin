@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'dva';
 import { TreeSelect } from 'antd';
+
+const { TreeNode } = TreeSelect;
 /* import { Select } from 'antd';
 
 const { Option, OptGroup } = Select;
@@ -26,19 +27,30 @@ export default () => (
 
 const { SHOW_PARENT } = TreeSelect;
 
-export default connect(({ employee }) => ({
-  employeeList: employee.employeeList,
-}))(({ value, setValue, employeeList }) => {
-  const tProps = {
-    treeData: employeeList,
-    value,
-    onChange: val => setValue(val),
-    treeCheckable: true,
-    showCheckedStrategy: SHOW_PARENT,
-    searchPlaceholder: '请选择人员',
-    style: { width: '50%' },
-  };
-  return <TreeSelect {...tProps} />;
-});
-
-// array\<{value, title, children, [disabled, disableCheckbox, selectable, checkable]}>
+export default ({ value, setValue, employeeList }) => (
+  <TreeSelect
+    style={{ width: '50%' }}
+    value={value}
+    placeholder="请选择人员"
+    allowClear
+    multiple
+    treeCheckable
+    treeDefaultExpandAll
+    showCheckedStrategy={SHOW_PARENT}
+    onChange={val => setValue(val)}
+  >
+    {employeeList?.map(({ value: pv, title, children }) => (
+      <TreeNode
+        selectable={false}
+        checkable={false}
+        key={`${pv}pv`}
+        value={`${pv}pv`}
+        title={title}
+      >
+        {children?.map(({ key: ck, value: cv, title: ct }) => (
+          <TreeNode key={`${pv}-${ck}`} value={`${pv}-${cv}`} title={ct} />
+        ))}
+      </TreeNode>
+    ))}
+  </TreeSelect>
+);

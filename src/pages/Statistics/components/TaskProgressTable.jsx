@@ -1,4 +1,5 @@
-import { Card, Menu, Dropdown, Icon, Table, Badge, Progress } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { Card, Menu, Dropdown, Table, Badge, Progress } from 'antd';
 import React from 'react';
 import { statusEnum } from '@/constants/basicEnum';
 
@@ -11,7 +12,7 @@ const menu = (
 const dropdownGroup = (
   <span>
     <Dropdown overlay={menu} placement="bottomRight">
-      <Icon type="ellipsis" />
+      <EllipsisOutlined />
     </Dropdown>
   </span>
 );

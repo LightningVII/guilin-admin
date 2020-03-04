@@ -21,7 +21,7 @@ export async function queryNotices() {
   // return request('/api/notices');
 
   return new Promise(resolve => {
-    console.log('queryNotices');
+    // console.log('queryNotices');
     setTimeout(
       () =>
         resolve([

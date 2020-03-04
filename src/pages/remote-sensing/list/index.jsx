@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
+
 import {
-  Card,
-  Table,
-  Tabs,
-  Button,
-  Divider,
-  Dropdown,
-  Input,
-  Icon,
-  Menu,
-  Row,
-  Col,
-  message,
-} from 'antd';
+  CopyOutlined,
+  DownloadOutlined,
+  DownOutlined,
+  FileExcelOutlined,
+  FileOutlined,
+  FilePdfOutlined,
+  PrinterOutlined,
+} from '@ant-design/icons';
+
+import { Card, Table, Tabs, Button, Divider, Dropdown, Input, Menu, Row, Col, message } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -34,23 +32,23 @@ const defaultPageSize = 10;
 const menu = (
   <Menu>
     <Menu.Item key="1">
-      <Icon type="printer" />
+      <PrinterOutlined />
       打印
     </Menu.Item>
     <Menu.Item key="2">
-      <Icon type="copy" />
+      <CopyOutlined />
       复制
     </Menu.Item>
     <Menu.Item key="3">
-      <Icon type="file-excel" />
+      <FileExcelOutlined />
       Excel格式
     </Menu.Item>
     <Menu.Item key="4">
-      <Icon type="file" />
+      <FileOutlined />
       CSV格式
     </Menu.Item>
     <Menu.Item key="5">
-      <Icon type="file-pdf" />
+      <FilePdfOutlined />
       PDF格式
     </Menu.Item>
   </Menu>
@@ -149,13 +147,13 @@ const TableList = props => {
             />
           </Col>
           <Col span={10} offset={8} style={{ textAlign: 'right' }}>
-            <Button type="primary" disabled={!!spotIds?.length} onClick={() => setVisible(true)}>
+            <Button type="primary" disabled={!spotIds?.length} onClick={() => setVisible(true)}>
               {formatMessage({ id: 'remote-sensing.approval' })}
             </Button>
             <Divider type="vertical" />
             <Dropdown overlay={menu}>
-              <Button icon="download">
-                导出 <Icon type="down" />
+              <Button icon={<DownloadOutlined />}>
+                导出 <DownOutlined />
               </Button>
             </Dropdown>
           </Col>
@@ -183,14 +181,9 @@ const TableList = props => {
           rowKey={({ spotid }) => spotid}
           rowSelection={rowSelection}
           expandRowByClick
-          // expandedRowRender={}
-          rowExpandable={record => {
-            console.log(
-              'feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length :',
-              !!feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length,
-            );
-            return feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length;
-          }}
+          rowExpandable={record =>
+            feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length
+          }
           expandedRowRender={record => {
             const feedbackData = feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm);
             return feedbackData?.length ? (
@@ -227,6 +220,7 @@ const TableList = props => {
               spotIds,
               deptId: deptid === 'customdeptid' ? null : deptid,
               userIds,
+              userid: user.currentUser.userid,
             },
           }).then(res => {
             if (res?.code === 200) {

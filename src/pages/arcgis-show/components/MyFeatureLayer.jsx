@@ -16,7 +16,7 @@ const MyFeatureLayer = props => {
           url: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0',
           id: 'bhtb1',
           outFields: ['*'],
-          popupTemplate:template,
+          popupTemplate: template,
           title: '202001',
         });
 

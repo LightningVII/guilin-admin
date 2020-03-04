@@ -63,7 +63,6 @@ export default () => {
             >
               <MyImageLayer imgLayer={img2} />
               <MyFeatureLayer />
-
             </MyBasemap>
           </Col>
         </Row>

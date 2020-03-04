@@ -14,11 +14,9 @@ import MapCompare from '../components/MapCompare';
 import MapBottom from '../components/MapBottom';
 import Print from '../components/PrintWidget';
 
-import style from './style.css'
+import style from './style.css';
 
 const MyBasemap = React.lazy(() => import('../components/MyBasemap'));
-
-
 
 export default class GlobeMapShow extends React.Component {
   constructor() {
@@ -32,33 +30,33 @@ export default class GlobeMapShow extends React.Component {
       showSwipeModal: false, // Swipe Model选择框
       renderCompare: false, // Compare 内容框
       compareLayersArray: [], // Compare选择的图层列表
-      showCompareModal: false,// Compare Model选择框
-      featrueGraphic: null // 传入Featrue的图斑编码
+      showCompareModal: false, // Compare Model选择框
+      featrueGraphic: null, // 传入Featrue的图斑编码
     };
   }
 
   addFeature2Cmp = graphic => {
     this.setState({
       renderCompare: true,
-      featrueGraphic: graphic
-    })
-  }
+      featrueGraphic: graphic,
+    });
+  };
 
   handleMenuClick = ({ key }) => {
     switch (key) {
       case 'cl':
         this.setState(prevState => ({
-          renderMeasure: !prevState.renderMeasure
+          renderMeasure: !prevState.renderMeasure,
         }));
         break;
       case 'jl':
         this.setState(prevState => ({
-          showSwipeModal: !prevState.showSwipeModal
+          showSwipeModal: !prevState.showSwipeModal,
         }));
         break;
       case 'dp':
         this.setState(prevState => ({
-          showCompareModal: !prevState.showCompareModal
+          showCompareModal: !prevState.showCompareModal,
         }));
         break;
       case 'dy':
@@ -69,46 +67,42 @@ export default class GlobeMapShow extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   handleMenuClose = () => {
-
     this.setState(prevState => ({
-      showMeasure: !prevState.showMeasure
+      showMeasure: !prevState.showMeasure,
     }));
-  }
+  };
 
   onSetCompare = layersArray => {
     if (layersArray.length > 0)
       this.setState({
         showCompareModal: false,
         renderCompare: true,
-        compareLayersArray: layersArray
-      })
+        compareLayersArray: layersArray,
+      });
     else
       this.setState({
         showCompareModal: false,
-        renderCompare: false
-      })
-  }
+        renderCompare: false,
+      });
+  };
 
   onSetSwipe = (layersArray, rCount) => {
     if (rCount === 2)
       this.setState({
         showSwipeModal: false,
         renderSwipe: true,
-        swipeLayersArray: layersArray
-      })
+        swipeLayersArray: layersArray,
+      });
     else if (rCount === -1)
       this.setState({
         showSwipeModal: false,
         renderSwipe: false,
-      })
-    else
-      message.info("请选择两幅栅格影像")
-
-
-  }
+      });
+    else message.info('请选择两幅栅格影像');
+  };
 
   render() {
     return (
@@ -137,28 +131,32 @@ export default class GlobeMapShow extends React.Component {
             } >
               <Button icon="tool" >常用</Button>
             </Dropdown>
-            <Dropdown overlay={
-              <Menu onClick={this.handleMenuClick}>
-                <Menu.Item key="cl" >
-                  <Icon type="user" />
-                  点选
-             </Menu.Item>
-              </Menu>
-            }>
+            <Dropdown
+              overlay={
+                <Menu onClick={this.handleMenuClick}>
+                  <Menu.Item key="cl">
+                    <Icon type="user" />
+                    点选
+                  </Menu.Item>
+                </Menu>
+              }
+            >
               <Button icon="info-circle">查询</Button>
             </Dropdown>
-            <Dropdown overlay={
-              <Menu onClick={this.handleMenuClick}>
-                <Menu.Item key="jl" >
-                  <Icon type="user" />
-                  卷帘
-             </Menu.Item>
-                <Menu.Item key="dp">
-                  <Icon type="user" />
-                  多屏
-             </Menu.Item>
-              </Menu>
-            }>
+            <Dropdown
+              overlay={
+                <Menu onClick={this.handleMenuClick}>
+                  <Menu.Item key="jl">
+                    <Icon type="user" />
+                    卷帘
+                  </Menu.Item>
+                  <Menu.Item key="dp">
+                    <Icon type="user" />
+                    多屏
+                  </Menu.Item>
+                </Menu>
+              }
+            >
               <Button icon="snippets">分析</Button>
             </Dropdown>
           </Button.Group>
@@ -239,16 +237,49 @@ export default class GlobeMapShow extends React.Component {
           ) : null
         }
 
+        {this.state.showCompareModal ? <ModalCompareTree onSetCompare={this.onSetCompare} /> : null}
+
+        {this.state.renderCompare ? (
+          <Affix className={style.mapCompare} offsetTop={80}>
+            <Card
+              size="small"
+              title="多屏工具"
+              extra={
+                <a
+                  onClick={() =>
+                    this.setState({
+                      renderCompare: false,
+                      featrueGraphic: null,
+                    })
+                  }
+                >
+                  X
+                </a>
+              }
+            >
+              <MapCompare
+                featrueGraphic={this.state.featrueGraphic}
+                layersArray={this.state.compareLayersArray}
+              />
+            </Card>
+          </Affix>
+        ) : null}
+
+        {this.state.mapView ? (
+          <Affix className={style.mapBottom}>
+            <MapBottom mapView={this.state.mapView} />
+          </Affix>
+        ) : null}
 
         <Row style={{ margin: '-24px' }}>
           <Col span={24}>
             <Suspense fallback="...loading">
               <MyBasemap
                 height="calc(100vh - 64px)"
-                style={{ overflow: "hidden" }}
+                style={{ overflow: 'hidden' }}
                 handleLoad={(map, view) => {
                   this.setState({ mapView: view });
-                  view.ui.remove("zoom");
+                  view.ui.remove('zoom');
                 }}
               />
 
@@ -257,6 +288,6 @@ export default class GlobeMapShow extends React.Component {
           </Col>
         </Row>
       </>
-    )
+    );
   }
-} 
+}

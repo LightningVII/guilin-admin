@@ -2,10 +2,9 @@ import React from 'react';
 import { debounce } from 'lodash'
 import { Card, Col, Row } from 'antd';
 import { loadModules } from 'esri-loader';
-import style from './style.css'
+import style from './style.css';
 
-import { baseMapList, labelMapList } from './baseMapList.js'
-
+import { baseMapList, labelMapList } from './baseMapList.js';
 
 let EsriWebTileLayer;
 let EsriBasemap;
@@ -58,7 +57,8 @@ class MapBottom extends React.Component {
             default:
                 break;
         }
-        return togClass
+
+        return togClass;
     }
 
     changeBaseMap = item => {
@@ -95,56 +95,81 @@ class MapBottom extends React.Component {
     render() {
         return (
             <>
-
-                <div style={{ textAlign: 'right', marginRight: 150, marginTop: 3 }}>
-                    经度:{this.state.X} &#12288; 纬度:{this.state.Y} &#12288;级别:{this.state.zoom} &#12288;
-                    底图: <a onClick={this.showBaseMap}>{this.state.title}</a>
-                </div>
-
-                {
-                    this.state.showBaseMapCard ?
-                        <Card className={style.mapBottomCard} size="small" title="切换底图" extra={<a onClick={
-                            () => this.setState({
-                                showBaseMapCard: false
-                            })
-                        }>X</a>}>
-                            <Row gutter={16}>
-                                <div className={style.baseMapTitle}><b>标注</b></div>
-                                {
-                                    labelMapList.map((item, index) =>
-
-                                        <Col span={8} key={item.key} className={this.setToggleClass(item, index, 'label')}
-                                            onClick={() => { this.changeBaseMap(item) }
-                                            }>
-                                            <img className={style.baseMapImg} src={item.thumbnailUrl} alt="Smiley face" width="42" height="42" />
-                                            <div className={style.baseMapText}>{item.name}</div>
-                                        </Col>
-                                    )
-                                }
-                            </Row>
-                            <Row gutter={16}>
-                                <div className={style.baseMapTitle}><b>底图</b></div>
-                                {
-                                    baseMapList.map((item, index) =>
-
-                                        <Col span={8} key={item.key} className={this.setToggleClass(item, index, 'base')}
-                                            onClick={
-                                                () => { this.changeBaseMap(item) }
-                                            }>
-                                            <img className={style.baseMapImg} src={item.thumbnailUrl} alt="Smiley face" width="42" height="42" />
-                                            <div className={style.baseMapText}>{item.name}</div>
-                                        </Col>
-                                    )
-                                }
-                            </Row>
-                        </Card>
-                        : null
+            <div style={{ textAlign: 'right', marginRight: 150, marginTop: 3 }}>
+              经度:{this.state.X} &#12288; 纬度:{this.state.Y} &#12288;级别:{this.state.zoom} &#12288;
+              底图: <a onClick={this.showBaseMap}>{this.state.title}</a>
+            </div>
+    
+            {this.state.showBaseMapCard ? (
+              <Card
+                className={style.mapBottomCard}
+                size="small"
+                title="切换底图"
+                extra={
+                  <a
+                    onClick={() =>
+                      this.setState({
+                        showBaseMapCard: false,
+                      })
+                    }
+                  >
+                    X
+                  </a>
                 }
-
-
-            </>
-        )
-    }
+              >
+                <Row gutter={16}>
+                  <div className={style.baseMapTitle}>
+                    <b>标注</b>
+                  </div>
+                  {labelMapList.map((item, index) => (
+                    <Col
+                      span={8}
+                      key={item.key}
+                      className={this.setToggleClass(item, index, 'label')}
+                      onClick={() => {
+                        this.changeBaseMap(item);
+                      }}
+                    >
+                      <img
+                        className={style.baseMapImg}
+                        src={item.thumbnailUrl}
+                        alt="Smiley face"
+                        width="42"
+                        height="42"
+                      />
+                      <div className={style.baseMapText}>{item.name}</div>
+                    </Col>
+                  ))}
+                </Row>
+                <Row gutter={16}>
+                  <div className={style.baseMapTitle}>
+                    <b>底图</b>
+                  </div>
+                  {baseMapList.map((item, index) => (
+                    <Col
+                      span={8}
+                      key={item.key}
+                      className={this.setToggleClass(item, index, 'base')}
+                      onClick={() => {
+                        this.changeBaseMap(item);
+                      }}
+                    >
+                      <img
+                        className={style.baseMapImg}
+                        src={item.thumbnailUrl}
+                        alt="Smiley face"
+                        width="42"
+                        height="42"
+                      />
+                      <div className={style.baseMapText}>{item.name}</div>
+                    </Col>
+                  ))}
+                </Row>
+              </Card>
+            ) : null}
+          </>
+    );
+  }
 }
 
 export default MapBottom;

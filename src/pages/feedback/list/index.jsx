@@ -1,4 +1,7 @@
-import { Button, Card, Col, Form, Icon, List, Row, Select } from 'antd';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Button, Card, Col, List, Row, Select } from 'antd';
 import React, { Component } from 'react';
 
 import { connect } from 'dva';
@@ -50,7 +53,7 @@ class FeedbackList extends Component {
 
     const IconText = ({ type, text, onClick }) => (
       <span onClick={onClick}>
-        <Icon type={type} style={{ marginRight: 8 }} />
+        <LegacyIcon type={type} style={{ marginRight: 8 }} />
         {text}
       </span>
     );
@@ -68,7 +71,7 @@ class FeedbackList extends Component {
         <Button onClick={this.fetchMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
           {loading ? (
             <span>
-              <Icon type="loading" /> 加载中...
+              <LoadingOutlined /> 加载中...
             </span>
           ) : (
             '加载更多'

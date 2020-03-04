@@ -39,7 +39,6 @@ const RemoteModel = {
     },
     *fetchRemoteSensingDetail({ payload }, { call, put }) {
       const data = yield call(queryRemoteSensingDetail, payload);
-      console.log('fetchRemoteSensingDetail  data', data);
       yield put({
         type: 'show',
         payload: data?.content,

@@ -12,8 +12,10 @@ const radioStyle = {
   lineHeight: '30px',
 };
 
-export default connect(({ employee }) => ({
+export default connect(({ employee, user }) => ({
   deptList: employee.deptList,
+  user: user.currentUser,
+  employeeList: employee.employeeList,
 }))(
   ({
     handleCloseClick,
@@ -21,10 +23,12 @@ export default connect(({ employee }) => ({
     handleOkClick,
     deptid,
     setDeptid,
+    user,
     userIds,
     setUserIds,
     dispatch,
     deptList,
+    employeeList,
   }) => {
     useEffect(() => {
       if (dispatch) {
@@ -34,6 +38,9 @@ export default connect(({ employee }) => ({
       }
     }, []);
 
+    const isXTGLY = user.roles[0].rolecode === 'XTGLY';
+    const isZFDDZ = user.roles[0].rolecode === 'ZFDDZ';
+
     return (
       <Modal
         title={formatMessage({ id: 'remote-sensing.approval' })}
@@ -41,19 +48,28 @@ export default connect(({ employee }) => ({
         onOk={handleOkClick}
         onCancel={handleCloseClick}
       >
-        <RadioGroup onChange={e => setDeptid(e.target.value)} value={deptid}>
-          {[...deptList, { deptname: '自定义', deptid: 'customdeptid' }].map(
-            ({ deptname, deptid: id }) => (
-              <Radio style={radioStyle} value={id} key={id}>
-                {deptname}
-              </Radio>
-            ),
-          )}
-        </RadioGroup>
-        {deptid === 'customdeptid' ? (
-          <EmployeeSelect value={userIds} setValue={setUserIds} />
-        ) : null}
-        {/* <EmployeeSelect /> */}
+        {isXTGLY && (
+          <RadioGroup onChange={e => setDeptid(e.target.value)} value={deptid}>
+            {[...deptList, { deptname: '自定义', deptid: 'customdeptid' }].map(
+              ({ deptname, deptid: id }) => (
+                <Radio style={radioStyle} value={id} key={id}>
+                  {deptname}
+                </Radio>
+              ),
+            )}
+          </RadioGroup>
+        )}
+        {(!isXTGLY || deptid === 'customdeptid') && (
+          <EmployeeSelect
+            employeeList={
+              isZFDDZ
+                ? employeeList.filter(({ value }) => value === user?.depts?.[0]?.deptid)
+                : employeeList
+            }
+            value={userIds}
+            setValue={setUserIds}
+          />
+        )}
       </Modal>
     );
   },

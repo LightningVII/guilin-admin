@@ -1,6 +1,7 @@
 import React from 'react';
-import { debounce } from 'lodash'
-import { Icon, Tooltip } from 'antd';
+import { debounce } from 'lodash';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import style from "./style.css";
 
 class Compass extends React.Component {
@@ -78,10 +79,10 @@ class Compass extends React.Component {
                 </div>
                 <div className={style.zoomStyle}>
                     <Tooltip placement="left" title="放大">
-                        <Icon type="plus" className={style.zoomInStyle} onClick={() => this.zoomIn()} />
+                        <MinusOutlined type="plus" className={style.zoomInStyle} onClick={() => this.zoomIn()} />
                     </Tooltip>
                     <Tooltip placement="left" title="缩小">
-                        <Icon type="minus" className={style.zoomOutStyle} onClick={() => this.zoomOut()} />
+                        <PlusOutlined type="minus" className={style.zoomOutStyle} onClick={() => this.zoomOut()} />
                     </Tooltip>
                 </div>
             </div >

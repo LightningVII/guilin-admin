@@ -2,14 +2,15 @@ import slash from 'slash2';
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 import routes from './routes';
 
-import themePluginConfig from './themePluginConfig';
-import theme from './theme';
+// import themePluginConfig from './themePluginConfig';
+// import proxy from './proxy';
+// import webpackPlugin from './plugin.config';
 const { pwa } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 
-const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
-const isAntDesignProPreview = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site';
+const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV } = process.env;
 const plugins = [
+  ['umi-plugin-antd-icon-config', {}],
   [
     'umi-plugin-react',
     {
@@ -56,17 +57,6 @@ const plugins = [
   ],
 ];
 
-if (isAntDesignProPreview) {
-  // 针对 preview.pro.ant.design 的 GA 统计代码
-  plugins.push([
-    'umi-plugin-ga',
-    {
-      code: 'UA-72788897-6',
-    },
-  ]);
-  plugins.push(['umi-plugin-antd-theme', themePluginConfig]);
-}
-
 export default {
   publicPath: './',
   outputPath: './gl',
@@ -79,8 +69,12 @@ export default {
   // umi routes: https://umijs.org/zh/guide/router.html
   routes,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
-  theme,
+  theme: {
+    // ...darkTheme,
+    'primary-color': defaultSettings.primaryColor,
+  },
   define: {
+    REACT_APP_ENV: REACT_APP_ENV || false,
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
       ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
   },
@@ -121,7 +115,6 @@ export default {
   proxy: {
     '/strapi': {
       target: 'http://qs.vipgz4.idcfengye.com/',
-      // target: 'http://1bc20b9d.ngrok.io/',
       changeOrigin: true,
       pathRewrite: {
         '^/strapi': '',

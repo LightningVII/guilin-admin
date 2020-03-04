@@ -53,7 +53,7 @@ const action = (handleApprovalClick, tbbm) => (
         进入地图
       </Button>
       <Button onClick={handleApprovalClick}>分发</Button>
-      <Button>归档</Button>
+      {/* <Button>归档</Button> */}
     </ButtonGroup>
     <Button type="primary">填写反馈报告</Button>
   </Fragment>
@@ -68,17 +68,37 @@ const extra = item => (
 const description = item => (
   <RouteContext.Consumer>
     {() => (
-      <Descriptions className={styles.headerList} size="small" column={2}>
-        <Descriptions.Item label="前时相">{item?.qsx}</Descriptions.Item>
-        <Descriptions.Item label="前时相地类名称">{item?.qsxdlmc}</Descriptions.Item>
-        <Descriptions.Item label="后时相">{item?.HSX}</Descriptions.Item>
-        <Descriptions.Item label="后时相地类名称">{item?.hsxdlmc}</Descriptions.Item>
-        <Descriptions.Item label="变化类型">{item?.BHLX}</Descriptions.Item>
-        <Descriptions.Item label="前时相变化地类">{item?.qsxbhdl}</Descriptions.Item>
-        <Descriptions.Item label="区县">{item?.COUNTY}</Descriptions.Item>
-        <Descriptions.Item label="后时相变化地类">{item?.hsxbhdl}</Descriptions.Item>
-        <Descriptions.Item label="位置">{item?.location}</Descriptions.Item>
-        <Descriptions.Item label="面积（亩）">{item?.area}</Descriptions.Item>
+      <Descriptions key={1} className={styles.headerList} size="small" column={2}>
+        <Descriptions.Item key={1} label="前时相">
+          {item?.qsx}
+        </Descriptions.Item>
+        <Descriptions.Item key={2} label="前时相地类名称">
+          {item?.qsxdlmc}
+        </Descriptions.Item>
+        <Descriptions.Item key={3} label="后时相">
+          {item?.HSX}
+        </Descriptions.Item>
+        <Descriptions.Item key={4} label="后时相地类名称">
+          {item?.hsxdlmc}
+        </Descriptions.Item>
+        <Descriptions.Item key={5} label="变化类型">
+          {item?.BHLX}
+        </Descriptions.Item>
+        <Descriptions.Item key={6} label="前时相变化地类">
+          {item?.qsxbhdl}
+        </Descriptions.Item>
+        <Descriptions.Item key={7} label="区县">
+          {item?.COUNTY}
+        </Descriptions.Item>
+        <Descriptions.Item key={8} label="后时相变化地类">
+          {item?.hsxbhdl}
+        </Descriptions.Item>
+        <Descriptions.Item key={9} label="位置">
+          {item?.location}
+        </Descriptions.Item>
+        <Descriptions.Item key={10} label="面积（亩）">
+          {item?.area}
+        </Descriptions.Item>
       </Descriptions>
     )}
   </RouteContext.Consumer>
@@ -90,8 +110,8 @@ class Details extends Component {
   state = {
     visible: false,
     approvalShow: false,
-    deptid: 0,
-    userIds: 0,
+    deptid: undefined,
+    userIds: undefined,
     selectedImages: [],
     imagesViewShow: false,
     approvalContent: '',
@@ -197,7 +217,27 @@ class Details extends Component {
         </div>
         <DistributeModal
           visible={visible}
-          handleOkClick={() => this.setState({ visible: false })}
+          handleOkClick={() => {
+            dispatch({
+              type: 'remoteSensing/fetchChangespotIssue',
+              payload: {
+                spotIds: [changespot.spotid],
+                deptId: deptid === 'customdeptid' ? null : deptid,
+                userIds,
+                userid: user.currentUser.userid,
+              },
+            }).then(res => {
+              if (res?.code === 200) {
+                dispatch({
+                  type: 'remoteSensing/fetchRemoteSensingDetail',
+                  payload: match?.params,
+                });
+                this.setState({ visible: false });
+              } else {
+                message.warning('数据异常');
+              }
+            });
+          }}
           handleCloseClick={() => this.setState({ visible: false })}
           deptid={deptid}
           setDeptid={r => this.setState({ deptid: r })}

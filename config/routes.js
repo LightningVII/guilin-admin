@@ -28,29 +28,29 @@ export default [
           {
             path: '/',
             redirect: '/statistics',
-            authority: ['XTGLY'],
+            authority: ['XTGLY', 'ZFDDZ'],
           },
           {
             path: '/feedback/list',
-            authority: ['XTGLY'],
+            authority: ['XTGLY', 'ZFDDZ'],
           },
           {
             path: '/remote-sensing/list',
-            authority: ['XTGLY'],
+            authority: ['XTGLY', 'ZFDDZ'],
           },
           {
             icon: 'crown',
             name: 'home',
             path: '/statistics',
             component: './Statistics', // authority: ['admin'],
-            authority: ['XTGLY'],
+            authority: ['XTGLY', 'ZFDDZ'],
           },
           {
             name: 'data.center',
             icon: 'smile',
             path: '/listsearchprojects',
             component: './ListSearchProjects',
-            authority: ['XTGLY'],
+            authority: ['XTGLY', 'ZFDDZ'],
             // hideInMenu: true,
           },
           {
@@ -58,14 +58,14 @@ export default [
             name: 'map-show.center',
             path: '/global-map-show',
             component: './arcgis-show/global-map-show', // authority: ['admin'],
-            authority: ['XTGLY'],
+            authority: ['XTGLY', 'ZFDDZ'],
           },
           {
             name: 'monitoring-results',
             icon: 'smile',
             path: '/remote-sensing',
             component: './remote-sensing/list',
-            authority: ['XTGLY'],
+            authority: ['XTGLY', 'ZFDDZ'],
             hideInMenu: true,
           },
           {
