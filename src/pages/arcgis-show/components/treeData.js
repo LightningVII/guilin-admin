@@ -30,7 +30,7 @@ export const treeData = [
         loadType: 'tile',
         layerUrl:
           'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}',
-      },
+      }
     ],
   },
   {
@@ -60,7 +60,7 @@ export const treeData = [
         key: '0-1-3',
         loadType: 'feature',
         layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0',
-      },
+      }
     ],
   },
   {

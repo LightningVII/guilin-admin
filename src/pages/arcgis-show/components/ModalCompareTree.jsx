@@ -34,7 +34,7 @@ class ModalCompareTree extends React.Component {
     const fA = [];
 
     e.checkedNodes.forEach(checkedNode => {
-      const type = checkedNode.props.loadType;
+      const type = checkedNode.loadType;
       switch (type) {
         case 'tile':
           rA.push(checkedNode);

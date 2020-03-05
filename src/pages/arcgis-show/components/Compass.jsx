@@ -79,10 +79,10 @@ class Compass extends React.Component {
                 </div>
                 <div className={style.zoomStyle}>
                     <Tooltip placement="left" title="放大">
-                        <MinusOutlined type="plus" className={style.zoomInStyle} onClick={() => this.zoomIn()} />
+                        <PlusOutlined className={style.zoomInStyle} onClick={() => this.zoomIn()} />
                     </Tooltip>
                     <Tooltip placement="left" title="缩小">
-                        <PlusOutlined type="minus" className={style.zoomOutStyle} onClick={() => this.zoomOut()} />
+                        <MinusOutlined className={style.zoomOutStyle} onClick={() => this.zoomOut()} />
                     </Tooltip>
                 </div>
             </div >

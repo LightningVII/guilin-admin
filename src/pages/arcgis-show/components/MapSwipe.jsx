@@ -36,7 +36,7 @@ class MapSwipe extends React.Component {
     const rLayers = [];
     const fLayers = [];
     this.props.layersArray.forEach(node => {
-      const type = node.props.loadType;
+      const type = node.loadType;
       if (type) {
         switch (type) {
           case 'tile':
@@ -52,16 +52,16 @@ class MapSwipe extends React.Component {
     });
     if (rLayers.length === 2) {
       this.setState({
-        LT: rLayers[0].props.title,
-        RT: rLayers[1].props.title,
+        LT: rLayers[0].title,
+        RT: rLayers[1].title,
       });
 
       const layer1 = new EsriWebTileLayer({
-        urlTemplate: rLayers[0].props.layerUrl,
+        urlTemplate: rLayers[0].layerUrl,
       });
 
       const layer2 = new EsriWebTileLayer({
-        urlTemplate: rLayers[1].props.layerUrl,
+        urlTemplate: rLayers[1].layerUrl,
       });
 
       mapView.map.addMany([layer1, layer2]);
@@ -76,7 +76,7 @@ class MapSwipe extends React.Component {
       mapView.ui.add(swipe);
 
       fLayers.forEach(fLayer => {
-        mapView.map.add(new EsriFeatureLayer({ url: fLayer.props.layerUrl, id: fLayer.key }));
+        mapView.map.add(new EsriFeatureLayer({ url: fLayer.layerUrl, id: fLayer.key }));
       });
     } else {
       message.info('请选择两幅栅格影像');

@@ -1,6 +1,7 @@
 import React from 'react';
-import { debounce } from 'lodash'
-import { Icon, Input, Tree, Tooltip, List, Typography } from 'antd';
+import { debounce } from 'lodash';
+import { UnorderedListOutlined, CarryOutOutlined } from '@ant-design/icons';
+import { Input, Tree, Tooltip, List, Typography } from 'antd';
 import { loadModules } from 'esri-loader';
 // import router from 'umi/router';
 
@@ -71,9 +72,9 @@ class SearchGIS extends React.Component {
   loadToMap = (checkedKeys, e) => {
     this.props.view.map.removeAll();
     e.checkedNodes.forEach(checkedNode => {
-      const type = checkedNode.props.loadType;
+      const type = checkedNode.loadType;
       if (type) {
-        const nodeUrl = checkedNode.props.layerUrl;
+        const nodeUrl = checkedNode.layerUrl;
         const nodeId = checkedNode.key;
         switch (type) {
           case 'tile':
@@ -165,11 +166,9 @@ class SearchGIS extends React.Component {
           allowClear
           prefix={
             <Tooltip placement="bottom" title="图层">
-              <Icon
-                type="unordered-list"
+              <UnorderedListOutlined
                 style={{ cursor: 'pointer' }}
-                onClick={this.handleClick}
-              />
+                onClick={this.handleClick} />
             </Tooltip>
           }
         />
@@ -188,6 +187,19 @@ class SearchGIS extends React.Component {
 
         <div style={{ width: 240, overflow: 'hidden' }}>
           <Tree
+            checkable
+            onCheck={this.onCheck}
+            defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer', 'base-layer']}
+            treeData={treeData}
+            // style={{ overflow: 'hidden' }}
+            style={{
+              background: '#FFF',
+              height: this.state.height,
+              marginTop: this.state.marginTop,
+              transition: '.3s all ease-in',
+            }}
+          />
+          {/* <Tree
             showLine
             showIcon
             checkable
@@ -203,13 +215,13 @@ class SearchGIS extends React.Component {
                 marginTop: this.state.marginTop,
                 transition: '.3s all ease-in',
               }}
-              icon={<Icon type="carry-out" />}
+              icon={<CarryOutOutlined />}
               title="所有图层"
               key="0-0"
             >
               {this.renderTreeNodes(treeData)}
             </TreeNode>
-          </Tree>
+          </Tree> */}
         </div>
       </>
     );

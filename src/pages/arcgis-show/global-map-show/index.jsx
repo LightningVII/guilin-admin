@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
-import { Row, Col, Affix, Menu, Button, Dropdown, Icon, Card, message } from 'antd';
+import { ToolOutlined, InfoCircleOutlined, UserOutlined, SnippetsOutlined } from '@ant-design/icons';
+import { Row, Col, Affix, Menu, Button, Dropdown, Card, message } from 'antd';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
 // import MyBasemap from '../components/MyBasemap';
@@ -112,52 +113,52 @@ export default class GlobeMapShow extends React.Component {
             <Dropdown overlay={
               <Menu onClick={this.handleMenuClick}>
                 <Menu.Item key="cl" >
-                  <Icon type="user" />
+                 <UserOutlined/>
                   测量
                </Menu.Item>
                 <Menu.Item key="2">
-                  <Icon type="user" />
+                <UserOutlined/>
                   全屏
                </Menu.Item>
                 <Menu.Item key="3">
-                  <Icon type="user" />
+                <UserOutlined/>
                   截图
                </Menu.Item>
                 <Menu.Item key="dy">
-                  <Icon type="user" />
+                <UserOutlined/>
                   打印
                </Menu.Item>
               </Menu>
             } >
-              <Button icon="tool" >常用</Button>
+              <Button><ToolOutlined/>常用</Button>
             </Dropdown>
             <Dropdown
               overlay={
                 <Menu onClick={this.handleMenuClick}>
                   <Menu.Item key="cl">
-                    <Icon type="user" />
+                  <UserOutlined/>
                     点选
                   </Menu.Item>
                 </Menu>
               }
             >
-              <Button icon="info-circle">查询</Button>
+              <Button><InfoCircleOutlined/>查询</Button>
             </Dropdown>
             <Dropdown
               overlay={
                 <Menu onClick={this.handleMenuClick}>
                   <Menu.Item key="jl">
-                    <Icon type="user" />
+                  <UserOutlined/>
                     卷帘
                   </Menu.Item>
                   <Menu.Item key="dp">
-                    <Icon type="user" />
+                  <UserOutlined/>
                     多屏
                   </Menu.Item>
                 </Menu>
               }
             >
-              <Button icon="snippets">分析</Button>
+              <Button><SnippetsOutlined/>分析</Button>
             </Dropdown>
           </Button.Group>
         </Affix>
@@ -175,7 +176,7 @@ export default class GlobeMapShow extends React.Component {
         {
           this.state.renderPrint ?
             <Affix className={style.print} offsetTop={80}>
-              <Print view={this.state.mapView}/>
+              <Print view={this.state.mapView} />
             </Affix> : null
         }
 

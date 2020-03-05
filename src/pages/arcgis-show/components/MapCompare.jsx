@@ -47,16 +47,15 @@ class MapCompare extends React.Component {
       const graphic2 = {};
       // graphic1=this.props.featrueGraphic
       // const graphic2 = this.props.featrueGraphic;
-      graphic1.props = {};
-      graphic1.props.title = this.props.featrueGraphic.attributes.QSX;
-      graphic1.props.layerUrl =
+    
+      graphic1.title = this.props.featrueGraphic.attributes.QSX;
+      graphic1.layerUrl =
         'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}';
       graphic1.key = '1';
-      graphic2.props = {};
-      graphic2.props.layerUrl =
+      graphic2.layerUrl =
         'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201802/MapServer/tile/{level}/{row}/{col}';
       graphic2.key = '2';
-      graphic2.props.title = this.props.featrueGraphic.attributes.HSX;
+      graphic2.title = this.props.featrueGraphic.attributes.HSX;
       tLayers.push(graphic1);
       tLayers.push(graphic2);
       const fg = this.props.featrueGraphic;
@@ -64,7 +63,7 @@ class MapCompare extends React.Component {
       fLayers.push(fg);
     } else {
       layersArray.forEach(node => {
-        const type = node.props.loadType;
+        const type = node.loadType;
         if (type) {
           switch (type) {
             case 'tile':
@@ -87,7 +86,7 @@ class MapCompare extends React.Component {
 
   handleLoad = (map, view, item, fLCounts, tLCounts) => {
     if (this.props.featrueGraphic) {
-      map.add(new EsriWebTileLayer({ urlTemplate: item.props.layerUrl, id: item.key }));
+      map.add(new EsriWebTileLayer({ urlTemplate: item.layerUrl, id: item.key }));
       // fLCounts.forEach(fLayer => {
       //      map.add(new EsriGraphicsLayer({graphics: [fLayer]}))
       // })
@@ -106,9 +105,9 @@ class MapCompare extends React.Component {
       const gl = new EsriGraphicsLayer({ graphics: fls });
       map.add(gl);
     } else {
-      map.add(new EsriWebTileLayer({ urlTemplate: item.props.layerUrl, id: item.key }));
+      map.add(new EsriWebTileLayer({ urlTemplate: item.layerUrl, id: item.key }));
       fLCounts.forEach(fLayer => {
-        map.add(new EsriFeatureLayer({ url: fLayer.props.layerUrl, id: fLayer.key }));
+        map.add(new EsriFeatureLayer({ url: fLayer.layerUrl, id: fLayer.key }));
       });
     }
 
@@ -180,7 +179,7 @@ render() {
                 style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}
                 onClick={this.handleOpenModal}
               >
-                {item.props.title}
+                {item.title}
               </Button>
               <MyBasemap
                 height={heightStyle}
@@ -196,7 +195,7 @@ render() {
           {countsDown.map(item => (
             <Col className="gutter-row" span={colSpan} key={item.key}>
               <Button style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}>
-                {item.props.title}
+                {item.title}
               </Button>
               <MyBasemap
                 height={heightStyle}
