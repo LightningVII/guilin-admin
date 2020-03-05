@@ -49,3 +49,11 @@ export async function queryChangespotApproval(params) {
 export async function queryRemoteSensingDetail(tbbm) {
   return request(`/strapi/changespot/info?${stringify(tbbm)}`);
 }
+
+export async function queryChangespotFuzzyQuery(term) {
+  return request(`/strapi/changespot/fuzzyQuery?${stringify(term)}`);
+}
+
+export async function queryChangespotGeomotry(tbbm) {
+  return request(`/strapi/changespot/geomotry?${stringify(tbbm)}`);
+}

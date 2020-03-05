@@ -3,6 +3,8 @@ import {
   queryChangespotIssue,
   queryChangespotApproval,
   queryRemoteSensingDetail,
+  queryChangespotFuzzyQuery,
+  queryChangespotGeomotry,
 } from '@/services/remote';
 
 const RemoteModel = {
@@ -11,6 +13,8 @@ const RemoteModel = {
   state: {
     remoteSensingData: null,
     changespot: null,
+    fuzzyChangespot: null,
+    geomotry: null,
   },
 
   effects: {
@@ -44,6 +48,20 @@ const RemoteModel = {
         payload: data?.content,
       });
     },
+    *fetchChangespotFuzzyQuery({ payload }, { call, put }) {
+      const data = yield call(queryChangespotFuzzyQuery, payload);
+      yield put({
+        type: 'saveFuzzyChangespot',
+        payload: data?.content,
+      });
+    },
+    *fetchChangespotGeomotry({ payload }, { call, put }) {
+      const data = yield call(queryChangespotGeomotry, payload);
+      yield put({
+        type: 'saveGeomotry',
+        payload: data?.content,
+      });
+    },
   },
 
   reducers: {
@@ -55,6 +73,12 @@ const RemoteModel = {
     },
     show(state, { payload }) {
       return { ...state, ...payload };
+    },
+    saveFuzzyChangespot(state, { payload }) {
+      return { ...state, fuzzyChangespot: payload };
+    },
+    saveGeomotry(state, { payload }) {
+      return { ...state, geomotry: payload };
     },
   },
 };
