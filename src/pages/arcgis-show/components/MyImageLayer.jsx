@@ -13,23 +13,13 @@ const MyImageLayer = props => {
           proxyUrl: 'http://112.35.60.89:82/resourceProxy',
         });
 
-        // const fl = new FeatureLayer({
-        //     url: 'http://218.3.176.6:6080/arcgis/rest/services/BHTuBan/MS_SL_BHTuBan_201812/MapServer/0',
-        //     id: 'bhtb2',
-        //     outFields: ['*'],
-        //     popupTemplate: template,
-        //     title: '202001',
-        // });
-
         const wt = new WebTileLayer({
-          urlTemplate: props.imgLayer.urlTemplate,
+          urlTemplate: props.imgLayer.layerUrl,
           id: props.imgLayer.id,
         });
 
         setImageLayer(wt);
         props.view.map.add(wt);
-
-        // props.view.map.add(fl);
       })
       .catch(err => console.error(err));
 

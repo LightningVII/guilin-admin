@@ -1,8 +1,9 @@
 import React from 'react';
 import { debounce } from 'lodash';
-import { UnorderedListOutlined, CarryOutOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined } from '@ant-design/icons';
 import { Input, Tree, Tooltip, List, Typography } from 'antd';
 import { loadModules } from 'esri-loader';
+import { connect } from 'dva';
 // import router from 'umi/router';
 
 import { treeData } from './treeData.js';
@@ -13,36 +14,53 @@ const { Search } = Input;
 const { TreeNode } = Tree;
 let EsriFeatureLayer;
 let EsriWebTileLayer;
-let EsriQueryTask;
-let EsriQuery;
 let flag = false;
+
+@connect(({ remoteSensing, layer }) => ({
+  fuzzyChangespot: remoteSensing.fuzzyChangespot,
+  geomotry: remoteSensing.geomotry,
+  layerTree: layer.layerTree,
+  layerUrl: layer.layerUrl,
+}))
+
 
 class SearchGIS extends React.Component {
   constructor(props) {
     super(props);
-    this.inputValChange = debounce(this.inputValChange, 20)
+    // const { dispatch, fuzzyChangespot } = props;
+    this.inputValChange = debounce(this.inputValChange, 100)
     // 设置 initial state
     this.state = {
       isToggleOn: true,
-      marginTop: -20,
       height: 0,
       searchPanelVisiable: 'hidden',
       searchData: [],
+      treeDatas: treeData
     };
 
     loadModules([
       'esri/layers/FeatureLayer',
-      'esri/layers/WebTileLayer',
-      'esri/tasks/QueryTask',
-      'esri/tasks/support/Query',
-    ]).then(([FeatureLayer, WebTileLayer, QueryTask, Query]) => {
+      'esri/layers/WebTileLayer'
+    ]).then(([FeatureLayer, WebTileLayer]) => {
       EsriFeatureLayer = FeatureLayer;
       EsriWebTileLayer = WebTileLayer;
-      EsriQueryTask = QueryTask;
-      EsriQuery = Query;
       flag = false;
     });
   }
+
+  componentDidMount() {
+    const { dispatch, layerTree } = this.props;
+    
+    dispatch({
+      type: 'layer/fetchLayerTree'
+    }).then(() => {
+      
+      this.setState({
+        treeDatas:layerTree.ok?layerTree:treeData
+      })
+    });
+  }
+
 
   handleInputSearch = e => {
     this.inputValChange(e.target.value)
@@ -94,54 +112,59 @@ class SearchGIS extends React.Component {
   }
 
   inputValChange = value => {
-    const that = this
-    const str = value.replace(/\s*/g, '')
-    if (str !== '') {
-      this.setState({
-        isToggleOn: false,
-        marginTop: -20,
-        height: 0,
-        searchPanelVisiable: 'visible',
-        searchData: [],
-      });
-      const queryTask = new EsriQueryTask({
-        url:
-          'http://218.3.176.6:6080/arcgis/rest/services/BHTuBan/MS_SL_BHTuBan_201812/MapServer/0',
-      });
-      const query = new EsriQuery();
-      query.returnGeometry = true;
-      query.outFields = ['*'];
-      query.where = `hxmc like '%${str}%'`;
-      queryTask.execute(query).then(results => {
-        const temp = [];
-        results.features.forEach(feature => {
-          const obj = {};
-          obj.text = feature.attributes.hxmc;
-          obj.type = '变化图斑';
-          temp.push(obj);
+    const { dispatch, fuzzyChangespot } = this.props;
+    this.setState({
+      isToggleOn: false,
+      height: 0,
+      searchPanelVisiable: 'visible',
+      searchData: []
+    }, () => {
+      const str = value.replace(/\s*/g, '')
+      const temp = [];
+      if (str !== '') {
+        dispatch({
+          type: 'remoteSensing/fetchChangespotFuzzyQuery',
+          payload: { term: str }
+        }).then(() => {
+          if (fuzzyChangespot) {
+            fuzzyChangespot.forEach(item => {
+              const obj = {};
+              obj.BATCH = item.BATCH;
+              obj.COUNTY = item.COUNTY;
+              obj.LOCATION = item.LOCATION;
+              obj.TBBM = item.TBBM;
+              temp.push(obj);
+            })
+            this.setState({
+              searchData: temp
+            });
+          }
         });
-        if (temp.length > 0)
-          that.setState({
-            searchData: temp,
-          });
-      });
-    } else {
-      this.setState(prevState => ({
-        isToggleOn: !prevState.isToggleOn,
-        marginTop: !prevState.isToggleOn ? -20 : 0,
-        height: !prevState.isToggleOn ? 0 : 600,
-        searchPanelVisiable: 'hidden',
-      }));
-    }
+      } else {
+        this.setState({
+          searchPanelVisiable: 'hidden',
+          searchData: []
+        });
+      }
+    });
   };
 
   handleClick = () => {
     this.setState(prevState => ({
       isToggleOn: !prevState.isToggleOn,
-      marginTop: !prevState.isToggleOn ? -20 : 0,
       height: !prevState.isToggleOn ? 0 : 600,
     }));
   };
+
+  serchItemClick = TBBM => {
+    const { dispatch, geomotry } = this.props;
+    dispatch({
+      type: 'remoteSensing/fetchChangespotGeomotry',
+      payload: { tbbm: TBBM }
+    }).then(() => {
+      console.log(geomotry)
+    })
+  }
 
   renderTreeNodes = data =>
     data.map(item => {
@@ -178,8 +201,10 @@ class SearchGIS extends React.Component {
             bordered
             dataSource={this.state.searchData}
             renderItem={item => (
-              <List.Item style={{ cursor: 'pointer' }}>
-                {item.text} <Typography.Text code>{item.type}</Typography.Text>
+              <List.Item style={{ cursor: 'pointer' }} onClick={() => this.serchItemClick(item.TBBM)}>
+                {item.TBBM}
+                <Typography.Text code>{item.COUNTY}</Typography.Text>
+                <Typography.Text code>{item.BATCH}</Typography.Text>
               </List.Item>
             )}
           />
@@ -190,38 +215,13 @@ class SearchGIS extends React.Component {
             checkable
             onCheck={this.onCheck}
             defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer', 'base-layer']}
-            treeData={treeData}
-            // style={{ overflow: 'hidden' }}
+            treeData={this.state.treeDatas}
             style={{
               background: '#FFF',
               height: this.state.height,
-              marginTop: this.state.marginTop,
               transition: '.3s all ease-in',
             }}
           />
-          {/* <Tree
-            showLine
-            showIcon
-            checkable
-            onCheck={this.onCheck}
-            defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer', 'base-layer']}
-            style={{ overflow: 'hidden' }}
-          >
-            <TreeNode
-              checkable
-              style={{
-                background: '#FFF',
-                height: this.state.height,
-                marginTop: this.state.marginTop,
-                transition: '.3s all ease-in',
-              }}
-              icon={<CarryOutOutlined />}
-              title="所有图层"
-              key="0-0"
-            >
-              {this.renderTreeNodes(treeData)}
-            </TreeNode>
-          </Tree> */}
         </div>
       </>
     );

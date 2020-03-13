@@ -70,10 +70,10 @@ class Compass extends React.Component {
                             />
                         </div>
                         <div className={style.compassRotateLeft}
-                            onClick={() => this.rotateLeftDegree}
+                            onClick={() => this.rotateLeftDegree()}
                         />
                         <div className={style.compassRotateRight}
-                            onClick={() => this.rotateRightDegree}
+                            onClick={() => this.rotateRightDegree()}
                         />
                     </div>
                 </div>

@@ -34,6 +34,7 @@ export default class GlobeMapShow extends React.Component {
       showCompareModal: false, // Compare Model选择框
       featrueGraphic: null, // 传入Featrue的图斑编码
     };
+    
   }
 
   addFeature2Cmp = graphic => {
@@ -64,6 +65,9 @@ export default class GlobeMapShow extends React.Component {
         this.setState(prevState => ({
           renderPrint: !prevState.renderPrint
         }));
+        break;
+      case 'qp':
+        this.fullScreen();
         break;
       default:
         break;
@@ -105,6 +109,22 @@ export default class GlobeMapShow extends React.Component {
     else message.info('请选择两幅栅格影像');
   };
 
+  fullScreen=()=>{
+    const ele = this.eleBaseMap;
+    if (ele.requestFullscreen) {
+        ele.requestFullscreen();
+    }
+    else if (ele.webkitRequestFullscreen) {
+        ele.webkitRequestFullscreen();
+    }
+    else if (ele.msRequestFullscreen) {
+        ele.msRequestFullscreen();
+    }
+    else if (ele.mozRequestFullScreen) {
+        ele.mozRequestFullScreen();
+    }
+  }
+
   render() {
     return (
       <>
@@ -116,7 +136,7 @@ export default class GlobeMapShow extends React.Component {
                  <UserOutlined/>
                   测量
                </Menu.Item>
-                <Menu.Item key="2">
+                <Menu.Item key="qp">
                 <UserOutlined/>
                   全屏
                </Menu.Item>
@@ -276,6 +296,7 @@ export default class GlobeMapShow extends React.Component {
           <Col span={24}>
             <Suspense fallback="...loading">
               <MyBasemap
+                ref={el => {this.eleBaseMap = el}}
                 height="calc(100vh - 64px)"
                 style={{ overflow: 'hidden' }}
                 handleLoad={(map, view) => {

@@ -115,6 +115,7 @@ export default {
   proxy: {
     '/strapi': {
       target: 'http://qs.vipgz4.idcfengye.com/',
+      // target: 'http://192.168.1.104:8080/',
       changeOrigin: true,
       pathRewrite: {
         '^/strapi': '',

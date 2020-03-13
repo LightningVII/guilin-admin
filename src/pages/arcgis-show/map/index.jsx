@@ -1,33 +1,32 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Card, Button } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { connect } from 'dva';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
 import MyBasemap from '../components/MyBasemap';
 // import BermudaTriangle from '../components/BermudaTriangle';
 import MyFeatureLayer from '../components/MyFeatureLayer';
 import MyImageLayer from '../components/MyImageLayer';
-import { connect } from 'dva';
+
 
 export default connect(({ remoteSensing, layer }) => ({
-  fuzzyChangespot: remoteSensing.fuzzyChangespot,
-  geomotry: remoteSensing.fuzzyChangespot,
-  layerTree: layer.layerTree,
+  geomotry: remoteSensing.geomotry,
   layerUrl: layer.layerUrl,
 }))(props => {
-  const { dispatch, match, geomotry, fuzzyChangespot, layerUrl, layerTree } = props;
+  const { dispatch, match, geomotry, layerUrl } = props;
   // const [extent, setExtent] = useState();
   let basemap1;
   let basemap2;
   const img1 = {
-    urlTemplate:
+    layerUrl:
       'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201810/MapServer/tile/{level}/{row}/{col}',
     id: '201810',
     title: '2018年10月影像',
   };
 
   const img2 = {
-    urlTemplate:
+    layerUrl:
       'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}',
     id: '201812',
     title: '2018年12月影像',
@@ -35,35 +34,19 @@ export default connect(({ remoteSensing, layer }) => ({
 
   useEffect(() => {
     dispatch({
-      type: 'remoteSensing/fetchChangespotFuzzyQuery',
-      payload: { term: '' },
-    });
-
-    dispatch({
       type: 'remoteSensing/fetchChangespotGeomotry',
       payload: match?.params,
     });
 
     dispatch({
-      type: 'layer/fetchLayerTree',
-    });
-
-    dispatch({
       type: 'layer/fetchLayerGetLayerUrl',
       payload: {
-        qsx: '',
-        hsx: '',
+        qsx: '201702',
+        hsx: '201704',
       },
     });
   }, []);
 
-  console.log(
-    'geomotry, fuzzyChangespot, layerUrl, layerTree',
-    geomotry,
-    fuzzyChangespot,
-    layerUrl,
-    layerTree,
-  );
 
   return (
     <PageHeaderWrapper title={false}>
@@ -85,8 +68,8 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              <MyImageLayer imgLayer={img1} />
-              <MyFeatureLayer />
+              <MyImageLayer imgLayer={img1||layerUrl[0]} />
+              <MyFeatureLayer geomotry={geomotry}/>
             </MyBasemap>
           </Col>
           <Col span={12}>
@@ -105,8 +88,8 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              <MyImageLayer imgLayer={img2} />
-              <MyFeatureLayer />
+              <MyImageLayer imgLayer={img2||layerUrl[1]} />
+              <MyFeatureLayer  geomotry={geomotry}/>
             </MyBasemap>
           </Col>
         </Row>

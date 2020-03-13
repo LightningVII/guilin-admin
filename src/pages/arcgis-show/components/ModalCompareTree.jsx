@@ -1,9 +1,9 @@
 import React from 'react';
-import { Modal, Tree, Icon } from 'antd';
+import { Modal, Tree } from 'antd';
 
 import { treeData } from './treeData.js';
 
-const { TreeNode } = Tree;
+
 
 class ModalCompareTree extends React.Component {
   constructor(props) {
@@ -17,17 +17,7 @@ class ModalCompareTree extends React.Component {
     };
   }
 
-  renderTreeNodes = data =>
-    data.map(item => {
-      if (item.children) {
-        return (
-          <TreeNode title={item.title} key={item.key} dataRef={item}>
-            {this.renderTreeNodes(item.children)}
-          </TreeNode>
-        );
-      }
-      return <TreeNode key={item.key} {...item} />;
-    });
+
 
   onCheck = (checkedKeys, e) => {
     const rA = [];
@@ -68,14 +58,11 @@ class ModalCompareTree extends React.Component {
             showLine
             showIcon
             checkable
-            defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer', 'base-layer']}
-            style={{ overflowY: 'scroll', maxHeight: '50vh' }}
             onCheck={this.onCheck}
-          >
-            <TreeNode checkable icon={<Icon type="carry-out" />} title="所有图层" key="0-0">
-              {this.renderTreeNodes(treeData)}
-            </TreeNode>
-          </Tree>
+            defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer', 'base-layer']}
+            treeData={treeData}
+            style={{ overflowY: 'scroll', maxHeight: '50vh' }}
+          />
           <p>
             <span>
               已选图层：{this.state.fCount + this.state.rCount}（{this.state.rCount}栅格，
