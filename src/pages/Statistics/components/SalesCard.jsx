@@ -4,7 +4,8 @@ import React from 'react';
 import styles from '../style.less';
 // import MyBasemap from '../../arcgis-show/components/MyBasemap';
 // import MyFeatureLayer from '../../arcgis-show/components/MyFeatureLayer';
-import MyEcharts from '../../arcgis-show/components/MyEcharts';
+// import MyEcharts from '../../arcgis-show/components/MyEcharts';
+import MapCharts from '../../arcgis-show/components/MapCharts';
 
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
@@ -107,9 +108,9 @@ const SalesCard = ({
   >
     <Row type="flex" style={{ padding: '24px' }}>
       <Col style={{ paddingRight: '24px' }} xl={16} lg={12} md={12} sm={24} xs={24}>
-        <MyEcharts height="328px">
+        <MapCharts height="328px">
           {/* <MyFeatureLayer /> */}
-        </MyEcharts>
+        </MapCharts>
       </Col>
       <Col xl={8} lg={12} md={12} sm={24} xs={24}>
         <h4
