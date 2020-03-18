@@ -1,19 +1,17 @@
 /**
- * Ant Design Pro v4 use `@ant-design/pro-layout` to handle Layout.
+ * 北京航天泰坦 v4 use `@ant-design/pro-layout` to handle Layout.
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import ProLayout from '@ant-design/pro-layout';
+import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
-import { Result, Button, Layout } from 'antd';
+import { Result, Button } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { getAuthorityFromRouter } from '@/utils/utils';
-
-const { Footer } = Layout;
 
 const noMatch = (
   <Result
@@ -36,58 +34,6 @@ const menuDataRender = menuList =>
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
     return Authorized.check(item.authority, localItem, null);
   });
-
-/* const defaultFooterDom = (
-  <DefaultFooter
-    copyright="2019 蚂蚁金服体验技术部出品"
-    links={[
-      {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
-        blankTarget: true,
-      },
-      {
-        key: 'github',
-        title: <Icon type="github" />,
-        href: 'https://github.com/ant-design/ant-design-pro',
-        blankTarget: true,
-      },
-      {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
-        blankTarget: true,
-      },
-    ]}
-  />
-);
-
-const footerRender = () => {
-  if (!isAntDesignPro()) {
-    return defaultFooterDom;
-  }
-
-  return (
-    <>
-      {defaultFooterDom}
-      <div
-        style={{
-          padding: '0px 24px 24px',
-          textAlign: 'center',
-        }}
-      >
-        <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
-          <img
-            src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
-            width="82px"
-            alt="netlify logo"
-          />
-        </a>
-      </div>
-    </>
-  );
-}; */
 
 const BasicLayout = props => {
   const {
@@ -127,7 +73,12 @@ const BasicLayout = props => {
   };
   return (
     <ProLayout
-      menuHeaderRender={(logoDom, titleDom) => <Link to="/">{titleDom}</Link>}
+      menuHeaderRender={(logoDom, titleDom) => (
+        <Link to="/">
+          {logoDom}
+          {titleDom}
+        </Link>
+      )}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl || menuItemProps.children) {
@@ -155,7 +106,7 @@ const BasicLayout = props => {
         );
       }}
       footerRender={() => (
-        <Footer style={{ textAlign: 'center' }}>北京航天泰坦科技股份有限公司</Footer>
+        <DefaultFooter links={false} copyright="2020 北京航天泰坦科技股份有限公司" />
       )}
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}

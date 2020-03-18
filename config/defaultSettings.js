@@ -11,6 +11,7 @@ export default {
     locale: true,
   },
   title: '执法遥感监测平台',
+  logo: '/favicon.png',
   pwa: false,
   iconfontUrl: '',
 };

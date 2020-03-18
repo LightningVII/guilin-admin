@@ -198,7 +198,6 @@ export async function fakeChartData() {
   // return request('/api/fake_chart_data');
 
   return new Promise(resolve => {
-    console.log('fakeChartData', getFakeChartData);
     setTimeout(() => resolve(getFakeChartData), 1000);
   });
 }

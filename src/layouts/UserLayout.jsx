@@ -50,7 +50,7 @@ const UserLayout = props => {
           </div>
           {children}
         </div>
-        <DefaultFooter />
+        <DefaultFooter links={false} copyright="2020 北京航天泰坦科技股份有限公司" />
       </div>
     </>
   );

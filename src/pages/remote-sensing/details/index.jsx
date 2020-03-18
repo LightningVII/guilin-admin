@@ -1,4 +1,4 @@
-import { Button, Card, Statistic, Descriptions, Steps, Table, message } from 'antd';
+import { Button, Card, Row, Col, Statistic, Descriptions, Steps, Table, message } from 'antd';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import React, { Component, Fragment } from 'react';
 import { statusEnum } from '@/constants/basicEnum';
@@ -22,7 +22,7 @@ const processingAction = item => (
 );
 
 const { Step } = Steps;
-const ButtonGroup = Button.Group;
+// const ButtonGroup = Button.Group;
 const routes = [
   {
     path: '',
@@ -48,14 +48,19 @@ function itemRender(route, params, routeList, paths) {
 
 const action = (handleApprovalClick, tbbm) => (
   <Fragment>
-    <ButtonGroup>
-      <Button onClick={() => router.push(`/remote-sensing/details/arcgis-show/${tbbm}`)}>
-        进入地图
-      </Button>
-      <Button onClick={handleApprovalClick}>分发</Button>
-      {/* <Button>归档</Button> */}
-    </ButtonGroup>
-    <Button type="primary">填写反馈报告</Button>
+    {/* <ButtonGroup> */}
+    <Button
+      type="primary"
+      onClick={() => router.push(`/remote-sensing/details/arcgis-show/${tbbm}`)}
+    >
+      进入地图
+    </Button>
+    <Button type="danger" onClick={handleApprovalClick}>
+      分发
+    </Button>
+    {/* <Button>归档</Button> */}
+    {/* </ButtonGroup> */}
+    {/* <Button type="primary">填写反馈报告</Button> */}
   </Fragment>
 );
 
@@ -178,41 +183,47 @@ class Details extends Component {
                 )}
               </RouteContext.Consumer>
             </Card>
-            <Card bordered={false} style={{ marginBottom: 24 }}>
-              <TimelineAlternate tbbm={match?.params?.tbbm} logsInfo={procedureInfo} />
-            </Card>
-            <Card
-              bodyStyle={{ padding: 0 }}
-              title="执行报告"
-              style={{ marginBottom: 24 }}
-              bordered={false}
-            >
-              <Table
-                pagination={false}
-                dataSource={spotImplements}
-                rowKey="implementid"
-                columns={feedbackListColumns(
-                  images => {
-                    setSelectedImages(images);
-                    setImagesViewShow(true);
-                  },
-                  r => {
-                    this.setState({
-                      approvalShow: true,
-                      approvalContent: '',
-                    });
-                    implementId = r.implementid;
-                  },
-                )}
-              />
-            </Card>
-            {/* <Card title="反馈人信息" style={{ marginBottom: 24 }} bordered={false}>
+            <Row gutter={16}>
+              <Col span={8}>
+                <Card bordered={false} style={{ marginBottom: 24 }}>
+                  <TimelineAlternate tbbm={match?.params?.tbbm} logsInfo={procedureInfo} />
+                </Card>
+              </Col>
+              <Col span={16}>
+                <Card
+                  bodyStyle={{ padding: 0 }}
+                  title="执行报告"
+                  style={{ marginBottom: 24 }}
+                  bordered={false}
+                >
+                  <Table
+                    pagination={false}
+                    dataSource={spotImplements}
+                    rowKey="implementid"
+                    columns={feedbackListColumns(
+                      images => {
+                        setSelectedImages(images);
+                        setImagesViewShow(true);
+                      },
+                      r => {
+                        this.setState({
+                          approvalShow: true,
+                          approvalContent: '',
+                        });
+                        implementId = r.implementid;
+                      },
+                    )}
+                  />
+                </Card>
+              </Col>
+              {/* <Card title="反馈人信息" style={{ marginBottom: 24 }} bordered={false}>
               <Descriptions>
                 <Descriptions.Item label="姓名">{changespot?.username}</Descriptions.Item>
                 <Descriptions.Item label="联系方式">{changespot?.phone}</Descriptions.Item>
                 <Descriptions.Item label="联系地址">{changespot?.address}</Descriptions.Item>
               </Descriptions>
             </Card> */}
+            </Row>
           </GridContent>
         </div>
         <DistributeModal

@@ -28,29 +28,29 @@ export default [
           {
             path: '/',
             redirect: '/statistics',
-            authority: ['XTGLY', 'ZFDDZ'],
+            authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
           },
           {
             path: '/feedback/list',
-            authority: ['XTGLY', 'ZFDDZ'],
+            authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
           },
           {
             path: '/remote-sensing/list',
-            authority: ['XTGLY', 'ZFDDZ'],
+            authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
           },
           {
             icon: 'crown',
             name: 'home',
             path: '/statistics',
             component: './Statistics', // authority: ['admin'],
-            authority: ['XTGLY', 'ZFDDZ'],
+            authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
           },
           {
             name: 'data.center',
             icon: 'smile',
             path: '/listsearchprojects',
             component: './ListSearchProjects',
-            authority: ['XTGLY', 'ZFDDZ'],
+            authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
             // hideInMenu: true,
           },
           {
@@ -58,14 +58,14 @@ export default [
             name: 'map-show.center',
             path: '/global-map-show',
             component: './arcgis-show/global-map-show', // authority: ['admin'],
-            authority: ['XTGLY', 'ZFDDZ'],
+            authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
           },
           {
             name: 'monitoring-results',
             icon: 'smile',
             path: '/remote-sensing',
             component: './remote-sensing/list',
-            authority: ['XTGLY', 'ZFDDZ'],
+            authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
             hideInMenu: true,
           },
           {

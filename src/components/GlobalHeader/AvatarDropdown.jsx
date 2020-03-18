@@ -66,8 +66,7 @@ class AvatarDropdown extends React.Component {
             src="http://47.52.250.238:1337/uploads/a0abf382c5ef4ca58226eb5b194a828c.jpg"
             alt="avatar"
           /> */}
-          <UserOutlined />
-          <span className={styles.name}>{currentUser.username}</span>
+          <UserOutlined /> <span className={styles.name}>{currentUser.username}</span>
         </span>
       </HeaderDropdown>
     ) : (

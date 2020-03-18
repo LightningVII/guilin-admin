@@ -20,9 +20,6 @@ export async function queryRemoteData(params) {
     state: params.status,
   };
 
-  // if (!payload.status) delete payload.status;
-  console.log('queryRemoteData', payload);
-
   return request(`/strapi/changespot/list?${stringify(payload)}`);
 }
 
