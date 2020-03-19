@@ -22,50 +22,58 @@ let flag = false;
   layerTree: layer.layerTree,
   layerUrl: layer.layerUrl,
 }))
-
-
 class SearchGIS extends React.Component {
   constructor(props) {
     super(props);
     // const { dispatch, fuzzyChangespot } = props;
-    this.inputValChange = debounce(this.inputValChange, 100)
+    this.inputValChange = debounce(this.inputValChange, 100);
     // 设置 initial state
     this.state = {
       isToggleOn: true,
       height: 0,
       searchPanelVisiable: 'hidden',
       searchData: [],
-      treeDatas: treeData
+      treeDatas: treeData,
     };
 
-    loadModules([
-      'esri/layers/FeatureLayer',
-      'esri/layers/WebTileLayer'
-    ]).then(([FeatureLayer, WebTileLayer]) => {
-      EsriFeatureLayer = FeatureLayer;
-      EsriWebTileLayer = WebTileLayer;
-      flag = false;
-    });
+    loadModules(['esri/layers/FeatureLayer', 'esri/layers/WebTileLayer']).then(
+      ([FeatureLayer, WebTileLayer]) => {
+        EsriFeatureLayer = FeatureLayer;
+        EsriWebTileLayer = WebTileLayer;
+        flag = false;
+      },
+    );
   }
 
   componentDidMount() {
     const { dispatch, layerTree } = this.props;
-    
+
+    /* dispatch({
+      type: 'layer/fetchLayerAdd',
+      payload: {},
+    }).then(res => {
+      console.log('fetchLayerAdd res :', res);
+    });
+
     dispatch({
-      type: 'layer/fetchLayerTree'
+      type: 'layer/fetchLayerUpdate',
+      payload: {},
+    }).then(res => {
+      console.log('fetchLayerUpdate res :', res);
+    }); */
+
+    dispatch({
+      type: 'layer/fetchLayerTree',
     }).then(() => {
-      
       this.setState({
-        treeDatas:layerTree.ok?layerTree:treeData
-      })
+        treeDatas: layerTree.ok ? layerTree : treeData,
+      });
     });
   }
 
-
   handleInputSearch = e => {
-    this.inputValChange(e.target.value)
-  }
-
+    this.inputValChange(e.target.value);
+  };
 
   onCheck = (checkedKeys, e) => {
     this.loadToMap(checkedKeys, e);
@@ -84,8 +92,7 @@ class SearchGIS extends React.Component {
         }
       });
     }
-  }
-
+  };
 
   loadToMap = (checkedKeys, e) => {
     this.props.view.map.removeAll();
@@ -109,44 +116,47 @@ class SearchGIS extends React.Component {
         }
       }
     });
-  }
+  };
 
   inputValChange = value => {
     const { dispatch, fuzzyChangespot } = this.props;
-    this.setState({
-      isToggleOn: false,
-      height: 0,
-      searchPanelVisiable: 'visible',
-      searchData: []
-    }, () => {
-      const str = value.replace(/\s*/g, '')
-      const temp = [];
-      if (str !== '') {
-        dispatch({
-          type: 'remoteSensing/fetchChangespotFuzzyQuery',
-          payload: { term: str }
-        }).then(() => {
-          if (fuzzyChangespot) {
-            fuzzyChangespot.forEach(item => {
-              const obj = {};
-              obj.BATCH = item.BATCH;
-              obj.COUNTY = item.COUNTY;
-              obj.LOCATION = item.LOCATION;
-              obj.TBBM = item.TBBM;
-              temp.push(obj);
-            })
-            this.setState({
-              searchData: temp
-            });
-          }
-        });
-      } else {
-        this.setState({
-          searchPanelVisiable: 'hidden',
-          searchData: []
-        });
-      }
-    });
+    this.setState(
+      {
+        isToggleOn: false,
+        height: 0,
+        searchPanelVisiable: 'visible',
+        searchData: [],
+      },
+      () => {
+        const str = value.replace(/\s*/g, '');
+        const temp = [];
+        if (str !== '') {
+          dispatch({
+            type: 'remoteSensing/fetchChangespotFuzzyQuery',
+            payload: { term: str },
+          }).then(() => {
+            if (fuzzyChangespot) {
+              fuzzyChangespot.forEach(item => {
+                const obj = {};
+                obj.BATCH = item.BATCH;
+                obj.COUNTY = item.COUNTY;
+                obj.LOCATION = item.LOCATION;
+                obj.TBBM = item.TBBM;
+                temp.push(obj);
+              });
+              this.setState({
+                searchData: temp,
+              });
+            }
+          });
+        } else {
+          this.setState({
+            searchPanelVisiable: 'hidden',
+            searchData: [],
+          });
+        }
+      },
+    );
   };
 
   handleClick = () => {
@@ -160,11 +170,11 @@ class SearchGIS extends React.Component {
     const { dispatch, geomotry } = this.props;
     dispatch({
       type: 'remoteSensing/fetchChangespotGeomotry',
-      payload: { tbbm: TBBM }
+      payload: { tbbm: TBBM },
     }).then(() => {
-      console.log(geomotry)
-    })
-  }
+      console.log(geomotry);
+    });
+  };
 
   renderTreeNodes = data =>
     data.map(item => {
@@ -189,9 +199,7 @@ class SearchGIS extends React.Component {
           allowClear
           prefix={
             <Tooltip placement="bottom" title="图层">
-              <UnorderedListOutlined
-                style={{ cursor: 'pointer' }}
-                onClick={this.handleClick} />
+              <UnorderedListOutlined style={{ cursor: 'pointer' }} onClick={this.handleClick} />
             </Tooltip>
           }
         />
@@ -201,7 +209,10 @@ class SearchGIS extends React.Component {
             bordered
             dataSource={this.state.searchData}
             renderItem={item => (
-              <List.Item style={{ cursor: 'pointer' }} onClick={() => this.serchItemClick(item.TBBM)}>
+              <List.Item
+                style={{ cursor: 'pointer' }}
+                onClick={() => this.serchItemClick(item.TBBM)}
+              >
                 {item.TBBM}
                 <Typography.Text code>{item.COUNTY}</Typography.Text>
                 <Typography.Text code>{item.BATCH}</Typography.Text>

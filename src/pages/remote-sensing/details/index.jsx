@@ -245,7 +245,7 @@ class Details extends Component {
                 });
                 this.setState({ visible: false });
               } else {
-                message.warning('数据异常');
+                message.warning(res?.message || '数据异常');
               }
             });
           }}
@@ -279,7 +279,7 @@ class Details extends Component {
                 });
                 this.setState({ approvalShow: false });
               } else {
-                message.warning('数据异常');
+                message.warning(res?.message || '数据异常');
               }
             });
           }}
@@ -300,7 +300,7 @@ class Details extends Component {
                 });
                 this.setState({ approvalShow: false });
               } else {
-                message.warning('数据异常');
+                message.warning(res?.message || '数据异常');
               }
             });
             console.log('不通过 ---------------:');

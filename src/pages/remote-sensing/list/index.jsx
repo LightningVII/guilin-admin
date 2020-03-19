@@ -233,7 +233,7 @@ const TableList = props => {
               fetchRemoteData();
               setVisible(false);
             } else {
-              message.warning('数据异常');
+              message.warning(res?.message || '数据异常');
             }
           });
         }}
@@ -264,7 +264,7 @@ const TableList = props => {
               fetchRemoteData();
               setApprovalShow(false);
             } else {
-              message.warning('数据异常');
+              message.warning(res?.message || '数据异常');
             }
           });
         }}
@@ -282,7 +282,7 @@ const TableList = props => {
               fetchRemoteData();
               setApprovalShow(false);
             } else {
-              message.warning('数据异常');
+              message.warning(res?.message || '数据异常');
             }
           });
         }}

@@ -1,4 +1,9 @@
-import { queryLayerTree, queryLayerGetLayerUrl } from '@/services/layer';
+import {
+  queryLayerTree,
+  queryLayerGetLayerUrl,
+  queryLayerAdd,
+  queryLayerUpdate,
+} from '@/services/layer';
 
 const LayerModel = {
   namespace: 'layer',
@@ -24,6 +29,12 @@ const LayerModel = {
         type: 'saveLayerUrl',
         payload: content,
       });
+    },
+    *fetchLayerAdd({ payload }, { call }) {
+      return yield call(queryLayerAdd, payload);
+    },
+    *fetchLayerUpdate({ payload }, { call }) {
+      return yield call(queryLayerUpdate, payload);
     },
   },
 

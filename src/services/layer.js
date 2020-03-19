@@ -8,3 +8,23 @@ export async function queryLayerTree() {
 export async function queryLayerGetLayerUrl(payload) {
   return request(`/strapi/layer/getLayerUrl?${stringify(payload)}`);
 }
+
+export async function queryLayerAdd(payload) {
+  return request(`/strapi/layer/add`, {
+    method: 'POST',
+    data: stringify(payload),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+  });
+}
+
+export async function queryLayerUpdate(payload) {
+  return request(`/strapi/layer/update`, {
+    method: 'POST',
+    data: stringify(payload),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+  });
+}

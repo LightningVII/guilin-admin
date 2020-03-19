@@ -1,5 +1,6 @@
 import { stringify } from 'querystring';
 import router from 'umi/router';
+import { message } from 'antd';
 import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
@@ -14,7 +15,14 @@ const Model = {
   // ?.user?.roles?.[0]
   effects: {
     *login({ payload }, { call, put }) {
-      const { content } = yield call(fakeAccountLogin, payload);
+      const response = yield call(fakeAccountLogin, payload);
+      const { content, message: msg } = response;
+
+      if (['账号不存在', '密码不正确'].includes(msg)) {
+        message.warning(msg);
+        return null;
+      }
+
       yield put({
         type: 'changeLoginStatus',
         payload: content,
@@ -40,13 +48,14 @@ const Model = {
             }
           } else {
             window.location.href = '/';
-            return;
+            return null;
           }
         }
         if (content?.menus.find(({ perms }) => perms === 'HOME')) router.replace('/');
       } else {
         router.replace('/404');
       }
+      return null;
     },
     *getCaptcha({ payload }, { call }) {
       yield call(getFakeCaptcha, payload);
