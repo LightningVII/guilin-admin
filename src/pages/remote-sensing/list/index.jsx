@@ -19,9 +19,9 @@ import { getTimeDistance } from '@/utils/utils';
 import RangeDataSelectDistance from '@/components/RangeDataSelectDistance';
 import { remoteSensingListColumns } from '@/constants/columns';
 import { TabsEnum } from '@/constants/basicEnum';
-import FeedbackList from '../components/FeedbackList';
 import DistributeModal from '../components/DistributeModal';
-import ImagesPreview from '../components/ImagesPreview';
+// import FeedbackList from '../components/FeedbackList';
+// import ImagesPreview from '../components/ImagesPreview';
 import ApprovalModal from '../components/ApprovalModal';
 
 const { TabPane } = Tabs;
@@ -56,16 +56,16 @@ const menu = (
 let implementId;
 const TableList = props => {
   const [spotIds, setSpotIds] = useState([]);
-  const [selectedImages, setSelectedImages] = useState([]);
+  // const [selectedImages, setSelectedImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [approvalContent, setApprovalContent] = useState('');
 
   const [approvalShow, setApprovalShow] = useState(false);
 
-  const [imagesViewShow, setImagesViewShow] = useState(false);
+  // const [imagesViewShow, setImagesViewShow] = useState(false);
   const [deptid, setDeptid] = useState(null);
-  const [userIds, setUserIds] = useState([]);
+  const [userIds, setUserIds] = useState();
   const [searchParams, setSearchParams] = useState({
     current: 1,
     pageSize: defaultPageSize,
@@ -73,7 +73,7 @@ const TableList = props => {
     rangePickerValue: initRangPickerValue,
     keywords: '',
   });
-  const { totalCount, data, user, feedback, dispatch } = props;
+  const { totalCount, data, user, dispatch } = props; // feedback,
 
   const fetchRemoteData = (params = {}) => {
     if (dispatch) {
@@ -86,15 +86,15 @@ const TableList = props => {
       dispatch({
         type: 'remoteSensing/fetchRemoteData',
         payload,
-      }).then(res => {
-        if (res?.payload?.data?.length) {
+      }).then(() => {
+        /* if (res?.payload?.data?.length) {
           res.payload.data.forEach(async record => {
             await dispatch({
               type: 'feedback/fetchFeedbackTBBM',
               payload: { tbbm: record?.tbbm },
             });
           });
-        }
+        } */
         setLoading(false);
       });
     }
@@ -146,7 +146,14 @@ const TableList = props => {
             />
           </Col>
           <Col span={10} offset={8} style={{ textAlign: 'right' }}>
-            <Button type="primary" disabled={!spotIds?.length} onClick={() => setVisible(true)}>
+            <Button
+              type="primary"
+              disabled={
+                !spotIds?.length &&
+                ['XTGLY', 'ZFDDZ'].includes(user?.currentUser?.roles?.[0]?.rolecode)
+              }
+              onClick={() => setVisible(true)}
+            >
               {formatMessage({ id: 'remote-sensing.approval' })}
             </Button>
             <Divider type="vertical" />
@@ -179,11 +186,11 @@ const TableList = props => {
           loading={loading}
           rowKey={({ spotid }) => spotid}
           rowSelection={rowSelection}
-          expandRowByClick
-          rowExpandable={record =>
-            feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length
-          }
-          expandedRowRender={record => {
+          // expandRowByClick
+          // rowExpandable={record =>
+          //   feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length
+          // }
+          /* expandedRowRender={record => {
             const feedbackData = feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm);
             return feedbackData?.length ? (
               <FeedbackList
@@ -199,7 +206,7 @@ const TableList = props => {
                 record={feedbackData}
               />
             ) : null;
-          }}
+          }} */
           pagination={{
             current: searchParams.current,
             defaultPageSize,
@@ -236,11 +243,11 @@ const TableList = props => {
         userIds={userIds}
         setUserIds={setUserIds}
       />
-      <ImagesPreview
+      {/* <ImagesPreview
         images={selectedImages}
         visible={imagesViewShow}
         handleCloseClick={() => setImagesViewShow(false)}
-      />
+      /> */}
       <ApprovalModal
         visible={approvalShow}
         handleYesClick={() => {

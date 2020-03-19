@@ -2,7 +2,7 @@
 // import { Random } from 'mockjs';
 import React from 'react';
 import { statusEnum } from '@/constants/basicEnum';
-import { Badge, Divider, Tag } from 'antd';
+import { Button, Badge, Divider, Tag } from 'antd';
 import moment from 'moment';
 import router from 'umi/router';
 
@@ -78,9 +78,13 @@ export const feedbackListColumns = (handleImagesClick, handleReportClick) => [
     render: czry => <Tag>{czry}</Tag>,
   },
   {
+    title: '执行状态',
+    dataIndex: 'zxstate',
+    render: zxstate => ['未审批', '已通过', '未通过'][zxstate],
+  },
+  {
     title: '上传图片',
     dataIndex: 'fjs',
-    width: 200,
     render: fjs => mockImages(fjs || [], handleImagesClick),
   },
   {
@@ -94,7 +98,6 @@ export const feedbackListColumns = (handleImagesClick, handleReportClick) => [
   {
     title: '执行时间',
     dataIndex: 'czsj',
-    width: 200,
     render: czsj => moment(czsj).format('YYYY-MM-DD'),
   },
   {
@@ -102,6 +105,10 @@ export const feedbackListColumns = (handleImagesClick, handleReportClick) => [
     dataIndex: 'option',
     valueType: 'option',
     align: 'right',
-    render: (record, item) => <a onClick={() => handleReportClick(item)}>执行审批</a>,
+    render: (record, item) => (
+      <Button disabled={item.zxstate !== 0} type="link" onClick={() => handleReportClick(item)}>
+        执行审批
+      </Button>
+    ),
   },
 ];

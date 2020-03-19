@@ -33,8 +33,6 @@ export default ({ value, setValue, employeeList }) => (
     value={value}
     placeholder="请选择人员"
     allowClear
-    multiple
-    treeCheckable
     treeDefaultExpandAll
     showCheckedStrategy={SHOW_PARENT}
     onChange={val => setValue(val)}

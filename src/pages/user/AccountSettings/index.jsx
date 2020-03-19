@@ -7,6 +7,8 @@ import BaseView from './components/base';
 import BindingView from './components/binding';
 import NotificationView from './components/notification';
 import SecurityView from './components/security';
+import DatasourceView from './components/datasource';
+
 import styles from './style.less';
 
 const { Item } = Menu;
@@ -17,28 +19,23 @@ class AccountSettings extends Component {
   constructor(props) {
     super(props);
     const menuMap = {
-      base: (
-        <FormattedMessage
-          id="userandaccountsettings.menuMap.basic"
-          defaultMessage="Basic Settings"
-        />
-      ),
+      base: <FormattedMessage id="app.settings.menuMap.basic" defaultMessage="Basic Settings" />,
       security: (
-        <FormattedMessage
-          id="userandaccountsettings.menuMap.security"
-          defaultMessage="Security Settings"
-        />
+        <FormattedMessage id="app.settings.menuMap.security" defaultMessage="Security Settings" />
       ),
       binding: (
-        <FormattedMessage
-          id="userandaccountsettings.menuMap.binding"
-          defaultMessage="Account Binding"
-        />
+        <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Account Binding" />
       ),
       notification: (
         <FormattedMessage
-          id="userandaccountsettings.menuMap.notification"
+          id="app.settings.menuMap.notification"
           defaultMessage="New Message Notification"
+        />
+      ), // 数据资源设置
+      datasource: (
+        <FormattedMessage
+          id="app.settings.menuMap.datasource"
+          defaultMessage="New Message Datasource"
         />
       ),
     };
@@ -120,6 +117,9 @@ class AccountSettings extends Component {
 
       case 'notification':
         return <NotificationView />;
+
+      case 'datasource':
+        return <DatasourceView />;
 
       default:
         break;

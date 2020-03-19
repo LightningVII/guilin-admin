@@ -37,12 +37,9 @@ const RemoteModel = {
     },
     *fetchChangespotIssue({ payload }, { call }) {
       let { userIds } = payload;
-
-      if (userIds?.length) {
-        userIds = userIds.map(item => {
-          const u = item.split('-');
-          return u[u.length - 1];
-        });
+      if (userIds) {
+        const u = userIds.split('-');
+        userIds = u[u.length - 1];
       }
       return yield call(queryChangespotIssue, {
         ...payload,
