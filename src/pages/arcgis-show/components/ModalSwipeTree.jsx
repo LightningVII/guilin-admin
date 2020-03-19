@@ -11,7 +11,7 @@ class ModalSwipeTree extends React.Component {
     this.state = {
       rCount: 0,
       fCount: 0,
-      checkedTempArray: [],
+      checkedTempArray: []
     };
   }
 

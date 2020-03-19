@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { ToolOutlined, InfoCircleOutlined, UserOutlined, SnippetsOutlined } from '@ant-design/icons';
+import { ToolOutlined, InfoCircleOutlined, UserOutlined, SnippetsOutlined, UploadOutlined } from '@ant-design/icons';
 import { Row, Col, Affix, Menu, Button, Dropdown, Card, message } from 'antd';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
@@ -14,6 +14,7 @@ import ModalCompareTree from '../components/ModalCompareTree';
 import MapCompare from '../components/MapCompare';
 import MapBottom from '../components/MapBottom';
 import Print from '../components/PrintWidget';
+import BookMark from '../components/BookMark';
 
 import style from './style.css';
 
@@ -29,12 +30,13 @@ export default class GlobeMapShow extends React.Component {
       renderSwipe: false, // Swipe内容框
       swipeLayersArray: [], // Swipe选择的图层列表
       showSwipeModal: false, // Swipe Model选择框
+      showBookMark: false,
       renderCompare: false, // Compare 内容框
       compareLayersArray: [], // Compare选择的图层列表
       showCompareModal: false, // Compare Model选择框
       featrueGraphic: null, // 传入Featrue的图斑编码
     };
-    
+
   }
 
   addFeature2Cmp = graphic => {
@@ -68,6 +70,11 @@ export default class GlobeMapShow extends React.Component {
         break;
       case 'qp':
         this.fullScreen();
+        break;
+      case 'sq':
+        this.setState(prevState => ({
+          showBookMark: !prevState.showBookMark
+        }));
         break;
       default:
         break;
@@ -109,19 +116,19 @@ export default class GlobeMapShow extends React.Component {
     else message.info('请选择两幅栅格影像');
   };
 
-  fullScreen=()=>{
+  fullScreen = () => {
     const ele = this.eleBaseMap;
     if (ele.requestFullscreen) {
-        ele.requestFullscreen();
+      ele.requestFullscreen();
     }
     else if (ele.webkitRequestFullscreen) {
-        ele.webkitRequestFullscreen();
+      ele.webkitRequestFullscreen();
     }
     else if (ele.msRequestFullscreen) {
-        ele.msRequestFullscreen();
+      ele.msRequestFullscreen();
     }
     else if (ele.mozRequestFullScreen) {
-        ele.mozRequestFullScreen();
+      ele.mozRequestFullScreen();
     }
   }
 
@@ -133,52 +140,60 @@ export default class GlobeMapShow extends React.Component {
             <Dropdown overlay={
               <Menu onClick={this.handleMenuClick}>
                 <Menu.Item key="cl" >
-                 <UserOutlined/>
+                  <UserOutlined />
                   测量
                </Menu.Item>
+                <Menu.Item key="sq" >
+                  <UserOutlined />
+                  书签
+               </Menu.Item>
                 <Menu.Item key="qp">
-                <UserOutlined/>
+                  <UserOutlined />
                   全屏
                </Menu.Item>
                 <Menu.Item key="3">
-                <UserOutlined/>
+                  <UserOutlined />
                   截图
                </Menu.Item>
+                <Menu.Item key="dr">
+                  <UploadOutlined />
+                  导入
+               </Menu.Item>
                 <Menu.Item key="dy">
-                <UserOutlined/>
+                  <UserOutlined />
                   打印
                </Menu.Item>
               </Menu>
             } >
-              <Button><ToolOutlined/>常用</Button>
+              <Button><ToolOutlined />常用</Button>
             </Dropdown>
             <Dropdown
               overlay={
                 <Menu onClick={this.handleMenuClick}>
                   <Menu.Item key="cl">
-                  <UserOutlined/>
+                    <UserOutlined />
                     点选
                   </Menu.Item>
                 </Menu>
               }
             >
-              <Button><InfoCircleOutlined/>查询</Button>
+              <Button><InfoCircleOutlined />查询</Button>
             </Dropdown>
             <Dropdown
               overlay={
                 <Menu onClick={this.handleMenuClick}>
                   <Menu.Item key="jl">
-                  <UserOutlined/>
+                    <UserOutlined />
                     卷帘
                   </Menu.Item>
                   <Menu.Item key="dp">
-                  <UserOutlined/>
+                    <UserOutlined />
                     多屏
                   </Menu.Item>
                 </Menu>
               }
             >
-              <Button><SnippetsOutlined/>分析</Button>
+              <Button><SnippetsOutlined />分析</Button>
             </Dropdown>
           </Button.Group>
         </Affix>
@@ -199,6 +214,12 @@ export default class GlobeMapShow extends React.Component {
               <Print view={this.state.mapView} />
             </Affix> : null
         }
+
+        {this.state.showBookMark ? (
+          <Affix offsetTop={80}>
+            <BookMark view={this.state.mapView} />
+          </Affix>
+        ) : null}
 
         {
           this.state.showSwipeModal ? (
@@ -296,7 +317,7 @@ export default class GlobeMapShow extends React.Component {
           <Col span={24}>
             <Suspense fallback="...loading">
               <MyBasemap
-                ref={el => {this.eleBaseMap = el}}
+                ref={el => { this.eleBaseMap = el }}
                 height="calc(100vh - 64px)"
                 style={{ overflow: 'hidden' }}
                 handleLoad={(map, view) => {
@@ -304,8 +325,6 @@ export default class GlobeMapShow extends React.Component {
                   view.ui.remove('zoom');
                 }}
               />
-
-
             </Suspense>
           </Col>
         </Row>
