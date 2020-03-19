@@ -214,7 +214,7 @@ class SearchGIS extends React.Component {
           <Tree
             checkable
             onCheck={this.onCheck}
-            defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer', 'base-layer']}
+            defaultExpandAll
             treeData={this.state.treeDatas}
             style={{
               background: '#FFF',
