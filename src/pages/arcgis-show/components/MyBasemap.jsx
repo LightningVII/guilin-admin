@@ -48,8 +48,8 @@ const MyBasemap = props => {
     <Map
       id="hiugiuu"
       onLoad={handleLoad}
-      // mapProperties={mapProperties}
-      mapProperties={{ basemap: 'satellite' }}
+      mapProperties={mapProperties}
+      // mapProperties={{ basemap: 'satellite' }}
       loaderOptions={{ css: true }}
       viewProperties={{
         center,

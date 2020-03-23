@@ -8,14 +8,11 @@ export default class BaseMap extends React.Component {
         super(props);
         this.mapRef = React.createRef();
         this.state = {
-            height:this.props.height||'100vh',
-            width:this.props.width||'100vw',
-
+            height:this.props.height||'100vh'
         }
     }
 
     componentDidMount() {
-        // lazy load the required ArcGIS API for JavaScript modules and CSS
         loadModules(['esri/Map', 'esri/views/MapView', 'esri/layers/WebTileLayer', 'esri/Basemap'], { css: true })
             .then(([ArcGISMap, MapView, WebTileLayer, Basemap]) => {
                 const tiandituLabelLayer = new WebTileLayer({
@@ -52,7 +49,7 @@ export default class BaseMap extends React.Component {
                     zoom: 13,
                 });
 
-                this.props.getMapView(this.argmap,this.view);
+                this.props.handleLoad(this.argmap,this.view);
             });
     }
 
@@ -66,7 +63,7 @@ export default class BaseMap extends React.Component {
         return (
             <div
                 ref={this.mapRef}
-                style={{ height:this.state.height, width: this.state.width }}
+                style={{ height:this.state.height}}
             />
         );
     }

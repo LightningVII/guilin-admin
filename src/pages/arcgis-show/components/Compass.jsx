@@ -62,13 +62,21 @@ class Compass extends React.Component {
             <div style={{ width: 64, height: "auto" }}>
                 <div style={{ transform: "scale(0.35)" }}>
                     <div className={style.compassStyle}>
-                        <div className={style.compassClockStyle}>
-                            <div className={style.compassPointerStyle}
-                                style={{
-                                    transform: `rotate(${this.state.rotateDegree}deg)`
-                                }}
-                            />
-                        </div>
+                        <Tooltip placement="top" title="指北">
+                            <div className={style.compassClockStyle} onClick={() => {
+                                this.setState({
+                                    rotateDegree: 0,
+                                }, (() => {
+                                    this.props.view.rotation = 0;
+                                }));
+                            }}>
+                                <div className={style.compassPointerStyle}
+                                    style={{
+                                        transform: `rotate(${this.state.rotateDegree}deg)`
+                                    }}
+                                />
+                            </div>
+                        </Tooltip>
                         <div className={style.compassRotateLeft}
                             onClick={() => this.rotateLeftDegree()}
                         />

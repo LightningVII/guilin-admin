@@ -19,7 +19,7 @@ import BookMark from '../components/BookMark';
 
 import style from './style.css';
 
-// const MyBasemap = React.lazy(() => import('../components/BaseMap'));
+// const MyBasemap = React.lazy(() => import('../components/MyBasemap'));
 
 export default class GlobeMapShow extends React.Component {
   constructor() {
@@ -221,14 +221,8 @@ export default class GlobeMapShow extends React.Component {
         }
 
         {
-          this.state.showCompareModal ? (
-            <ModalCompareTree onSetCompare={this.onSetCompare} />
-          ) : null
-        }
-
-        {
           this.state.renderCompare ? (
-            <Affix className={style.mapCompare} offsetTop={60} offsetBottom={20}>
+            <Affix className={style.mapCompare} offsetTop={80}>
               <Card size="small" title="多屏工具" extra={<a onClick={
                 () => this.setState({
                   renderCompare: false,
@@ -236,7 +230,7 @@ export default class GlobeMapShow extends React.Component {
                 })
               }>X</a>}>
                 <MapCompare
-                  // featrueGraphic={this.state.featrueGraphic}
+                  featrueGraphic={this.state.featrueGraphic}
                   layersArray={this.state.compareLayersArray}
                 />
               </Card>
@@ -247,60 +241,28 @@ export default class GlobeMapShow extends React.Component {
 
         {
           this.state.mapView ?
-            (<Affix className={style.mapBottom}>
+            (<div className={style.mapBottom}>
               <MapBottom mapView={this.state.mapView} />
-            </Affix>) : null
+            </div>) : null
         }
 
         {
           this.state.mapView ?
-            (<Affix className={style.compass} offsetBottom={50} >
+            (<div className={style.compass} >
               <Compass view={this.state.mapView} />
-            </Affix>
+            </div>
             ) : null
         }
 
-        {
-          this.state.mapView ? (
-            <Affix className={style.search} offsetTop={80}>
-              <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
-            </Affix>
-          ) : null
-        }
-
-        {this.state.showCompareModal ? <ModalCompareTree onSetCompare={this.onSetCompare} /> : null}
-
-        {this.state.renderCompare ? (
-          <Affix className={style.mapCompare} offsetTop={80}>
-            <Card
-              size="small"
-              title="多屏工具"
-              extra={
-                <a
-                  onClick={() =>
-                    this.setState({
-                      renderCompare: false,
-                      featrueGraphic: null,
-                    })
-                  }
-                >
-                  X
-                </a>
-              }
-            >
-              <MapCompare
-                featrueGraphic={this.state.featrueGraphic}
-                layersArray={this.state.compareLayersArray}
-              />
-            </Card>
-          </Affix>
-        ) : null}
 
         {this.state.mapView ? (
-          <Affix className={style.mapBottom}>
-            <MapBottom mapView={this.state.mapView} />
-          </Affix>
+          <div className={style.search}>
+            <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
+          </div>
         ) : null}
+
+
+        {this.state.showCompareModal ? <ModalCompareTree onSetCompare={this.onSetCompare} /> : null}
 
         <Row style={{ margin: '-24px' }}  >
           <Col span={24}>
@@ -308,7 +270,7 @@ export default class GlobeMapShow extends React.Component {
               <BaseMap
                 height="calc(100vh - 64px)"
                 style={{ overflow: 'hidden' }}
-                getMapView={(map, view) => {
+                handleLoad={(map, view) => {
                   this.setState({ mapView: view });
                   view.ui.remove('zoom');
                 }}

@@ -3,20 +3,24 @@ import { loadModules } from 'esri-loader';
 
 import style from './style.css';
 
-let EsriBookmarks = null;
 class BookMark extends React.Component {
     constructor(props) {
         super(props);
+
+        this.bookMarkRef = React.createRef();
 
         this.state = {
 
         };
 
+    }
+
+    componentDidMount() {
+
         loadModules([
             'esri/widgets/Bookmarks'
         ]).then(Bookmarks => {
-            EsriBookmarks = Bookmarks;
-            const bookmarks = new EsriBookmarks({
+            const bookmarks = new Bookmarks({
                 view: this.props.view,
                 // allows bookmarks to be added, edited, or deleted
                 editingEnabled: true,
@@ -28,21 +32,17 @@ class BookMark extends React.Component {
                         height: 100
                     }
                 },
-                // container:'bookMark'
+                container: this.bookMarkRef.current
             });
             this.props.view.ui.add(bookmarks, "top-right");
         });
     }
 
-    // componentDidMount() {
-
-    // }
-
 
     render() {
         return (
             <>
-                <div id='bookMark' className={style.bookMark} />
+                <div ref={this.bookMarkRef} className={style.bookMark} />
             </>
         );
     }

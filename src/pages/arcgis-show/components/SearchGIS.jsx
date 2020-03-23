@@ -38,30 +38,36 @@ class SearchGIS extends React.Component {
       searchData: [],
       treeDatas: treeData,
     };
+  }
+
+  componentDidMount() {
 
     loadModules(['esri/layers/FeatureLayer', 'esri/layers/WebTileLayer']).then(
       ([FeatureLayer, WebTileLayer]) => {
         EsriFeatureLayer = FeatureLayer;
         EsriWebTileLayer = WebTileLayer;
         flag = false;
+
+
+        const { dispatch, layerTree } = this.props;
+
+        // 图层数据
+        dispatch({
+          type: 'layer/fetchLayerTree'
+        }).then(() => {
+          this.setState({
+            treeDatas: layerTree,
+          });
+          console.log(layerTree)
+        });
+
       },
     );
-  }
 
-  componentDidMount() {
-    const { dispatch, layerTree } = this.props;
 
-    // 图层数据
-    // dispatch({
-    //   type: 'layer/fetchLayerTree'
-    // }).then(() => {
-    //   this.setState({
-    //     treeDatas: layerTree,
-    //   });
-    //   console.log(layerTree)
-    // });
 
-   
+
+
   }
 
   handleInputSearch = e => {
@@ -92,21 +98,21 @@ class SearchGIS extends React.Component {
     e.checkedNodes.forEach(checkedNode => {
       const type = checkedNode.loadType;
       // if (type!== 'parent') {
-        const nodeUrl = checkedNode.layerUrl;
-        const nodeId = checkedNode.key;
-        switch (type) {
-          case 'tile':
-            this.props.view.map.add(new EsriWebTileLayer({ urlTemplate: nodeUrl, id: nodeId }));
-            break;
-          case 'feature':
-            this.props.view.map.add(
-              new EsriFeatureLayer({ url: nodeUrl, id: nodeId, popupTemplate: template }),
-            );
-            break;
+      const nodeUrl = checkedNode.layerUrl;
+      const nodeId = checkedNode.key;
+      switch (type) {
+        case 'tile':
+          this.props.view.map.add(new EsriWebTileLayer({ urlTemplate: nodeUrl, id: nodeId }));
+          break;
+        case 'feature':
+          this.props.view.map.add(
+            new EsriFeatureLayer({ url: nodeUrl, id: nodeId, popupTemplate: template }),
+          );
+          break;
 
-          default:
-            break;
-        }
+        default:
+          break;
+      }
       // }
     });
   };

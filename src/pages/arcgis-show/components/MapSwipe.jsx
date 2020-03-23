@@ -1,7 +1,9 @@
 import React from 'react';
 import { loadModules } from 'esri-loader';
 import { message, Button } from 'antd';
-import MyBasemap from './MyBasemap';
+// import MyBasemap from './MyBasemap';
+import BaseMap from './BaseMap';
+import { infoTemplate } from './featureTemplate.js';
 
 let EsriSwipe;
 let EsriWebTileLayer;
@@ -76,7 +78,7 @@ class MapSwipe extends React.Component {
       mapView.ui.add(swipe);
 
       fLayers.forEach(fLayer => {
-        mapView.map.add(new EsriFeatureLayer({ url: fLayer.layerUrl, id: fLayer.key }));
+        mapView.map.add(new EsriFeatureLayer({ url: fLayer.layerUrl, id: fLayer.key, popupTemplate: infoTemplate }));
       });
     } else {
       message.info('请选择两幅栅格影像');
@@ -86,7 +88,7 @@ class MapSwipe extends React.Component {
   render() {
     return (
       <>
-        <MyBasemap
+        {/* <MyBasemap
           height="calc(100vh - 180px)"
           handleLoad={(map, view) => {
             mapView = view;
@@ -94,19 +96,29 @@ class MapSwipe extends React.Component {
               this.loadGIS();
             }, 600);
           }}
+        /> */}
+        <BaseMap
+          height="calc(100vh - 180px)"
+          handleLoad={(map, view) => {
+            mapView = view;
+            this.loadGIS();
+          }}
         />
 
         <Button
-          style={{ position: 'absolute', bottom: 30, right: 12, zIndex: 9 }}
+          type="primary"
+          style={{ position: 'absolute', bottom: 30, left: 30, zIndex: 9 }}
           onClick={this.handleOpenModal}
         >
-          {this.state.LT}
+          左影像:{this.state.LT}
         </Button>
+
         <Button
-          style={{ position: 'absolute', bottom: 30, left: 12, zIndex: 9 }}
+          type="primary"
+          style={{ position: 'absolute', bottom: 30, right: 30, zIndex: 9 }}
           onClick={this.handleOpenModal}
         >
-          {this.state.RT}
+          右影像:{this.state.RT}
         </Button>
       </>
     );

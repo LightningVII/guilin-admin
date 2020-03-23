@@ -117,7 +117,6 @@ class DatasourceView extends React.Component {
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        console.log('OK');
         dispatch({
           type: 'layer/fetchLayerDelete',
           payload: {
@@ -196,7 +195,6 @@ class DatasourceView extends React.Component {
     })
     const addObj = this.formAddRef.current.getFieldsValue();
     const { dispatch } = this.props;
-    console.log(addObj.qsx)
     dispatch({
       type: 'layer/fetchLayerAdd',
       payload: addObj,

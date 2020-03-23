@@ -16,21 +16,19 @@ class MapBottom extends React.Component {
       X: "117.1812",
       Y: "34.2734",
       zoom: "13",
-      baseMapTitle:this.props.mapView.map.basemap.title,
+      baseMapTitle: this.props.mapView.map.basemap.title,
       showBaseMapCard: false // 是否显示切换底图Card
     };
-
-    loadModules(['esri/layers/WebTileLayer'])
-      .then(([WebTileLayer]) => {
-        EsriWebTileLayer = WebTileLayer;
-      })
-
   }
 
   componentDidMount() {
-    this.props.mapView.on('pointer-move', evt => {
-      this.getXY(evt);
-    })
+    loadModules(['esri/layers/WebTileLayer'])
+      .then(([WebTileLayer]) => {
+        EsriWebTileLayer = WebTileLayer;
+        this.props.mapView.on('pointer-move', evt => {
+          this.getXY(evt);
+        })
+      })
   }
 
   setToggleClass = item => {
@@ -38,14 +36,14 @@ class MapBottom extends React.Component {
 
     switch (item.type) {
       case "labelMap":
-        // if (item.key === this.props.mapView.map.basemap.referenceLayers.items[0].id) {
+        if (item.key === this.props.mapView.map.basemap.referenceLayers.items[0].id) {
           togClass = style.baseMapTextToggle
-        // }
+        }
         break;
       case "baseMap":
-        // if (item.key === this.props.mapView.map.basemap.baseLayers.items[0].id) {
+        if (item.key === this.props.mapView.map.basemap.baseLayers.items[0].id) {
           togClass = style.baseMapTextToggle
-        // }
+        }
         break;
       default:
         break;
@@ -58,25 +56,26 @@ class MapBottom extends React.Component {
     switch (item.type) {
       case 'baseMap':
         this.setState({
-          baseMapTitle:item.title
+          baseMapTitle: item.title
         })
-        this.props.mapView.map.basemap.title=item.title;
-          this.props.mapView.map.basemap.baseLayers = [
-            new EsriWebTileLayer({
-              urlTemplate: item.urlTemplate,
-              subDomains: item.subDomains,
-              id:item.key
-            })
-          ]
-      
+        this.props.mapView.map.basemap.title = item.title;
+        this.props.mapView.map.basemap.baseLayers = [
+          new EsriWebTileLayer({
+            urlTemplate: item.urlTemplate,
+            subDomains: item.subDomains,
+            id: item.key
+          })
+        ]
+
         break;
       case 'labelMap':
-        this.props.mapView.map.basemap.title=item.title;
+        this.setState({}); // 为了重新render
+        this.props.mapView.map.basemap.title = item.title;
         this.props.mapView.map.basemap.referenceLayers = [
           new EsriWebTileLayer({
             urlTemplate: item.urlTemplate,
             subDomains: item.subDomains,
-            id:item.key
+            id: item.key
           })
         ]
         break;
@@ -84,18 +83,17 @@ class MapBottom extends React.Component {
 
         break;
     }
-
-
   }
 
 
   getXY = evt => {
     const point = this.props.mapView.toMap({ x: evt.x, y: evt.y });
-    this.setState({
-      X: point.longitude.toFixed(4),
-      Y: point.latitude.toFixed(4),
-      zoom: this.props.mapView.zoom
-    })
+    if (point)
+      this.setState({
+        X: point.longitude.toFixed(4),
+        Y: point.latitude.toFixed(4),
+        zoom: this.props.mapView.zoom
+      })
   }
 
   showBaseMap = () => {
@@ -109,7 +107,7 @@ class MapBottom extends React.Component {
       <>
         <div style={{ textAlign: 'right', marginRight: 150, marginTop: 3 }}>
           经度:{this.state.X} &#12288; 纬度:{this.state.Y} &#12288;级别:{this.state.zoom} &#12288;
-          底图: <a onClick={this.showBaseMap}>{this.state.baseMapTitle}</a>
+          底图: <a onClick={() => this.showBaseMap()}>{this.state.baseMapTitle}</a>
         </div>
 
         {this.state.showBaseMapCard ? (

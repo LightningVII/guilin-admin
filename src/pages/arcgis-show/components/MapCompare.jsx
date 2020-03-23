@@ -2,23 +2,21 @@ import React from 'react';
 import { loadModules } from 'esri-loader';
 import { Row, Col, Button } from 'antd';
 
-import MyBasemap from './MyBasemap';
-import BermudaTriangle from './BermudaTriangle';
+// import MyBasemap from './MyBasemap';
+import BaseMap from './BaseMap';
+// import BermudaTriangle from './BermudaTriangle';
+import {bhtblLineSymbol} from './lineSymbol'
+import {infoTemplate} from './featureTemplate'
+
+
+
 
 let EsriWebTileLayer;
 let EsriFeatureLayer;
 let EsriGraphicsLayer;
 let EsriGraphic;
 let maps = [];
-const sym = {
-  type: 'simple-line', // autocasts as new SimpleFillSymbol()
-  color: 'red',
-  outline: {
-    // autocasts as new SimpleLineSymbol()
-    color: [128, 128, 128, 0.5],
-    width: '0.5px',
-  },
-};
+
 
 class MapCompare extends React.Component {
   constructor(props) {
@@ -27,15 +25,17 @@ class MapCompare extends React.Component {
     // 设置 initial state
     this.state = {
     };
+  }
 
+  loadGIS = (map, view, item, fLCounts, tLCounts) => {
     loadModules(['esri/layers/WebTileLayer', 'esri/layers/FeatureLayer', 'esri/layers/GraphicsLayer', 'esri/Graphic'])
       .then(([WebTileLayer, FeatureLayer, GraphicsLayer, Graphic]) => {
         EsriWebTileLayer = WebTileLayer;
         EsriFeatureLayer = FeatureLayer;
         EsriGraphicsLayer = GraphicsLayer;
         EsriGraphic = Graphic;
+        this.handleLoad(map, view, item, fLCounts, tLCounts)
       })
-
   }
 
   getTiledLayers = layersArray => {
@@ -59,7 +59,7 @@ class MapCompare extends React.Component {
       tLayers.push(graphic1);
       tLayers.push(graphic2);
       const fg = this.props.featrueGraphic;
-      fg.symbol = sym;
+      fg.symbol = bhtblLineSymbol;
       fLayers.push(fg);
     } else {
       layersArray.forEach(node => {
@@ -87,16 +87,16 @@ class MapCompare extends React.Component {
   handleLoad = (map, view, item, fLCounts, tLCounts) => {
     if (this.props.featrueGraphic) {
       map.add(new EsriWebTileLayer({ urlTemplate: item.layerUrl, id: item.key }));
-      // fLCounts.forEach(fLayer => {
-      //      map.add(new EsriGraphicsLayer({graphics: [fLayer]}))
-      // })
+      fLCounts.forEach(fLayer => {
+        map.add(new EsriGraphicsLayer({ graphics: [fLayer] }))
+      })
 
-      // map.add(new EsriGraphicsLayer({graphics: fLCounts}))
+      map.add(new EsriGraphicsLayer({ graphics: fLCounts }))
       const fls = [];
       fLCounts.forEach(fLayer => {
         const g = new EsriGraphic({
           geometry: fLayer.geometry,
-          symbol: sym,
+          symbol: bhtblLineSymbol,
           attributes: fLayer.attributes,
         });
         fls.push(g);
@@ -107,7 +107,7 @@ class MapCompare extends React.Component {
     } else {
       map.add(new EsriWebTileLayer({ urlTemplate: item.layerUrl, id: item.key }));
       fLCounts.forEach(fLayer => {
-        map.add(new EsriFeatureLayer({ url: fLayer.layerUrl, id: fLayer.key }));
+        map.add(new EsriFeatureLayer({ url: fLayer.layerUrl, id: fLayer.key ,popupTemplate: infoTemplate}));
       });
     }
 
@@ -176,17 +176,23 @@ class MapCompare extends React.Component {
             {countsUp.map(item => (
               <Col className="gutter-row" span={colSpan} key={item.key}>
                 <Button
+                  type='primary'
                   style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}
                   onClick={this.handleOpenModal}
                 >
-                  {item.title}
+                  影像：{item.title}
                 </Button>
-                <MyBasemap
+                {/* <MyBasemap
                   height={heightStyle}
                   handleLoad={(map, view) => this.handleLoad(map, view, item, fLCounts, tLCounts)}
                 >
                   <BermudaTriangle />
-                </MyBasemap>
+                </MyBasemap> */}
+                <BaseMap
+                  height={heightStyle}
+                  handleLoad={(map, view) => this.loadGIS(map, view, item, fLCounts, tLCounts)}>
+                  {/* <BermudaTriangle /> */}
+                </BaseMap>
               </Col>
             ))}
           </Row>
@@ -194,15 +200,22 @@ class MapCompare extends React.Component {
           <Row gutter={16}>
             {countsDown.map(item => (
               <Col className="gutter-row" span={colSpan} key={item.key}>
-                <Button style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}>
-                  {item.title}
+                <Button
+                  type='primary'
+                  style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}>
+                   影像：{item.title}
                 </Button>
-                <MyBasemap
+                {/* <MyBasemap
                   height={heightStyle}
                   handleLoad={(map, view) => this.handleLoad(map, view, item, fLCounts, tLCounts)}
                 >
                   <BermudaTriangle />
-                </MyBasemap>
+                </MyBasemap> */}
+                <BaseMap
+                  height={heightStyle}
+                  handleLoad={(map, view) => this.loadGIS(map, view, item, fLCounts, tLCounts)}>
+                  {/* <BermudaTriangle /> */}
+                </BaseMap>
               </Col>
             ))}
           </Row>

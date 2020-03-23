@@ -4,7 +4,8 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
-import MyBasemap from '../components/MyBasemap';
+// import MyBasemap from '../components/MyBasemap';
+import BaseMap from '../components/BaseMap';
 // import BermudaTriangle from '../components/BermudaTriangle';
 import MyFeatureLayer from '../components/MyFeatureLayer';
 import MyImageLayer from '../components/MyImageLayer';
@@ -37,7 +38,7 @@ export default connect(({ remoteSensing, layer }) => ({
       type: 'remoteSensing/fetchChangespotGeomotry',
       payload: match?.params,
     });
-  
+
 
     dispatch({
       type: 'layer/fetchLayerGetLayerUrl',
@@ -46,19 +47,34 @@ export default connect(({ remoteSensing, layer }) => ({
         hsx: '201704',
       },
     });
-    console.log(layerUrl)
+    // console.log(layerUrl)
   }, []);
 
 
   return (
     <PageHeaderWrapper title={false}>
-      <Card bodyStyle={{ padding: 0 }}>
+      <Card bodyStyle={{margin: -25, padding: 0}}>
         <Row>
           <Col span={12}>
-            <Button style={{ position: 'absolute', right: 15, top: 15, zIndex: 99 }}>
+            <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 99 }}>
               {img1.title}
             </Button>
-            <MyBasemap
+            <BaseMap
+              id="basemap1"
+              handleLoad={(map, view) => {
+                basemap1 = view;
+                basemap1.watch('extent', () => {
+                  if (basemap1.focused) {
+                    basemap2.extent = basemap1.extent;
+                    basemap2.rotation = basemap1.rotation;
+                  }
+                });
+              }}
+            >
+              <MyImageLayer imgLayer={img1 || layerUrl[0]} />
+              <MyFeatureLayer geomotry={geomotry} />
+            </BaseMap>
+            {/* <MyBasemap
               id="basemap1"
               handleLoad={(map, view) => {
                 basemap1 = view;
@@ -72,13 +88,13 @@ export default connect(({ remoteSensing, layer }) => ({
             >
               <MyImageLayer imgLayer={img1||layerUrl[0]} />
               <MyFeatureLayer geomotry={geomotry}/>
-            </MyBasemap>
+            </MyBasemap> */}
           </Col>
           <Col span={12}>
-            <Button style={{ position: 'absolute', right: 15, top: 15, zIndex: 99 }}>
+            <Button  type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 99 }}>
               {img2.title}
             </Button>
-            <MyBasemap
+            <BaseMap
               id="basemap2"
               handleLoad={(map, view) => {
                 basemap2 = view;
@@ -90,9 +106,24 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              <MyImageLayer imgLayer={img2||layerUrl[1]} />
-              <MyFeatureLayer  geomotry={geomotry}/>
-            </MyBasemap>
+              <MyImageLayer imgLayer={img2 || layerUrl[1]} />
+              <MyFeatureLayer geomotry={geomotry} />
+            </BaseMap>
+            {/* <MyBasemap
+              id="basemap2"
+              handleLoad={(map, view) => {
+                basemap2 = view;
+                basemap2.watch('extent', () => {
+                  if (basemap2.focused) {
+                    basemap1.extent = basemap2.extent;
+                    basemap1.rotation = basemap2.rotation;
+                  }
+                });
+              }}
+            >
+              <MyImageLayer imgLayer={img2 || layerUrl[1]} />
+              <MyFeatureLayer geomotry={geomotry} />
+            </MyBasemap> */}
           </Col>
         </Row>
       </Card>
