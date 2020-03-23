@@ -3,6 +3,8 @@ import { loadModules } from 'esri-loader';
 
 import style from './style.css';
 
+let bookMark=null;
+
 class BookMark extends React.Component {
     constructor(props) {
         super(props);
@@ -16,32 +18,36 @@ class BookMark extends React.Component {
     }
 
     componentDidMount() {
+        loadModules(["esri/widgets/Bookmarks"], { css: true })
+            .then(([Bookmarks]) => {
+                console.log(this.props.view)
 
-        loadModules([
-            'esri/widgets/Bookmarks'
-        ]).then(Bookmarks => {
-            const bookmarks = new Bookmarks({
-                view: this.props.view,
-                // allows bookmarks to be added, edited, or deleted
-                editingEnabled: true,
-                bookmarkCreationOptions: {
-                    takeScreenshot: true,
-                    captureExtent: false,
-                    screenshotSettings: {
-                        width: 100,
-                        height: 100
-                    }
-                },
-                container: this.bookMarkRef.current
-            });
-            this.props.view.ui.add(bookmarks, "top-right");
-        });
+                bookMark = new Bookmarks({
+                    view: this.props.view,
+                    editingEnabled: true,
+                    bookmarkCreationOptions: {
+                        takeScreenshot: false,
+                        captureExtent: false,
+                        screenshotSettings: {
+                            width: 100,
+                            height: 100
+                        }
+                    },
+                    container: this.bookMarkRef.current
+                });
+                this.props.view.ui.add(bookMark, "top-right");
+            })
+    }
+
+    componentWillUnmount(){
+        this.props.view.ui.remove(bookMark);
     }
 
 
     render() {
         return (
             <>
+            
                 <div ref={this.bookMarkRef} className={style.bookMark} />
             </>
         );

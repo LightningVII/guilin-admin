@@ -157,3 +157,10 @@
   right: 280px;
 }
 
+.print{
+  position: absolute;
+  z-index: 9;
+  top: 60px;
+  right: 20px;
+}
+

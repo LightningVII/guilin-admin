@@ -1,20 +1,27 @@
 import React from 'react';
 import { loadModules } from 'esri-loader';
+import style from './style.css';
 
+let print=null;
 class PrintWidget extends React.Component {
 
-    constructor(props) {
+      constructor(props) {
         super(props);
-        this.state({
 
-        });
+        this.printRef = React.createRef();
+
+        this.state = {
+
+        };
+
     }
 
     componentDidMount() {
         loadModules(['esri/widgets/Print'])
             .then(([Print]) => {
-                const print = new Print({
+                 print = new Print({
                     view: this.props.view,
+                    container: this.printRef.current,
                     printServiceUrl:
                         "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
                 });
@@ -22,8 +29,14 @@ class PrintWidget extends React.Component {
             })
     }
 
+    componentWillUnmount(){
+        this.props.view.ui.remove(print);
+    }
+
     render() {
-        return null
+        return (
+            <div ref={this.printRef} className={style.print} />
+        )
     }
 }
 
