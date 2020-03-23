@@ -2,6 +2,7 @@ export const treeData = [
   {
     title: '影像图层',
     key: 'rsLayer',
+    loadType: 'parent',
     children: [
       {
         title: '2020年1月',
@@ -36,6 +37,7 @@ export const treeData = [
   {
     title: '变化图斑',
     key: 'bhtb',
+    loadType: 'parent',
     children: [
       {
         title: '2020年第1期',
@@ -66,6 +68,7 @@ export const treeData = [
   {
     title: '基础地理图层',
     key: 'baseLayer',
+    loadType: 'parent',
     children: [
       {
         title: '行政区划',

@@ -3,6 +3,7 @@ import {
   queryLayerGetLayerUrl,
   queryLayerAdd,
   queryLayerUpdate,
+  queryLayerDelete
 } from '@/services/layer';
 
 const LayerModel = {
@@ -36,6 +37,9 @@ const LayerModel = {
     *fetchLayerUpdate({ payload }, { call }) {
       return yield call(queryLayerUpdate, payload);
     },
+    *fetchLayerDelete({ payload }, { call }) {
+      return yield call(queryLayerDelete, payload);
+    }
   },
 
   reducers: {

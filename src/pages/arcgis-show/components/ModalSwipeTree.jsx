@@ -55,7 +55,7 @@ class ModalSwipeTree extends React.Component {
             showIcon
             checkable
             onCheck={this.onCheck}
-            defaultExpandedKeys={['0-0-0', 'bhtb', 'rs-layer', 'base-layer']}
+            defaultExpandAll
             treeData={treeData}
             style={{ overflowY: 'scroll', maxHeight: '50vh' }}
           />

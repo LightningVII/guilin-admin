@@ -36,18 +36,21 @@ const MyBasemap = props => {
             referenceLayers:[tiandituLabelLayer],
             title: '天地图街道图',
             thumbnailUrl: `http://t1.tianditu.com/DataServer?T=img_w&x=13&y=6&l=4&tk=${token}`,
-          }),
+          })
         );
       })
       .catch(err => console.error(err));
   }, []);
 
   mapProperties.basemap = mapProperties.basemap || basemap;
+
   return (
     <Map
       id="hiugiuu"
       onLoad={handleLoad}
-      mapProperties={mapProperties}
+      // mapProperties={mapProperties}
+      mapProperties={{ basemap: 'satellite' }}
+      loaderOptions={{ css: true }}
       viewProperties={{
         center,
         zoom,

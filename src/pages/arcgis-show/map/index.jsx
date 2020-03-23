@@ -37,6 +37,7 @@ export default connect(({ remoteSensing, layer }) => ({
       type: 'remoteSensing/fetchChangespotGeomotry',
       payload: match?.params,
     });
+  
 
     dispatch({
       type: 'layer/fetchLayerGetLayerUrl',
@@ -45,6 +46,7 @@ export default connect(({ remoteSensing, layer }) => ({
         hsx: '201704',
       },
     });
+    console.log(layerUrl)
   }, []);
 
 

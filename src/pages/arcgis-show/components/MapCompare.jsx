@@ -47,7 +47,7 @@ class MapCompare extends React.Component {
       const graphic2 = {};
       // graphic1=this.props.featrueGraphic
       // const graphic2 = this.props.featrueGraphic;
-    
+
       graphic1.title = this.props.featrueGraphic.attributes.QSX;
       graphic1.layerUrl =
         'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}';
@@ -137,79 +137,79 @@ class MapCompare extends React.Component {
     })
   };
 
-setExtentMove = (mapList, item) => {
-  mapList.forEach(mItem => {
-    const map = mItem;
-    if (mItem.key !== item.key) {
-      map.view.extent = item.view.extent;
+  setExtentMove = (mapList, item) => {
+    mapList.forEach(mItem => {
+      const map = mItem;
+      if (mItem.key !== item.key) {
+        map.view.extent = item.view.extent;
+      }
+    });
+  };
+
+  render() {
+    let countsUp = [];
+    let countsDown = [];
+    let heightStyle = '';
+    let colSpan = 4;
+    maps = [];
+
+    const obj = this.getTiledLayers(this.props.layersArray);
+    const tLCounts = obj.tLayers;
+    const fLCounts = obj.fLayers;
+
+    if (tLCounts.length <= 2) {
+      countsUp = tLCounts;
+      heightStyle = 'calc(100vh - 180px)';
+      colSpan = 24 / countsUp.length;
+    } else {
+      const num = Math.ceil(tLCounts.length / 2);
+      countsUp = tLCounts.slice(0, num);
+      countsDown = tLCounts.slice(num);
+      heightStyle = 'calc(50vh - 90px)';
+      colSpan = 24 / num;
     }
-  });
-};
 
-render() {
-  let countsUp = [];
-  let countsDown = [];
-  let heightStyle = '';
-  let colSpan = 4;
-  maps = [];
-
-  const obj = this.getTiledLayers(this.props.layersArray);
-  const tLCounts = obj.tLayers;
-  const fLCounts = obj.fLayers;
-
-  if (tLCounts.length <= 2) {
-    countsUp = tLCounts;
-    heightStyle = 'calc(100vh - 180px)';
-    colSpan = 24 / countsUp.length;
-  } else {
-    const num = Math.ceil(tLCounts.length / 2);
-    countsUp = tLCounts.slice(0, num);
-    countsDown = tLCounts.slice(num);
-    heightStyle = 'calc(50vh - 90px)';
-    colSpan = 24 / num;
+    return (
+      <>
+        <div className="gutter-example">
+          <Row gutter={16}>
+            {countsUp.map(item => (
+              <Col className="gutter-row" span={colSpan} key={item.key}>
+                <Button
+                  style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}
+                  onClick={this.handleOpenModal}
+                >
+                  {item.title}
+                </Button>
+                <MyBasemap
+                  height={heightStyle}
+                  handleLoad={(map, view) => this.handleLoad(map, view, item, fLCounts, tLCounts)}
+                >
+                  <BermudaTriangle />
+                </MyBasemap>
+              </Col>
+            ))}
+          </Row>
+          <br />
+          <Row gutter={16}>
+            {countsDown.map(item => (
+              <Col className="gutter-row" span={colSpan} key={item.key}>
+                <Button style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}>
+                  {item.title}
+                </Button>
+                <MyBasemap
+                  height={heightStyle}
+                  handleLoad={(map, view) => this.handleLoad(map, view, item, fLCounts, tLCounts)}
+                >
+                  <BermudaTriangle />
+                </MyBasemap>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      </>
+    );
   }
-
-  return (
-    <>
-      <div className="gutter-example">
-        <Row gutter={16}>
-          {countsUp.map(item => (
-            <Col className="gutter-row" span={colSpan} key={item.key}>
-              <Button
-                style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}
-                onClick={this.handleOpenModal}
-              >
-                {item.title}
-              </Button>
-              <MyBasemap
-                height={heightStyle}
-                handleLoad={(map, view) => this.handleLoad(map, view, item, fLCounts, tLCounts)}
-              >
-                <BermudaTriangle />
-              </MyBasemap>
-            </Col>
-          ))}
-        </Row>
-        <br />
-        <Row gutter={16}>
-          {countsDown.map(item => (
-            <Col className="gutter-row" span={colSpan} key={item.key}>
-              <Button style={{ position: 'absolute', top: 1, right: 12, zIndex: 9 }}>
-                {item.title}
-              </Button>
-              <MyBasemap
-                height={heightStyle}
-                handleLoad={(map, view) => this.handleLoad(map, view, item, fLCounts, tLCounts)}
-              >
-                <BermudaTriangle />
-              </MyBasemap>
-            </Col>
-          ))}
-        </Row>
-      </div>
-    </>
-  );
-}
 }
 
 export default MapCompare;

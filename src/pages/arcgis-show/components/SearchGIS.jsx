@@ -16,12 +16,15 @@ let EsriFeatureLayer;
 let EsriWebTileLayer;
 let flag = false;
 
+
 @connect(({ remoteSensing, layer }) => ({
   fuzzyChangespot: remoteSensing.fuzzyChangespot,
   geomotry: remoteSensing.geomotry,
   layerTree: layer.layerTree,
   layerUrl: layer.layerUrl,
 }))
+
+
 class SearchGIS extends React.Component {
   constructor(props) {
     super(props);
@@ -48,27 +51,17 @@ class SearchGIS extends React.Component {
   componentDidMount() {
     const { dispatch, layerTree } = this.props;
 
-    /* dispatch({
-      type: 'layer/fetchLayerAdd',
-      payload: {},
-    }).then(res => {
-      console.log('fetchLayerAdd res :', res);
-    });
+    // 图层数据
+    // dispatch({
+    //   type: 'layer/fetchLayerTree'
+    // }).then(() => {
+    //   this.setState({
+    //     treeDatas: layerTree,
+    //   });
+    //   console.log(layerTree)
+    // });
 
-    dispatch({
-      type: 'layer/fetchLayerUpdate',
-      payload: {},
-    }).then(res => {
-      console.log('fetchLayerUpdate res :', res);
-    }); */
-
-    dispatch({
-      type: 'layer/fetchLayerTree',
-    }).then(() => {
-      this.setState({
-        treeDatas: layerTree.ok ? layerTree : treeData,
-      });
-    });
+   
   }
 
   handleInputSearch = e => {
@@ -98,7 +91,7 @@ class SearchGIS extends React.Component {
     this.props.view.map.removeAll();
     e.checkedNodes.forEach(checkedNode => {
       const type = checkedNode.loadType;
-      if (type) {
+      // if (type!== 'parent') {
         const nodeUrl = checkedNode.layerUrl;
         const nodeId = checkedNode.key;
         switch (type) {
@@ -114,7 +107,7 @@ class SearchGIS extends React.Component {
           default:
             break;
         }
-      }
+      // }
     });
   };
 
@@ -162,7 +155,7 @@ class SearchGIS extends React.Component {
   handleClick = () => {
     this.setState(prevState => ({
       isToggleOn: !prevState.isToggleOn,
-      height: !prevState.isToggleOn ? 0 : 600,
+      height: !prevState.isToggleOn ? 0 : 600
     }));
   };
 
@@ -225,8 +218,8 @@ class SearchGIS extends React.Component {
           <Tree
             checkable
             onCheck={this.onCheck}
-            defaultExpandAll
             treeData={this.state.treeDatas}
+            defaultExpandAll
             style={{
               background: '#FFF',
               height: this.state.height,

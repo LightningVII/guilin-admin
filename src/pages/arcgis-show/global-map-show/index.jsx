@@ -3,7 +3,7 @@ import { ToolOutlined, InfoCircleOutlined, UserOutlined, SnippetsOutlined, Uploa
 import { Row, Col, Affix, Menu, Button, Dropdown, Card, message } from 'antd';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
-// import MyBasemap from '../components/MyBasemap';
+import BaseMap from '../components/BaseMap';
 
 import SearchGIS from '../components/SearchGIS';
 import Compass from '../components/Compass';
@@ -16,9 +16,10 @@ import MapBottom from '../components/MapBottom';
 import Print from '../components/PrintWidget';
 import BookMark from '../components/BookMark';
 
+
 import style from './style.css';
 
-const MyBasemap = React.lazy(() => import('../components/MyBasemap'));
+// const MyBasemap = React.lazy(() => import('../components/BaseMap'));
 
 export default class GlobeMapShow extends React.Component {
   constructor() {
@@ -68,9 +69,6 @@ export default class GlobeMapShow extends React.Component {
           renderPrint: !prevState.renderPrint
         }));
         break;
-      case 'qp':
-        this.fullScreen();
-        break;
       case 'sq':
         this.setState(prevState => ({
           showBookMark: !prevState.showBookMark
@@ -116,22 +114,6 @@ export default class GlobeMapShow extends React.Component {
     else message.info('请选择两幅栅格影像');
   };
 
-  fullScreen = () => {
-    const ele = this.eleBaseMap;
-    if (ele.requestFullscreen) {
-      ele.requestFullscreen();
-    }
-    else if (ele.webkitRequestFullscreen) {
-      ele.webkitRequestFullscreen();
-    }
-    else if (ele.msRequestFullscreen) {
-      ele.msRequestFullscreen();
-    }
-    else if (ele.mozRequestFullScreen) {
-      ele.mozRequestFullScreen();
-    }
-  }
-
   render() {
     return (
       <>
@@ -146,10 +128,6 @@ export default class GlobeMapShow extends React.Component {
                 <Menu.Item key="sq" >
                   <UserOutlined />
                   书签
-               </Menu.Item>
-                <Menu.Item key="qp">
-                  <UserOutlined />
-                  全屏
                </Menu.Item>
                 <Menu.Item key="3">
                   <UserOutlined />
@@ -250,32 +228,43 @@ export default class GlobeMapShow extends React.Component {
 
         {
           this.state.renderCompare ? (
-            <Affix className={style.mapCompare} offsetTop={80}>
+            <Affix className={style.mapCompare} offsetTop={60} offsetBottom={20}>
               <Card size="small" title="多屏工具" extra={<a onClick={
                 () => this.setState({
                   renderCompare: false,
                   featrueGraphic: null
                 })
               }>X</a>}>
-                <MapCompare featrueGraphic={this.state.featrueGraphic} layersArray={this.state.compareLayersArray} />
+                <MapCompare
+                  // featrueGraphic={this.state.featrueGraphic}
+                  layersArray={this.state.compareLayersArray}
+                />
               </Card>
             </Affix>
           ) : null
         }
 
+
+        {
+          this.state.mapView ?
+            (<Affix className={style.mapBottom}>
+              <MapBottom mapView={this.state.mapView} />
+            </Affix>) : null
+        }
+
+        {
+          this.state.mapView ?
+            (<Affix className={style.compass} offsetBottom={50} >
+              <Compass view={this.state.mapView} />
+            </Affix>
+            ) : null
+        }
+
         {
           this.state.mapView ? (
-            <>
-              <Affix className={style.mapBottom}>
-                <MapBottom mapView={this.state.mapView} />
-              </Affix>
-              <Affix className={style.compass} offsetBottom={50} >
-                <Compass view={this.state.mapView} />
-              </Affix>
-              <Affix className={style.search} offsetTop={80}>
-                <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
-              </Affix>
-            </>
+            <Affix className={style.search} offsetTop={80}>
+              <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
+            </Affix>
           ) : null
         }
 
@@ -313,14 +302,13 @@ export default class GlobeMapShow extends React.Component {
           </Affix>
         ) : null}
 
-        <Row style={{ margin: '-24px' }}>
+        <Row style={{ margin: '-24px' }}  >
           <Col span={24}>
             <Suspense fallback="...loading">
-              <MyBasemap
-                ref={el => { this.eleBaseMap = el }}
+              <BaseMap
                 height="calc(100vh - 64px)"
                 style={{ overflow: 'hidden' }}
-                handleLoad={(map, view) => {
+                getMapView={(map, view) => {
                   this.setState({ mapView: view });
                   view.ui.remove('zoom');
                 }}

@@ -28,3 +28,13 @@ export async function queryLayerUpdate(payload) {
     },
   });
 }
+
+export async function queryLayerDelete(payload) {
+  return request(`/strapi/layer/delete`, {
+    method: 'POST',
+    data: stringify(payload),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+  });
+}
