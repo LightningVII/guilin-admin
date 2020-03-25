@@ -137,15 +137,6 @@ class MapCompare extends React.Component {
     })
   };
 
-  setExtentMove = (mapList, item) => {
-    mapList.forEach(mItem => {
-      const map = mItem;
-      if (mItem.key !== item.key) {
-        map.view.extent = item.view.extent;
-      }
-    });
-  };
-
   render() {
     let countsUp = [];
     let countsDown = [];

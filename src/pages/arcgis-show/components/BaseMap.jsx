@@ -8,7 +8,7 @@ export default class BaseMap extends React.Component {
         super(props);
         this.mapRef = React.createRef();
         this.state = {
-            height:this.props.height||'100vh'
+            height: this.props.height || '100vh'
         }
     }
 
@@ -44,12 +44,12 @@ export default class BaseMap extends React.Component {
 
                 this.view = new MapView({
                     container: this.mapRef.current,
-                    map:this.argmap,
+                    map: this.argmap,
                     center: [117.18, 34.27],
                     zoom: 13,
                 });
 
-                this.props.handleLoad(this.argmap,this.view);
+                this.props.handleLoad(this.argmap, this.view);
             });
     }
 
@@ -63,8 +63,10 @@ export default class BaseMap extends React.Component {
         return (
             <div
                 ref={this.mapRef}
-                style={{ height:this.state.height}}
-            />
+                style={{ height: this.state.height }}
+            >
+                {this.state.children}
+            </div>
         );
     }
 }

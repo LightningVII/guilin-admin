@@ -29,6 +29,14 @@ const MyFeatureLayer = props => {
         setFeatureLayer(fl);
         props.view.map.add(fl);
         props.view.graphics.add(graphics);
+        props.view.extent = {
+          type: "extent",
+          xmax: 13026057.551445255,
+          xmin: 13025591.166139795,
+          ymax: 4077224.692780885,
+          ymin: 4076708.145675606,
+          spatialReference: { wkid: 102100 }
+        }
       })
       .catch(err => console.error(err));
 
