@@ -4,8 +4,8 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
-// import MyBasemap from '../components/MyBasemap';
-import BaseMap from '../components/BaseMap';
+import MyBasemap from '../components/MyBasemap';
+// import BaseMap from '../components/BaseMap';
 // import BermudaTriangle from '../components/BermudaTriangle';
 import MyFeatureLayer from '../components/MyFeatureLayer';
 import MyImageLayer from '../components/MyImageLayer';
@@ -59,7 +59,7 @@ export default connect(({ remoteSensing, layer }) => ({
             <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 99 }}>
               {img1.title}
             </Button>
-            <BaseMap
+            {/* <BaseMap
               id="basemap1"
               handleLoad={(map, view) => {
                 basemap1 = view;
@@ -73,8 +73,8 @@ export default connect(({ remoteSensing, layer }) => ({
             >
               <MyImageLayer imgLayer={img1 || layerUrl[0]} />
               <MyFeatureLayer geomotry={geomotry} />
-            </BaseMap>
-            {/* <MyBasemap
+            </BaseMap> */}
+            <MyBasemap
               id="basemap1"
               handleLoad={(map, view) => {
                 basemap1 = view;
@@ -88,13 +88,13 @@ export default connect(({ remoteSensing, layer }) => ({
             >
               <MyImageLayer imgLayer={img1||layerUrl[0]} />
               <MyFeatureLayer geomotry={geomotry}/>
-            </MyBasemap> */}
+            </MyBasemap>
           </Col>
           <Col span={12}>
             <Button  type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 99 }}>
               {img2.title}
             </Button>
-            <BaseMap
+            {/* <BaseMap
               id="basemap2"
               handleLoad={(map, view) => {
                 basemap2 = view;
@@ -108,8 +108,8 @@ export default connect(({ remoteSensing, layer }) => ({
             >
               <MyImageLayer imgLayer={img2 || layerUrl[1]} />
               <MyFeatureLayer geomotry={geomotry} />
-            </BaseMap>
-            {/* <MyBasemap
+            </BaseMap> */}
+            <MyBasemap
               id="basemap2"
               handleLoad={(map, view) => {
                 basemap2 = view;
@@ -123,7 +123,7 @@ export default connect(({ remoteSensing, layer }) => ({
             >
               <MyImageLayer imgLayer={img2 || layerUrl[1]} />
               <MyFeatureLayer geomotry={geomotry} />
-            </MyBasemap> */}
+            </MyBasemap>
           </Col>
         </Row>
       </Card>

@@ -24,7 +24,7 @@ class LayoutImg extends Component {
                             container: 'container',
                             forceFit: true,
                             height: 328,
-                            padding: [ 0, '20%' ]
+                            padding: [ 0, '20%' ],
                         });
                         // force sync scales
                         chart.scale({
@@ -39,12 +39,12 @@ class LayoutImg extends Component {
                         chart.tooltip({
                             showTitle: false,
                             containerTpl: '<div class="g2-tooltip"><table class="g2-tooltip-list"></table></div>',
-                            itemTpl: '<tr data-index="{index}"><td style="padding:5px;background-color:#545454;">{name}</td><td style="padding:5px;background-color:#fff;color:#000;">{value}</td></tr>',
+                            itemTpl: '<tr data-index="{index}"><td style="padding:5px;background-color:#fff;">{name}</td><td style="padding:5px;background-color:#fff;color:#000;">{value}</td></tr>',
                             'g2-tooltip': {
                                 borderRadius: '2px',
                                 backgroundColor: '#DDDDDD',
                                 padding: 0,
-                                border: '1px solid #333'
+                                border: '2px solid #aaddaa'
                             }
                         });
                         // data set
@@ -66,10 +66,10 @@ class LayoutImg extends Component {
                         bgView.polygon()
                             .position('x*y')
                             .style({
-                                fill: '#DDDDDD',
-                                stroke: '#b1b1b1',
-                                lineWidth: 0.5,
-                                fillOpacity: 0.85
+                                fill: '#004981',
+                                stroke: '#0476AB',
+                                lineWidth: 1.2,
+                                fillOpacity: 0.8
                             });
 
                         // draw the bubble plot
@@ -81,20 +81,25 @@ class LayoutImg extends Component {
                                 const objData = {
                                     x: projectedCoord[0],
                                     y: projectedCoord[1],
-                                    count: obj.count * 1
+                                    name:obj.name,
+                                    纬度:obj.lng,
+                                    经度:obj.lat,
+                                    位置:obj.location,
+                                    任务数: obj.count * 1
                                 }
                                 return objData;
                             }
                         });
                         const pointView = chart.view();
+                        
                         pointView.source(userData);
                         pointView.point()
                             .position('x*y')
-                            .size('count', [10, 20])
+                            .size('任务数', [10, 20])
                             .shape('circle')
-                            .opacity(0.45)
-                            .color('#FF2F29')
-                            .tooltip('location*lat*lng*count');
+                            .opacity(0.8)
+                            .color('#FFFF28')
+                            .tooltip('位置*纬度*经度*任务数');
 
                         chart.render();
                     // });
@@ -106,7 +111,7 @@ class LayoutImg extends Component {
     render() {
         return (
             // <div className="cloudhost-box">
-            <div id="container" style={{ mergeLeft: 0 }} />
+            <div id="container" style={{ mergeLeft: 0 ,backgroundColor:'#044161'}} />
             // </div>
         );
     }

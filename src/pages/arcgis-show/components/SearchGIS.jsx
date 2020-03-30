@@ -15,6 +15,7 @@ const { TreeNode } = Tree;
 let EsriFeatureLayer;
 let EsriWebTileLayer;
 let flag = false;
+let tempFeatureLayer = null;
 
 
 @connect(({ remoteSensing, layer }) => ({
@@ -47,7 +48,7 @@ class SearchGIS extends React.Component {
         EsriFeatureLayer = FeatureLayer;
         EsriWebTileLayer = WebTileLayer;
         flag = false;
-
+        this.triggerAction();
 
         const { dispatch, layerTree } = this.props;
 
@@ -64,10 +65,6 @@ class SearchGIS extends React.Component {
       },
     );
 
-
-
-
-
   }
 
   handleInputSearch = e => {
@@ -76,7 +73,7 @@ class SearchGIS extends React.Component {
 
   onCheck = (checkedKeys, e) => {
     this.loadToMap(checkedKeys, e);
-    this.triggerAction();
+
   };
 
   triggerAction = () => {
@@ -130,6 +127,16 @@ class SearchGIS extends React.Component {
         const str = value.replace(/\s*/g, '');
         const temp = [];
         if (str !== '') {
+
+          // const obj2 = {};
+          // obj2.BATCH = '2020年第一期';
+          // obj2.COUNTY = '沛县';
+          // obj2.LOCATION = '沛县';
+          // obj2.TBBM = 'Y18103231071N02';
+          // temp.push(obj2);
+          // this.setState({
+          //   searchData: temp,
+          // });
           dispatch({
             type: 'remoteSensing/fetchChangespotFuzzyQuery',
             payload: { term: str },
@@ -149,6 +156,10 @@ class SearchGIS extends React.Component {
             }
           });
         } else {
+          if (tempFeatureLayer)
+            this.props.view.map.remove(
+              tempFeatureLayer
+            );
           this.setState({
             searchPanelVisiable: 'hidden',
             searchData: [],
@@ -173,6 +184,26 @@ class SearchGIS extends React.Component {
     }).then(() => {
       console.log(geomotry);
     });
+
+    
+    if (tempFeatureLayer)
+      this.props.view.map.remove(
+        tempFeatureLayer
+      );
+    tempFeatureLayer = new EsriFeatureLayer({ url: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0', id: 'test', popupTemplate: template });
+    this.props.view.map.add(
+      tempFeatureLayer
+    )
+
+    this.props.view.extent = {
+      type: "extent",
+      xmax: 13026057.551445255,
+      xmin: 13025591.166139795,
+      ymax: 4077224.692780885,
+      ymin: 4076708.145675606,
+      spatialReference: { wkid: 102100 }
+    }
+
   };
 
   renderTreeNodes = data =>

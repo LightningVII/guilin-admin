@@ -14,27 +14,62 @@ export const mapJson = {"type":"FeatureCollection","crs":{"type":"name","propert
 
 export const geoCoordMap = [{
     "name": "丰县",
-    "location": "徐州丰县",
+    "location": "徐州市丰县",
     "lng": "116.57",
     "lat": "34.70",
-    "count": "20",
-    "comments": "\nThis quake also caused damage in Mexico at Tapachula, Chiapas. It was felt as far away as Jalapa, Veracruz and Mexico City. The duration in Mexico was estimated at one to one and a half minutes.\n["
+    "count": "20"
 },
 {
     "name": "沛县",
-    "location": "徐州沛县",
+    "location": "徐州市沛县",
     "lng": "116.90",
     "lat": "34.75",
-    "count": "14",
-    "comments": "\nThis quake also caused damage in Mexico at Tapachula, Chiapas. It was felt as far away as Jalapa, Veracruz and Mexico City. The duration in Mexico was estimated at one to one and a half minutes.\n["
+    "count": "14"
 },
 {
     "name": "铜山区",
-    "location": "徐州铜山区",
+    "location": "徐州市铜山区",
     "lng": "117.5",
     "lat": "34.2",
-    "count": "18",
-    "comments": "\nThis quake also caused damage in Mexico at Tapachula, Chiapas. It was felt as far away as Jalapa, Veracruz and Mexico City. The duration in Mexico was estimated at one to one and a half minutes.\n["
+    "count": "18"
+}
+,
+{
+    "name": "贾汪区",
+    "location": "徐州市贾汪区",
+    "lng": "117.45",	
+    "lat": "34.34",
+    "count": "23"
+},
+{
+    "name": "邳州市",
+    "location": "徐州市邳州市",
+    "lng": "117.95",	
+    "lat": "34.32",
+    "count": "43"
+},
+{
+    "name": "市区",
+    "location": "徐州市区",
+    "lng": "117.22",	
+    "lat": "34.25",
+    "count": "19"
+}
+,
+{
+    "name": "新沂市",
+    "location": "徐州市新沂市",
+    "lng": "118.35",	
+    "lat": "34.38",
+    "count": "19"
+}
+,
+{
+    "name": "睢宁县",
+    "location": "徐州市睢宁县",
+    "lng": "117.95",	
+    "lat": "33.9",
+    "count": "19"
 }
 
 ];
