@@ -32,13 +32,16 @@ class AccountSettings extends Component {
           defaultMessage="New Message Notification"
         />
       ), // 数据资源设置
-      datasource: (
+    };
+
+    if (props?.currentUser?.roles?.[0]?.rolecode === 'XTGLY')
+      menuMap.datasource = (
         <FormattedMessage
           id="app.settings.menuMap.datasource"
           defaultMessage="New Message Datasource"
         />
-      ),
-    };
+      );
+
     this.state = {
       mode: 'inline',
       menuMap,

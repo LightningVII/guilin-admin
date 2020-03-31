@@ -42,7 +42,7 @@ export default [
             icon: 'crown',
             name: 'home',
             path: '/statistics',
-            component: './Statistics', // authority: ['admin'],
+            component: './Statistics',
             authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
           },
           {

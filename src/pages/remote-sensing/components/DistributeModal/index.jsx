@@ -38,8 +38,10 @@ export default connect(({ employee, user }) => ({
       }
     }, []);
 
-    const isXTGLY = user.roles[0].rolecode === 'XTGLY';
-    const isZFDDZ = user.roles[0].rolecode === 'ZFDDZ';
+    const { rolecode } = user?.roles?.[0] || {};
+
+    const isXTGLY = rolecode === 'XTGLY';
+    const isZFDDZ = rolecode === 'ZFDDZ';
 
     return (
       <Modal

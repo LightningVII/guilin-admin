@@ -19,13 +19,17 @@ export const remoteSensingListColumns = () => [
     title: '位置',
     dataIndex: 'location',
   },
+  // {
+  //   title: '前时相',
+  //   dataIndex: 'qsxdlmc',
+  // },
+  // {
+  //   title: '后时相',
+  //   dataIndex: 'hsxdlmc',
+  // },
   {
-    title: '前时相',
-    dataIndex: 'qsxdlmc',
-  },
-  {
-    title: '后时相',
-    dataIndex: 'hsxdlmc',
+    title: '时间',
+    dataIndex: 'time',
   },
   {
     title: '占地面积',
