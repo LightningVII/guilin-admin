@@ -1,12 +1,13 @@
 .menu {
   position: absolute;
+  font-size: 16px !important;
   right: 0px;
   z-index: 9;
 }
 
 .search {
   position: fixed;
-  top:80px;
+  top: 80px;
   left: 20px;
   z-index: 9;
 }
@@ -47,17 +48,16 @@
   position: fixed;
   bottom: 0px;
   width: 100vw;
-  font-size: 12px;
-  height: 20px;
-  /* margin-left: -24px; */
+  font-size: 14px;
+  height: 22px;
+  background-color: rgba(255, 255, 255, 0.5);
   z-index: 9;
+  margin-left: -24px;
 }
 
-.print{
+.print {
   position: absolute;
   top: 12px;
   right: 12px;
   z-index: 99;
 }
-
-

@@ -37,26 +37,31 @@ export default connect(({ remoteSensing, layer }) => ({
     dispatch({
       type: 'remoteSensing/fetchChangespotGeomotry',
       payload: match?.params,
+    }).then(res => {
+      console.log('geo', res)
     });
 
 
     dispatch({
       type: 'layer/fetchLayerGetLayerUrl',
       payload: {
-        qsx: '201702',
-        hsx: '201704',
+        qsx: '202001',
+        hsx: '202002',
       },
+    }).then(res => {
+      console.log('url', res)
     });
-    // console.log(layerUrl)
+
+
   }, []);
 
 
   return (
     <PageHeaderWrapper title={false}>
-      <Card bodyStyle={{margin: -25, padding: 0}}>
+      <Card bodyStyle={{ margin: -25, padding: 0 }}>
         <Row>
-          <Col span={12}>
-            <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 99 }}>
+          <Col span={12} style={{ border: '1px solid #888888' }}>
+            <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 5 }}>
               {img1.title}
             </Button>
             {/* <BaseMap
@@ -76,8 +81,10 @@ export default connect(({ remoteSensing, layer }) => ({
             </BaseMap> */}
             <MyBasemap
               id="basemap1"
+              height='calc(100vh - 120px)'
               handleLoad={(map, view) => {
                 basemap1 = view;
+                basemap1.ui.remove('attribution')
                 basemap1.watch('extent', () => {
                   if (basemap1.focused) {
                     basemap2.extent = basemap1.extent;
@@ -86,12 +93,12 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              <MyImageLayer imgLayer={img1||layerUrl[0]} />
-              <MyFeatureLayer geomotry={geomotry}/>
+              <MyImageLayer imgLayer={img1 || layerUrl[0]} />
+              <MyFeatureLayer geomotry={geomotry} />
             </MyBasemap>
           </Col>
-          <Col span={12}>
-            <Button  type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 99 }}>
+          <Col span={12} style={{ border: '1px solid #888888' }}>
+            <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 5 }}>
               {img2.title}
             </Button>
             {/* <BaseMap
@@ -111,8 +118,10 @@ export default connect(({ remoteSensing, layer }) => ({
             </BaseMap> */}
             <MyBasemap
               id="basemap2"
+              height='calc(100vh - 120px)'
               handleLoad={(map, view) => {
                 basemap2 = view;
+                basemap2.ui.remove('attribution')
                 basemap2.watch('extent', () => {
                   if (basemap2.focused) {
                     basemap1.extent = basemap2.extent;

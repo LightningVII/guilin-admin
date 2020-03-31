@@ -35,7 +35,7 @@ class BookMark extends React.Component {
                     },
                     container: this.bookMarkRef.current
                 });
-                this.props.view.ui.add(bookMark, "top-right");
+                this.props.view.ui.add(bookMark);
             })
     }
 

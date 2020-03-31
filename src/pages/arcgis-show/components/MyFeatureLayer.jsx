@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadModules } from 'esri-loader';
-import { template } from './featureTemplate.js';
+import { infoTemplate } from './featureTemplate.js';
 import { polylineSymbol } from './lineSymbol.js'
 
 const MyFeatureLayer = props => {
@@ -17,7 +17,7 @@ const MyFeatureLayer = props => {
           url: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0',
           id: 'bhtb1',
           outFields: ['*'],
-          popupTemplate: template,
+          popupTemplate: infoTemplate,
           title: '202001',
         });
 

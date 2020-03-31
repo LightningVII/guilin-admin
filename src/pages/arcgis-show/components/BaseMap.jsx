@@ -21,16 +21,12 @@ export default class BaseMap extends React.Component {
                     id: 'tdtLabelStreet',
                     visible: true,
                     listMode: 'hide',
-                    copyright:
-                        '地图数据 © 2018 tianditu <a href="http://lbs.tianditu.gov.cn/server/MapService.html">tianditu</a>',
                 });
 
                 const tiandituLayerVec = new WebTileLayer({
                     urlTemplate: `http://t{subDomain}.tianditu.com/vec_w/wmts?layer=vec&style=default&tilematrixset=w&Service=WMTS&Request=GetTile&Version=1.0.0&Format=&TileMatrix={level}&TileCol={col}&TileRow={row}&tk=${token}`,
                     subDomains: [1, 2, 3, 4, 5, 6],
-                    id: 'tiandituLayer_vec',
-                    copyright:
-                        '地图数据 © 2018 <a href="http://www.tianditu.gov.cn" target="_blank">天地图</a>',
+                    id: 'tiandituLayer_vec'
                 });
 
                 this.argmap = new ArcGISMap({

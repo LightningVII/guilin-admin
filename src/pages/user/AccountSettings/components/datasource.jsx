@@ -1,6 +1,6 @@
 import React from 'react';
-import { Table, Button, Modal, Form, Input, Select, Upload, message, DatePicker } from 'antd';
-import { UploadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Table, Button, Modal, Form, Input, Select, Upload, message, DatePicker, Tooltip } from 'antd';
+import { UploadOutlined, ExclamationCircleOutlined, FolderAddOutlined, FileAddOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { connect } from 'dva';
 
@@ -25,10 +25,10 @@ const props = {
     },
 };
 
-@connect(({ layer }) => ({
-    layerTree: layer.layerTree,
-    layerUrl: layer.layerUrl,
-}))
+// @connect(({ layer }) => ({
+//     layerTree: layer.layerTree,
+//     layerUrl: layer.layerUrl,
+// }))
 class DatasourceView extends React.Component {
 
     formUpdateRef = React.createRef();
@@ -59,13 +59,13 @@ class DatasourceView extends React.Component {
                     title: '图层名',
                     dataIndex: 'title',
                     key: 'title',
-                    width: '15%'
+                    width: '25%'
                 },
                 {
                     title: '加载方式',
                     dataIndex: 'loadType',
                     key: 'loadType',
-                    width: '15%'
+                    width: '10%'
                 },
                 {
                     title: '图层地址',
@@ -80,11 +80,11 @@ class DatasourceView extends React.Component {
                     width: '20%',
                     render: record => (
                         (record.loadType === 'parent' ? <span>
-                            <a onClick={() => this.add(record)} style={{ marginRight: 16 }}>添加</a>
-                            <a onClick={() => this.del(record)} >删除</a>
+                            <a onClick={() => this.add(record)} style={{ marginRight: 16 }}><Tooltip placement="top" title="添加"><FileAddOutlined /></Tooltip></a>
+                            <a onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined /></Tooltip></a>
                         </span> : <span>
-                                <a onClick={() => this.update(record)} style={{ marginRight: 16 }}>修改</a>
-                                <a onClick={() => this.del(record)} >删除</a>
+                                <a onClick={() => this.update(record)} style={{ marginRight: 16 }}><Tooltip placement="top" title='修改'><EditOutlined /></Tooltip></a>
+                                <a onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined /></Tooltip></a>
                             </span>)
                     ),
                 }
@@ -121,16 +121,18 @@ class DatasourceView extends React.Component {
     }
 
     initTreeJson = () => {
-        const { dispatch, layerTree } = this.props;
+
+        const { dispatch } = this.props;
         dispatch({
             type: 'layer/fetchLayerTree',
-            payload: {},
-        }).then(() => {
+        }).then(tree => {
             this.setState({
-                treeJson: treeData,
+                treeJson: tree || treeData,
             });
-            console.log(layerTree)
+            console.log(tree)
         });
+
+
     }
 
     del = record => {
@@ -152,7 +154,10 @@ class DatasourceView extends React.Component {
                 }).then(res => {
                     if (res.code === 200) {
                         message.success(res.message)
-                        that.initTreeJson();
+                        setTimeout(() => {
+                            that.initTreeJson();
+                        }, 1000)
+
                     }
                     else
                         message.error(res.message)
@@ -179,9 +184,9 @@ class DatasourceView extends React.Component {
                     url: record.layerUrl,
                     layermenuname: record.title,
                     datatype: record.loadType,
-                    qsx: record.qsx ? moment(record.qsx, 'YYYYMM') : moment(),
-                    hsx: record.hsx ? moment(record.hsx, 'YYYYMM') : moment(),
-                    layerdate: record.layerdate ? moment(record.layerdate, 'YYYYMM') : moment()
+                    qsx: record.QSX ? moment(record.QSX, 'YYYYMM') : moment(),
+                    hsx: record.HSX ? moment(record.HSX, 'YYYYMM') : moment(),
+                    layerdate: record.LAYERDATE ? moment(record.LAYERDATE, 'YYYYMM') : moment()
                 });
                 this.renderDate(record.loadType)
             }, 800)
@@ -193,19 +198,19 @@ class DatasourceView extends React.Component {
         updateObj.qsx = moment(updateObj.qsx).format('YYYYMM')
         updateObj.hsx = moment(updateObj.hsx).format('YYYYMM')
         updateObj.layerdate = moment(updateObj.layerdate).format('YYYYMM')
- 
-        if (parseInt(updateObj.qsx, 10) >= parseInt(updateObj.hsx, 10)) {
-            message.warning('后时相必须大于前时相')
-            return
-        }
+
+        // if (parseInt(updateObj.qsx, 10) >= parseInt(updateObj.hsx, 10)) {
+        //     message.warning('后时相必须大于前时相')
+        //     return
+        // }
 
 
         this.setState({
             updateVisible: false
         })
 
-        
-        
+
+
         const { dispatch } = this.props;
         dispatch({
             type: 'layer/fetchLayerUpdate',
@@ -213,7 +218,9 @@ class DatasourceView extends React.Component {
         }).then(res => {
             if (res.code === 200) {
                 message.success(res.message)
-                this.initTreeJson();
+                setTimeout(() => {
+                    this.initTreeJson();
+                }, 1000)
             }
             else
                 message.error(res.message)
@@ -244,10 +251,10 @@ class DatasourceView extends React.Component {
         addObj.hsx = moment(addObj.hsx).format('YYYYMM')
         addObj.layerdate = moment(addObj.layerdate).format('YYYYMM')
 
-        if (parseInt(addObj.qsx, 10) >= parseInt(addObj.hsx, 10)) {
-            message.warning('后时相必须大于前时相')
-            return
-        }
+        // if (parseInt(addObj.qsx, 10) >= parseInt(addObj.hsx, 10)) {
+        //     message.warning('后时相必须大于前时相')
+        //     return
+        // }
 
         this.setState({
             addVisble: false
@@ -261,7 +268,9 @@ class DatasourceView extends React.Component {
         }).then(res => {
             if (res.code === 200) {
                 message.success(res.message)
-                this.initTreeJson();
+                setTimeout(() => {
+                    this.initTreeJson();
+                }, 1000)
             }
             else
                 message.error(res.message)
@@ -312,9 +321,8 @@ class DatasourceView extends React.Component {
         return (
             <>
                 <Button type="primary" onClick={
-                    () =>
-                        this.addParent()
-                }>添加父级菜单</Button>
+                    () => this.addParent()
+                }><FolderAddOutlined />添加文件夹</Button>
 
                 <Upload {...props}>
                     <Button style={{ marginLeft: 20 }}>
@@ -355,8 +363,8 @@ class DatasourceView extends React.Component {
                             <Select onChange={value => {
                                 this.renderDate(value);
                             }}>
-                                <Select.Option value="tile">tile</Select.Option>
-                                <Select.Option value="feature">feature</Select.Option>
+                                <Select.Option value="tile">tile(切片)</Select.Option>
+                                <Select.Option value="feature">feature(矢量)</Select.Option>
                             </Select>
                         </Form.Item>
 
@@ -416,8 +424,8 @@ class DatasourceView extends React.Component {
                             <Select onChange={value => {
                                 this.renderDate(value);
                             }}>
-                                <Select.Option value="tile">tile</Select.Option>
-                                <Select.Option value="feature">feature</Select.Option>
+                                <Select.Option value="tile">tile(切片)</Select.Option>
+                                <Select.Option value="feature">feature(矢量)</Select.Option>
                             </Select>
                         </Form.Item>
 
@@ -475,7 +483,7 @@ class DatasourceView extends React.Component {
                             <Input placeholder="输入pid" disabled />
                         </Form.Item>
 
-                        <Form.Item name="remark" label="数据备注" rules={[{ required: true }]}>
+                        <Form.Item name="remark" label="数据备注">
                             <Input placeholder="输入备注" />
                         </Form.Item>
 
@@ -487,4 +495,7 @@ class DatasourceView extends React.Component {
     }
 }
 
-export default DatasourceView;
+export default connect(({ layer }) => ({
+    layerTree: layer.layerTree,
+    layerUrl: layer.layerUrl,
+}))(DatasourceView);

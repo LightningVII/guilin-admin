@@ -22,6 +22,8 @@ const LayerModel = {
         type: 'saveLayerTree',
         payload,
       });
+
+      return payload;
     },
     *fetchLayerGetLayerUrl({ payload }, { call, put }) {
       const { content } = yield call(queryLayerGetLayerUrl, payload);
@@ -30,6 +32,8 @@ const LayerModel = {
         type: 'saveLayerUrl',
         payload: content,
       });
+
+      return content
     },
     *fetchLayerAdd({ payload }, { call }) {
       return yield call(queryLayerAdd, payload);

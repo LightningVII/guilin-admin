@@ -2,7 +2,12 @@ import request from '@/utils/request';
 import { stringify } from 'querystring';
 
 export async function queryLayerTree() {
-  return request('/strapi/layer/tree');
+  return request(`/strapi/layer/tree`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+  });
 }
 
 export async function queryLayerGetLayerUrl(payload) {

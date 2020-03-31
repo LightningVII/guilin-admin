@@ -69,6 +69,7 @@ const RemoteModel = {
         type: 'saveGeomotry',
         payload: data?.content,
       });
+      return data
     },
   },
 

@@ -35,6 +35,7 @@ class SearchGIS extends React.Component {
     this.state = {
       isToggleOn: true,
       height: 0,
+      paddingTop: 0,
       searchPanelVisiable: 'hidden',
       searchData: [],
       treeDatas: treeData,
@@ -50,17 +51,17 @@ class SearchGIS extends React.Component {
         flag = false;
         this.triggerAction();
 
-        const { dispatch, layerTree } = this.props;
+        const { dispatch } = this.props;
 
         // 图层数据
-        dispatch({
-          type: 'layer/fetchLayerTree'
-        }).then(() => {
-          this.setState({
-            treeDatas: layerTree,
-          });
-          console.log(layerTree)
-        });
+        // dispatch({
+        //   type: 'layer/fetchLayerTree'
+        // }).then(tree => {
+        //   this.setState({
+        //     treeDatas: tree,
+        //   });
+        //   console.log(tree)
+        // });
 
       },
     );
@@ -120,6 +121,7 @@ class SearchGIS extends React.Component {
       {
         isToggleOn: false,
         height: 0,
+        paddingTop:0,
         searchPanelVisiable: 'visible',
         searchData: [],
       },
@@ -128,15 +130,15 @@ class SearchGIS extends React.Component {
         const temp = [];
         if (str !== '') {
 
-          // const obj2 = {};
-          // obj2.BATCH = '2020年第一期';
-          // obj2.COUNTY = '沛县';
-          // obj2.LOCATION = '沛县';
-          // obj2.TBBM = 'Y18103231071N02';
-          // temp.push(obj2);
-          // this.setState({
-          //   searchData: temp,
-          // });
+          const obj2 = {};
+          obj2.BATCH = '2020年第一期';
+          obj2.COUNTY = '沛县';
+          obj2.LOCATION = '沛县';
+          obj2.TBBM = 'Y18103231071N02';
+          temp.push(obj2);
+          this.setState({
+            searchData: temp,
+          });
           dispatch({
             type: 'remoteSensing/fetchChangespotFuzzyQuery',
             payload: { term: str },
@@ -172,7 +174,8 @@ class SearchGIS extends React.Component {
   handleClick = () => {
     this.setState(prevState => ({
       isToggleOn: !prevState.isToggleOn,
-      height: !prevState.isToggleOn ? 0 : 600
+      height: !prevState.isToggleOn ? 0 : 'calc( 100vh - 260px )',
+      paddingTop: !prevState.isToggleOn ? 0 : 12
     }));
   };
 
@@ -185,7 +188,7 @@ class SearchGIS extends React.Component {
       console.log(geomotry);
     });
 
-    
+
     if (tempFeatureLayer)
       this.props.view.map.remove(
         tempFeatureLayer
@@ -227,6 +230,7 @@ class SearchGIS extends React.Component {
           onClick={this.handleClick}
           className={style.search}
           allowClear
+          size="large"
           prefix={
             <Tooltip placement="bottom" title="图层">
               <UnorderedListOutlined style={{ cursor: 'pointer' }} onClick={this.handleClick} />
@@ -251,9 +255,18 @@ class SearchGIS extends React.Component {
           />
         </div>
 
-        <div style={{ width: 240, overflow: 'hidden' }}>
+        <div style={{
+          width: 300,
+          overflow: 'hidden',
+          overflowY:'auto',
+          paddingTop: this.state.paddingTop,
+          backgroundColor: 'white',
+          boxShadow: '2px 2px 1px #888888'
+        }}>
+
           <Tree
             checkable
+            showLine
             onCheck={this.onCheck}
             treeData={this.state.treeDatas}
             defaultExpandAll
@@ -261,8 +274,11 @@ class SearchGIS extends React.Component {
               background: '#FFF',
               height: this.state.height,
               transition: '.3s all ease-in',
+              paddingLeft: 12,
+              fontSize: 16
             }}
           />
+
         </div>
       </>
     );

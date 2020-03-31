@@ -15,6 +15,7 @@ import MapCompare from '../components/MapCompare';
 import MapBottom from '../components/MapBottom';
 import Print from '../components/PrintWidget';
 import BookMark from '../components/BookMark';
+import ImportGeo from '../components/ImportGeo';
 
 
 import style from './style.css';
@@ -31,7 +32,8 @@ export default class GlobeMapShow extends React.Component {
       renderSwipe: false, // Swipe内容框
       swipeLayersArray: [], // Swipe选择的图层列表
       showSwipeModal: false, // Swipe Model选择框
-      showBookMark: false,
+      showBookMark: false, // 显示书签
+      showImportGeo: false, // 显示导入
       renderCompare: false, // Compare 内容框
       compareLayersArray: [], // Compare选择的图层列表
       showCompareModal: false, // Compare Model选择框
@@ -72,6 +74,11 @@ export default class GlobeMapShow extends React.Component {
       case 'sq':
         this.setState(prevState => ({
           showBookMark: !prevState.showBookMark
+        }));
+        break;
+      case 'dr':
+        this.setState(prevState => ({
+          showImportGeo: !prevState.showImportGeo
         }));
         break;
       default:
@@ -115,13 +122,14 @@ export default class GlobeMapShow extends React.Component {
   };
 
   render() {
+   
     return (
       <>
         <Affix className={style.menu} offsetTop={80}>
           <Button.Group>
             <Dropdown overlay={
-              <Menu onClick={this.handleMenuClick}>
-                <Menu.Item key="cl" >
+              <Menu style={{fontSize:16}} onClick={this.handleMenuClick}>
+                <Menu.Item  key="cl" >
                   <UserOutlined />
                   测量
                </Menu.Item>
@@ -143,19 +151,23 @@ export default class GlobeMapShow extends React.Component {
                </Menu.Item>
               </Menu>
             } >
-              <Button><ToolOutlined />常用</Button>
+              <Button  style={{fontSize:16}}><ToolOutlined />常用</Button>
             </Dropdown>
             <Dropdown
               overlay={
                 <Menu onClick={this.handleMenuClick}>
-                  <Menu.Item key="cl">
+                  <Menu.Item key="dx">
                     <UserOutlined />
                     点选
+                  </Menu.Item>
+                  <Menu.Item key="qx">
+                    <UserOutlined />
+                    框选
                   </Menu.Item>
                 </Menu>
               }
             >
-              <Button><InfoCircleOutlined />查询</Button>
+              <Button style={{fontSize:16}}><InfoCircleOutlined />查询</Button>
             </Dropdown>
             <Dropdown
               overlay={
@@ -168,10 +180,14 @@ export default class GlobeMapShow extends React.Component {
                     <UserOutlined />
                     多屏
                   </Menu.Item>
+                  <Menu.Item key="dp">
+                    <UserOutlined />
+                    统计
+                  </Menu.Item>
                 </Menu>
               }
             >
-              <Button><SnippetsOutlined />分析</Button>
+              <Button style={{fontSize:16}}><SnippetsOutlined />分析</Button>
             </Dropdown>
           </Button.Group>
         </Affix>
@@ -200,6 +216,18 @@ export default class GlobeMapShow extends React.Component {
         ) : null}
 
         {
+          this.state.showImportGeo ? (
+            <ImportGeo visible={this.state.showImportGeo}
+              onCloseModal={() => {
+                this.setState({
+                  showImportGeo: false
+                })
+              }}
+            />
+          ) : null
+        }
+
+        {
           this.state.showSwipeModal ? (
             <ModalSwipeTree onSetSwipe={this.onSetSwipe} />
           ) : null
@@ -215,7 +243,6 @@ export default class GlobeMapShow extends React.Component {
               }>X</a>}>
                 <MapSwipe layersArray={this.state.swipeLayersArray} />
               </Card>
-
             </Affix>
           ) : null
         }
@@ -272,7 +299,7 @@ export default class GlobeMapShow extends React.Component {
                 style={{ overflow: 'hidden' }}
                 handleLoad={(map, view) => {
                   this.setState({ mapView: view });
-                  view.ui.remove('zoom');
+                  view.ui.remove(['zoom', 'attribution']);
                 }}
               />
             </Suspense>
