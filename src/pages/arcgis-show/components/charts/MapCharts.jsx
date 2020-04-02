@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DataSet from '@antv/data-set';
 import G2 from '@antv/g2';
-import { mapJson, geoCoordMap } from './xuzhouJSON.js';
+import { mapJson, geoCoordMap } from '../json/xuzhouJSON.js';
 
 
 class LayoutImg extends Component {
@@ -85,7 +85,8 @@ class LayoutImg extends Component {
                                     纬度:obj.lng,
                                     经度:obj.lat,
                                     位置:obj.location,
-                                    任务数: obj.count * 1
+                                    图斑数量: obj.count * 1,
+                                    图斑面积:obj.area*1
                                 }
                                 return objData;
                             }
@@ -95,11 +96,11 @@ class LayoutImg extends Component {
                         pointView.source(userData);
                         pointView.point()
                             .position('x*y')
-                            .size('任务数', [10, 20])
+                            .size('图斑数量', [10, 20])
                             .shape('circle')
                             .opacity(0.8)
                             .color('#FFFF28')
-                            .tooltip('位置*纬度*经度*任务数');
+                            .tooltip('位置*图斑数量*图斑面积');
 
                         chart.render();
                     // });

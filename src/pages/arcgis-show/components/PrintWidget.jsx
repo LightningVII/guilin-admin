@@ -1,6 +1,6 @@
 import React from 'react';
 import { loadModules } from 'esri-loader';
-import style from './style.css';
+import style from './css/style.css';
 
 let print=null;
 class PrintWidget extends React.Component {

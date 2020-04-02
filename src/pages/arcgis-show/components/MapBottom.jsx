@@ -3,15 +3,15 @@ import { debounce } from 'lodash'
 import { Card, Col, Row, Tooltip } from 'antd';
 import { loadModules } from 'esri-loader';
 import { EyeOutlined, GlobalOutlined } from '@ant-design/icons';
-import style from './style.css';
+import style from './css/style.css';
 
-import { baseMapList, labelMapList } from './baseMapList.js';
+import { baseMapList, labelMapList } from './json/baseMapList.js';
 
 let EsriWebTileLayer;
 class MapBottom extends React.Component {
   constructor(props) {
     super(props);
-    this.getXY = debounce(this.getXY, 0);// 防抖函数
+    this.getXY = debounce(this.getXY, 10);// 防抖函数
     // 设置 initial state
     this.state = {
       X: "117.1812",
@@ -29,17 +29,8 @@ class MapBottom extends React.Component {
       .then(([WebTileLayer]) => {
         EsriWebTileLayer = WebTileLayer;
 
-        // const scaleBar = new ScaleBar({
-        //   view: this.props.mapView,
-        //   unit: "metric" 
-        // });
-
-        // Add the widget to the bottom left corner of the view
-        // this.props.mapView.ui.add(scaleBar,'bottom-left');
-
         this.props.mapView.on('pointer-move', evt => {
           this.getXY(evt.x, evt.y);
-          // console.log(evt.x,evt.y)
         })
 
         this.props.mapView.watch('extent', ext => {
@@ -50,16 +41,17 @@ class MapBottom extends React.Component {
   }
 
   setToggleClass = item => {
+    const baseMap = this.props.mapView.map.basemap
     let togClass = style.baseMapText
 
-    switch (item.type) {
+    switch (item.class) {
       case "labelMap":
-        if (item.key === this.props.mapView.map.basemap.referenceLayers.items[0].id) {
+        if (item.id === baseMap.referenceLayers.items[0].id) {
           togClass = style.baseMapTextToggle
         }
         break;
       case "baseMap":
-        if (item.key === this.props.mapView.map.basemap.baseLayers.items[0].id) {
+        if (item.id === baseMap.baseLayers.items[0].id) {
           togClass = style.baseMapTextToggle
         }
         break;
@@ -71,30 +63,23 @@ class MapBottom extends React.Component {
   }
 
   changeBaseMap = item => {
-    switch (item.type) {
+    const baseMap = this.props.mapView.map.basemap
+    switch (item.class) {
       case 'baseMap':
         this.setState({
           baseMapTitle: item.title
         })
-        this.props.mapView.map.basemap.title = item.title;
-        this.props.mapView.map.basemap.baseLayers = [
-          new EsriWebTileLayer({
-            urlTemplate: item.urlTemplate,
-            subDomains: item.subDomains,
-            id: item.key
-          })
+        baseMap.title = item.title;
+        baseMap.baseLayers = [
+          new EsriWebTileLayer(item)
         ]
 
         break;
       case 'labelMap':
         this.setState({}); // 为了重新render
-        this.props.mapView.map.basemap.title = item.title;
-        this.props.mapView.map.basemap.referenceLayers = [
-          new EsriWebTileLayer({
-            urlTemplate: item.urlTemplate,
-            subDomains: item.subDomains,
-            id: item.key
-          })
+        baseMap.title = item.title;
+        baseMap.referenceLayers = [
+          new EsriWebTileLayer(item)
         ]
         break;
       default:
@@ -130,14 +115,14 @@ class MapBottom extends React.Component {
   render() {
     return (
       <>
-        <div style={{ textAlign: 'right', marginRight: 100 }}>
+        <div className={style.mapBottomText}>
           经度:<Tooltip placement="top" title='输入经纬度'><a>{this.state.X}</a> </Tooltip>&#12288;
           纬度:<Tooltip placement="top" title='输入经纬度'><a>{this.state.Y}</a></Tooltip> &#12288;
           比例尺:<a>1:{this.state.scale}</a>&#12288;
 
           级别:<Tooltip placement="top" title='设置级别'><a>{this.state.zoom}</a></Tooltip>&#12288;
           视域统计：<Tooltip placement="top" title='打开统计'><a onClick={() => { this.areaQuery() }}><EyeOutlined />&nbsp;</a></Tooltip>&#12288;
-          当前底图: <Tooltip placement="top" title='打开选项卡'><a onClick={() => this.showBaseMap()}><GlobalOutlined />&nbsp;{this.state.baseMapTitle}</a></Tooltip>
+          当前底图: <Tooltip placement="top" title='切换底图'><a onClick={() => this.showBaseMap()}><GlobalOutlined />&nbsp;{this.state.baseMapTitle}</a></Tooltip>
         </div>
 
         {this.state.showBaseMapCard ? (
@@ -164,7 +149,7 @@ class MapBottom extends React.Component {
               {labelMapList.map(item => (
                 <Col
                   span={8}
-                  key={item.key}
+                  key={item.id}
                   className={this.setToggleClass(item)}
                   onClick={() => {
                     this.changeBaseMap(item);
@@ -174,8 +159,6 @@ class MapBottom extends React.Component {
                     className={style.baseMapImg}
                     src={item.thumbnailUrl}
                     alt="Smiley face"
-                    width="42"
-                    height="42"
                   />
                   <div className={style.baseMapText}>{item.title}</div>
                 </Col>
@@ -189,7 +172,7 @@ class MapBottom extends React.Component {
               {baseMapList.map(item => (
                 <Col
                   span={8}
-                  key={item.key}
+                  key={item.id}
                   className={this.setToggleClass(item)}
                   onClick={() => {
                     this.changeBaseMap(item);
@@ -199,8 +182,6 @@ class MapBottom extends React.Component {
                     className={style.baseMapImg}
                     src={item.thumbnailUrl}
                     alt="Smiley face"
-                    width="42"
-                    height="42"
                   />
                   <div className={style.baseMapText}>{item.title}</div>
                 </Col>

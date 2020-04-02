@@ -3,7 +3,7 @@ import { loadModules } from 'esri-loader';
 import { message, Button } from 'antd';
 // import MyBasemap from './MyBasemap';
 import BaseMap from './BaseMap';
-import { infoTemplate } from './featureTemplate.js';
+import { infoTemplate } from './json/featureTemplate.js';
 
 let EsriSwipe;
 let EsriWebTileLayer;

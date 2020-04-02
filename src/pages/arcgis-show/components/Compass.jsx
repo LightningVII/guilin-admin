@@ -2,12 +2,12 @@ import React from 'react';
 import { debounce } from 'lodash';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
-import style from "./style.css";
+import style from "./css/style.css";
 
 class Compass extends React.Component {
     constructor(props) {
         super(props);
-        this.setRotateDegree = debounce(this.setRotateDegree, 50);// 防抖函数
+        this.setRotateDegree = debounce(this.setRotateDegree, 10);// 防抖函数
         // 设置 initial state
         this.state = {
             rotateDegree: 0

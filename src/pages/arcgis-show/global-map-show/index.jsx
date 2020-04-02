@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { ToolOutlined, InfoCircleOutlined, UserOutlined, SnippetsOutlined, UploadOutlined } from '@ant-design/icons';
-import { Row, Col, Affix, Menu, Button, Dropdown, Card, message } from 'antd';
+import { Row, Col, Affix, Menu, Button, Dropdown, Card, message, Drawer } from 'antd';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
 import BaseMap from '../components/BaseMap';
@@ -16,6 +16,7 @@ import MapBottom from '../components/MapBottom';
 import Print from '../components/PrintWidget';
 import BookMark from '../components/BookMark';
 import ImportGeo from '../components/ImportGeo';
+import GISStastic from '../components/GISStastic'
 
 
 import style from './style.css';
@@ -34,6 +35,7 @@ export default class GlobeMapShow extends React.Component {
       showSwipeModal: false, // Swipe Model选择框
       showBookMark: false, // 显示书签
       showImportGeo: false, // 显示导入
+      showTJCard: false,// 显示右侧统计任务面板
       renderCompare: false, // Compare 内容框
       compareLayersArray: [], // Compare选择的图层列表
       showCompareModal: false, // Compare Model选择框
@@ -81,6 +83,11 @@ export default class GlobeMapShow extends React.Component {
           showImportGeo: !prevState.showImportGeo
         }));
         break;
+      case 'tj':
+        this.setState(prevState => ({
+          showTJCard: !prevState.showTJCard
+        }));
+        break;
       default:
         break;
     }
@@ -122,14 +129,14 @@ export default class GlobeMapShow extends React.Component {
   };
 
   render() {
-   
+
     return (
       <>
         <Affix className={style.menu} offsetTop={80}>
-          <Button.Group>
+          <Button.Group className={style.menuGroup}>
             <Dropdown overlay={
-              <Menu style={{fontSize:16}} onClick={this.handleMenuClick}>
-                <Menu.Item  key="cl" >
+              <Menu style={{ fontSize: 16 }} onClick={this.handleMenuClick}>
+                <Menu.Item key="cl" >
                   <UserOutlined />
                   测量
                </Menu.Item>
@@ -151,7 +158,7 @@ export default class GlobeMapShow extends React.Component {
                </Menu.Item>
               </Menu>
             } >
-              <Button  style={{fontSize:16}}><ToolOutlined />常用</Button>
+              <Button style={{ fontSize: 16 }}><ToolOutlined />常用</Button>
             </Dropdown>
             <Dropdown
               overlay={
@@ -167,7 +174,7 @@ export default class GlobeMapShow extends React.Component {
                 </Menu>
               }
             >
-              <Button style={{fontSize:16}}><InfoCircleOutlined />查询</Button>
+              <Button style={{ fontSize: 16 }}><InfoCircleOutlined />查询</Button>
             </Dropdown>
             <Dropdown
               overlay={
@@ -180,14 +187,14 @@ export default class GlobeMapShow extends React.Component {
                     <UserOutlined />
                     多屏
                   </Menu.Item>
-                  <Menu.Item key="dp">
+                  <Menu.Item key="tj">
                     <UserOutlined />
                     统计
                   </Menu.Item>
                 </Menu>
               }
             >
-              <Button style={{fontSize:16}}><SnippetsOutlined />分析</Button>
+              <Button style={{ fontSize: 16 }}><SnippetsOutlined />分析</Button>
             </Dropdown>
           </Button.Group>
         </Affix>
@@ -289,7 +296,33 @@ export default class GlobeMapShow extends React.Component {
         ) : null}
 
 
-        {this.state.showCompareModal ? <ModalCompareTree onSetCompare={this.onSetCompare} /> : null}
+        {this.state.showCompareModal ?
+          <ModalCompareTree onSetCompare={this.onSetCompare}
+          /> : null
+        }
+
+        {
+          this.state.showTJCard ? (
+            <div>
+              <Drawer
+                title="统计分析"
+                placement="right"
+                mask={false}
+                onClose={() => {
+                  this.setState({
+                    showTJCard: false
+                  })
+                }}
+                visible
+                width={320}
+                className={style.tjCard}
+              >
+                <GISStastic view={this.state.mapView} />
+              </Drawer>
+            </div>
+
+          ) : null
+        }
 
         <Row style={{ margin: '-24px' }}  >
           <Col span={24}>
@@ -301,6 +334,9 @@ export default class GlobeMapShow extends React.Component {
                   this.setState({ mapView: view });
                   view.ui.remove(['zoom', 'attribution']);
                 }}
+                child={
+                  <div id='container'/>
+                }
               />
             </Suspense>
           </Col>

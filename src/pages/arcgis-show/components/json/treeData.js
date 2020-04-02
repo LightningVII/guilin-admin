@@ -8,7 +8,7 @@ export const treeData = [
         title: '2020年1月',
         key: '0-0-1',
         loadType: 'tile',
-        layerdate:'202001',
+        layerdate: '202001',
         layerUrl:
           'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201805/MapServer/tile/{level}/{row}/{col}',
       },
@@ -16,7 +16,7 @@ export const treeData = [
         title: '2020年2月',
         key: '0-0-2',
         loadType: 'tile',
-        layerdate:'202002',
+        layerdate: '202002',
         layerUrl:
           'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201809/MapServer/tile/{level}/{row}/{col}',
       },
@@ -24,7 +24,7 @@ export const treeData = [
         title: '2020年3月',
         key: '0-0-3',
         loadType: 'tile',
-        layerdate:'202003',
+        layerdate: '202003',
         layerUrl:
           'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201810/MapServer/tile/{level}/{row}/{col}',
       },
@@ -32,7 +32,7 @@ export const treeData = [
         title: '2020年4月',
         key: '0-0-4',
         loadType: 'tile',
-        layerdate:'202004',
+        layerdate: '202004',
         layerUrl:
           'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}',
       }
@@ -47,32 +47,32 @@ export const treeData = [
         title: '2020年第1期',
         key: '0-1-0',
         loadType: 'feature',
-        qsx:'202001',
-        hsx:'202002',
+        qsx: '202001',
+        hsx: '202002',
         layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0',
       },
       {
         title: '2020年第2期',
         key: '0-1-1',
         loadType: 'feature',
-        qsx:'202002',
-        hsx:'202003',
+        qsx: '202002',
+        hsx: '202003',
         layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0',
       },
       {
         title: '2020年第3期',
         key: '0-1-2',
         loadType: 'feature',
-        qsx:'202003',
-        hsx:'202004',
+        qsx: '202003',
+        hsx: '202004',
         layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0',
       },
       {
         title: '2020年第4期',
         key: '0-1-3',
         loadType: 'feature',
-        qsx:'202004',
-        hsx:'202005',
+        qsx: '202004',
+        hsx: '202005',
         layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0',
       }
     ],
@@ -86,13 +86,28 @@ export const treeData = [
         title: '行政区划',
         key: '0-3-0',
         loadType: 'feature',
-        layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/Grid/MS_SL_Grid_city/MapServer/0',
+        layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/BaseData/MS_SL_BaseData_city/MapServer/0',
       },
     ],
   },
 ];
 
 
-export const geo =[
-  
+export const geo = [
+
 ]
+
+export const xzqFeature = {
+  title: '行政区划',
+  key: '0-3-0',
+  loadType: 'feature',
+  layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/BaseData/MS_SL_BaseData_city/MapServer/0',
+  extent: {
+    type: "extent",
+    xmax: 13202946.955927227,
+    xmin: 12964310.553620815,
+    ymax: 4139148.3735984867,
+    ymin: 4016696.2542855875,
+    spatialReference: { wkid: 102100 }
+  }
+}

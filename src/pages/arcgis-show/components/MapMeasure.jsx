@@ -2,7 +2,7 @@ import React from 'react';
 import { MinusOutlined, BorderOutlined, DeleteOutlined } from '@ant-design/icons';
 import { loadModules } from 'esri-loader';
 import { Button, Divider } from 'antd';
-import style from './style.css';
+import style from './css/style.css';
 
 let EsriDistanceMesurement;
 let EsriAreaMeasurement;

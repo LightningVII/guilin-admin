@@ -2,7 +2,7 @@
   width: 184px;
   height: 184px;
   border-radius: 50%;
-  background: url(../../../../public/compass/ctb.png) -44px -60px no-repeat;
+  background: url(../../../../../public/compass/ctb.png) -44px -60px no-repeat;
 }
 
 .compassClockStyle {
@@ -12,9 +12,9 @@
   top: 92px;
   left: 92px;
   margin: -48px;
-  z-index: 0;
+  z-index: 0; 
   cursor: pointer;
-  background: url(../../../../public/compass/ctb.png) -462px -52px no-repeat;
+  background: url(../../../../../public/compass/ctb.png) -462px -52px no-repeat;
 }
 
 .compassRotateLeft {
@@ -25,11 +25,11 @@
   left: 4px;
   z-index: 0;
   cursor: pointer;
-  background: url(../../../../public/compass/ctb.png) -603px -154px no-repeat;
+  background: url(../../../../../public/compass/ctb.png) -603px -154px no-repeat;
 }
 
 .compassRotateLeft:hover {
-  background: url(../../../../public/compass/ctb.png) -557px -153px no-repeat;
+  background: url(../../../../../public/compass/ctb.png) -557px -153px no-repeat;
 }
 
 .compassRotateRight {
@@ -41,11 +41,11 @@
   left: 134px;
   transform: rotateY(180deg);
   cursor: pointer;
-  background: url(../../../../public/compass/ctb.png) -603px -154px no-repeat;
+  background: url(../../../../../public/compass/ctb.png) -603px -154px no-repeat;
 }
 
 .compassRotateRight:hover {
-  background: url(../../../../public/compass/ctb.png) -557px -153px no-repeat;
+  background: url(../../../../../public/compass/ctb.png) -557px -153px no-repeat;
 }
 
 .compassPointerStyle {
@@ -55,7 +55,7 @@
   left: 18px;
   border: none;
   z-index: 2;
-  background: url(../../../../public/compass/ctb.png) -562px -52px no-repeat;
+  background: url(../../../../../public/compass/ctb.png) -562px -52px no-repeat;
 }
 
 .zoomStyle {
@@ -103,7 +103,7 @@
 
 .search {
   width: 300px;
-  box-shadow: 1px 1px 0.5px #888888
+  box-shadow: 1px 1px 0.5px #888888;
 }
 
 .searchList {
@@ -121,58 +121,82 @@
   height: 290px;
 }
 
-.baseMapCol{
+.baseMapCol {
   cursor: pointer;
 }
 
-.baseMapImg{
-  width: 90px;
+.baseMapImg {
+  width: 100%;
   height: 60px;
   background-size: cover;
   text-align: center;
 }
 
-.baseMapText{
+.baseMapText {
   font-size: 12px;
   text-align: center;
   cursor: pointer;
 }
 
-.baseMapTextToggle{
-  font-size: 12px;
+.baseMapText:hover {
+  color: black;
+  background-color:#ddd;
+}
+
+.baseMapTextToggle {
+  color: #0082fc;
+  background-color:white;
   text-align: center;
-  color: #1890ff;
   cursor: pointer;
 }
 
-.baseMapTitle{
+.baseMapTitle {
   font-size: 14px;
   margin: 4px 12px;
-
 }
 
-.bookMark{
+.bookMark {
   position: absolute;
   z-index: 9;
   top: 20px;
   right: 280px;
 }
 
-.print{
+.print {
   position: absolute;
   z-index: 9;
   top: 60px;
   right: 20px;
 }
 
-.areaQuery{
+.areaQuery {
   position: absolute;
   bottom: 28px;
   left: 20px;
   padding: 4px 12px;
   width: 300px;
-  background-color: rgba(74,144,226,0.8);
-  color: rgb(255,255,255);
-  box-shadow: 2px 2px 1px rgb(34,104,186)
+  background-color: rgba(74, 144, 226, 0.8);
+  color: rgb(255, 255, 255);
+  box-shadow: 2px 2px 1px rgb(34, 104, 186);
 }
 
+.loadingInfo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 16;
+}
+
+.mapBottomText {
+  text-align: right;
+  margin-right: 100px;
+  text-shadow: 1px 1px 1px #ddd;
+}
+
+.chart{
+  position: absolute;
+  top:120px;
+  left:140px;
+  width: 100px;
+  height: 100px;
+}

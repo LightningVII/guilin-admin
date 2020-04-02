@@ -1,40 +1,29 @@
 import React from 'react';
 import { loadModules } from 'esri-loader';
-
-const token = 'f976ce9b5e5a48f5f4753c52b37bd0b8';
+import { baseMapList, labelMapList } from './json/baseMapList'
+import style from './css/style.css'
 
 export default class BaseMap extends React.Component {
     constructor(props) {
         super(props);
         this.mapRef = React.createRef();
         this.state = {
-            height: this.props.height || '100vh'
+            height: this.props.height || '100vh',
+            loadStatus: 'visible',
+            loadInfo: '地图加载中...'
         }
     }
 
     componentDidMount() {
         loadModules(['esri/Map', 'esri/views/MapView', 'esri/layers/WebTileLayer', 'esri/Basemap'], { css: true })
             .then(([ArcGISMap, MapView, WebTileLayer, Basemap]) => {
-                const tiandituLabelLayer = new WebTileLayer({
-                    urlTemplate: `http://t{subDomain}.tianditu.com/cva_w/wmts?layer=cva&style=default&tilematrixset=w&Service=WMTS&Request=GetTile&Version=1.0.0&Format=&TileMatrix={level}&TileCol={col}&TileRow={row}&tk=${token}`,
-                    subDomains: [0, 1, 2, 3],
-                    id: 'tdtLabelStreet',
-                    visible: true,
-                    listMode: 'hide',
-                });
-
-                const tiandituLayerVec = new WebTileLayer({
-                    urlTemplate: `http://t{subDomain}.tianditu.com/vec_w/wmts?layer=vec&style=default&tilematrixset=w&Service=WMTS&Request=GetTile&Version=1.0.0&Format=&TileMatrix={level}&TileCol={col}&TileRow={row}&tk=${token}`,
-                    subDomains: [1, 2, 3, 4, 5, 6],
-                    id: 'tiandituLayer_vec'
-                });
 
                 this.argmap = new ArcGISMap({
                     basemap: new Basemap({
-                        baseLayers: [tiandituLayerVec],
-                        referenceLayers: [tiandituLabelLayer],
-                        title: '天地图街道图',
-                        thumbnailUrl: `http://t1.tianditu.com/DataServer?T=img_w&x=13&y=6&l=4&tk=${token}`,
+                        baseLayers: [new WebTileLayer(baseMapList[0])],
+                        referenceLayers: [new WebTileLayer(labelMapList[0])],
+                        title: baseMapList[0].title,
+                        thumbnailUrl: baseMapList[0].thumbnailUrl,
                     })
                 });
 
@@ -45,7 +34,18 @@ export default class BaseMap extends React.Component {
                     zoom: 13,
                 });
 
-                this.props.handleLoad(this.argmap, this.view);
+                this.view.when(() => {
+                    this.setState({
+                        loadStatus: 'hidden',
+                        loadInfo: '加载成功'
+                    })
+                    this.props.handleLoad(this.argmap, this.view);
+                }, error => {
+                    this.setState({
+                        loadStatus: 'visible',
+                        loadInfo: error
+                    })
+                })
             });
     }
 
@@ -61,7 +61,13 @@ export default class BaseMap extends React.Component {
                 ref={this.mapRef}
                 style={{ height: this.state.height }}
             >
-                {this.state.children}
+                <b
+                    className={style.loadingInfo}
+                    style={{
+                        visibility: this.state.loadStatus
+                    }}
+                >{this.state.loadInfo}</b>
+                {this.props.child}
             </div>
         );
     }

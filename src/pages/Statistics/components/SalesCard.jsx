@@ -4,7 +4,7 @@ import React from 'react';
 import styles from '../style.less';
 // import MyBasemap from '../../arcgis-show/components/MyBasemap';
 // import MyFeatureLayer from '../../arcgis-show/components/MyFeatureLayer';
-import MapCharts from '../../arcgis-show/components/MapCharts';
+import MapCharts from '../../arcgis-show/components/charts/MapCharts';
 
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;

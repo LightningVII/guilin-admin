@@ -5,8 +5,8 @@ import { Row, Col, Button } from 'antd';
 // import MyBasemap from './MyBasemap';
 import BaseMap from './BaseMap';
 // import BermudaTriangle from './BermudaTriangle';
-import {bhtblLineSymbol} from './lineSymbol'
-import {infoTemplate} from './featureTemplate'
+import {bhtblLineSymbol} from './json/lineSymbol'
+import {infoTemplate} from './json/featureTemplate'
 
 
 

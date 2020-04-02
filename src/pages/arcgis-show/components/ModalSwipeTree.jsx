@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Tree } from 'antd';
-import { treeData } from './treeData.js';
+import { treeData } from './json/treeData.js';
 
 
 class ModalSwipeTree extends React.Component {

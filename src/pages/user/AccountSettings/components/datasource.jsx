@@ -4,7 +4,7 @@ import { UploadOutlined, ExclamationCircleOutlined, FolderAddOutlined, FileAddOu
 import moment from 'moment';
 import { connect } from 'dva';
 
-import { treeData } from '../../../arcgis-show/components/treeData';
+import { treeData } from '../../../arcgis-show/components/json/treeData';
 
 const props = {
     name: 'file',
@@ -81,10 +81,10 @@ class DatasourceView extends React.Component {
                     render: record => (
                         (record.loadType === 'parent' ? <span>
                             <a onClick={() => this.add(record)} style={{ marginRight: 16 }}><Tooltip placement="top" title="添加"><FileAddOutlined /></Tooltip></a>
-                            <a onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined /></Tooltip></a>
+                            <a style={{color:'red'}} onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined/></Tooltip></a>
                         </span> : <span>
                                 <a onClick={() => this.update(record)} style={{ marginRight: 16 }}><Tooltip placement="top" title='修改'><EditOutlined /></Tooltip></a>
-                                <a onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined /></Tooltip></a>
+                                <a style={{color:'red'}} onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined /></Tooltip></a>
                             </span>)
                     ),
                 }

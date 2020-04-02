@@ -1,7 +1,7 @@
 import React from 'react';
 import { loadModules } from 'esri-loader';
 
-import style from './style.css';
+import style from './css/style.css';
 
 let bookMark=null;
 

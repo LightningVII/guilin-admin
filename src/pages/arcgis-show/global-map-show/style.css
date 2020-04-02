@@ -5,6 +5,10 @@
   z-index: 9;
 }
 
+.menuGroup {
+  box-shadow: 1px 1px 0.5px #888888;
+}
+
 .search {
   position: fixed;
   top: 80px;
@@ -60,4 +64,10 @@
   top: 12px;
   right: 12px;
   z-index: 99;
+}
+
+.tjCard {
+  position: absolute;
+  top: 120px;
+  height: calc(100vh - 150px);
 }

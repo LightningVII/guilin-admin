@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { loadModules } from 'esri-loader';
-import { infoTemplate } from './featureTemplate.js';
-import { polylineSymbol } from './lineSymbol.js'
+import { infoTemplate } from './json/featureTemplate.js';
+import { polylineSymbol } from './json/lineSymbol.js'
 
 const MyFeatureLayer = props => {
   const [featureLayer, setFeatureLayer] = useState(null);

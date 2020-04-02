@@ -1,17 +1,16 @@
 import React from 'react';
 import { debounce } from 'lodash';
 import { UnorderedListOutlined } from '@ant-design/icons';
-import { Input, Tree, Tooltip, List, Typography } from 'antd';
+import { Input, Tree, Tooltip, List, Typography,Empty  } from 'antd';
 import { loadModules } from 'esri-loader';
 import { connect } from 'dva';
 // import router from 'umi/router';
 
-import { treeData } from './treeData.js';
-import { template } from './featureTemplate.js';
-import style from './style.css';
+import { treeData } from './json/treeData.js';
+import { template } from './json/featureTemplate.js';
+import style from './css/style.css';
 
 const { Search } = Input;
-const { TreeNode } = Tree;
 let EsriFeatureLayer;
 let EsriWebTileLayer;
 let flag = false;
@@ -30,7 +29,7 @@ class SearchGIS extends React.Component {
   constructor(props) {
     super(props);
     // const { dispatch, fuzzyChangespot } = props;
-    this.inputValChange = debounce(this.inputValChange, 100);
+    this.inputValChange = debounce(this.inputValChange, 10);
     // 设置 initial state
     this.state = {
       isToggleOn: true,
@@ -38,7 +37,7 @@ class SearchGIS extends React.Component {
       paddingTop: 0,
       searchPanelVisiable: 'hidden',
       searchData: [],
-      treeDatas: treeData,
+      treeDatas: null,
     };
   }
 
@@ -54,14 +53,14 @@ class SearchGIS extends React.Component {
         const { dispatch } = this.props;
 
         // 图层数据
-        // dispatch({
-        //   type: 'layer/fetchLayerTree'
-        // }).then(tree => {
-        //   this.setState({
-        //     treeDatas: tree,
-        //   });
-        //   console.log(tree)
-        // });
+        dispatch({
+          type: 'layer/fetchLayerTree'
+        }).then(tree => {
+          this.setState({
+            treeDatas: tree||treeData,
+          });
+          console.log(tree)
+        });
 
       },
     );
@@ -116,12 +115,13 @@ class SearchGIS extends React.Component {
   };
 
   inputValChange = value => {
+
     const { dispatch, fuzzyChangespot } = this.props;
     this.setState(
       {
         isToggleOn: false,
         height: 0,
-        paddingTop:0,
+        paddingTop: 0,
         searchPanelVisiable: 'visible',
         searchData: [],
       },
@@ -129,16 +129,6 @@ class SearchGIS extends React.Component {
         const str = value.replace(/\s*/g, '');
         const temp = [];
         if (str !== '') {
-
-          const obj2 = {};
-          obj2.BATCH = '2020年第一期';
-          obj2.COUNTY = '沛县';
-          obj2.LOCATION = '沛县';
-          obj2.TBBM = 'Y18103231071N02';
-          temp.push(obj2);
-          this.setState({
-            searchData: temp,
-          });
           dispatch({
             type: 'remoteSensing/fetchChangespotFuzzyQuery',
             payload: { term: str },
@@ -209,24 +199,14 @@ class SearchGIS extends React.Component {
 
   };
 
-  renderTreeNodes = data =>
-    data.map(item => {
-      if (item.children) {
-        return (
-          <TreeNode title={item.title} key={item.key} dataRef={item}>
-            {this.renderTreeNodes(item.children)}
-          </TreeNode>
-        );
-      }
-      return <TreeNode key={item.key} {...item} />;
-    });
-
   render() {
     return (
       <>
         <Search
           placeholder="输入查询关键字..."
           onChange={this.handleInputSearch}
+          onPressEnter={this.handleInputSearch}
+          onSearch={ this.inputValChange}
           onClick={this.handleClick}
           className={style.search}
           allowClear
@@ -258,26 +238,31 @@ class SearchGIS extends React.Component {
         <div style={{
           width: 300,
           overflow: 'hidden',
-          overflowY:'auto',
+          overflowY: 'auto',
+          height: this.state.height,
+          transition: '.3s all ease-in',
           paddingTop: this.state.paddingTop,
           backgroundColor: 'white',
           boxShadow: '2px 2px 1px #888888'
         }}>
 
-          <Tree
-            checkable
-            showLine
-            onCheck={this.onCheck}
-            treeData={this.state.treeDatas}
-            defaultExpandAll
-            style={{
-              background: '#FFF',
-              height: this.state.height,
-              transition: '.3s all ease-in',
-              paddingLeft: 12,
-              fontSize: 16
-            }}
-          />
+          {
+            this.state.treeDatas ? (
+              <Tree
+                checkable
+                showLine
+                onCheck={this.onCheck}
+                treeData={this.state.treeDatas}
+                defaultExpandAll
+                style={{
+                  background: '#FFF',
+                  paddingLeft: 12,
+                  fontSize: 16
+                }}
+              />
+
+            ) : (<Empty/>)
+          }
 
         </div>
       </>
