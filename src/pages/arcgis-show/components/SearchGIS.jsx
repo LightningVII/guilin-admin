@@ -37,7 +37,7 @@ class SearchGIS extends React.Component {
       paddingTop: 0,
       searchPanelVisiable: 'hidden',
       searchData: [],
-      treeDatas: null,
+      treeDatas: treeData,
     };
   }
 
@@ -53,14 +53,14 @@ class SearchGIS extends React.Component {
         const { dispatch } = this.props;
 
         // 图层数据
-        dispatch({
-          type: 'layer/fetchLayerTree'
-        }).then(tree => {
-          this.setState({
-            treeDatas: tree||treeData,
-          });
-          console.log(tree)
-        });
+        // dispatch({
+        //   type: 'layer/fetchLayerTree'
+        // }).then(tree => {
+        //   this.setState({
+        //     treeDatas: tree||treeData,
+        //   });
+        //   console.log(tree)
+        // });
 
       },
     );

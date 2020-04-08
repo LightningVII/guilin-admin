@@ -195,8 +195,5 @@
 
 .chart{
   position: absolute;
-  top:120px;
-  left:140px;
-  width: 100px;
-  height: 100px;
+  width: 40px
 }

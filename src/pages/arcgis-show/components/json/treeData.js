@@ -104,10 +104,10 @@ export const xzqFeature = {
   layerUrl: 'http://218.3.176.6:6080/arcgis/rest/services/BaseData/MS_SL_BaseData_city/MapServer/0',
   extent: {
     type: "extent",
-    xmax: 13202946.955927227,
-    xmin: 12964310.553620815,
-    ymax: 4139148.3735984867,
-    ymin: 4016696.2542855875,
+    xmax: 13378262.686815985,
+    xmin: 12900989.882203575,
+    ymax: 4213152.162529322,
+    ymin: 3968247.923903736,
     spatialReference: { wkid: 102100 }
   }
 }

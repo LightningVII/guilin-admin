@@ -84,72 +84,55 @@ export const geoCoordMap = [{
 
 ];
 
-export const renderData = [{
-    "name": "丰县",
-    "location": "徐州市丰县",
-    "lng": "116.57",
-    "lat": "34.70",
-    "count": "20",
-    'area': '20'
-},
-{
-    "name": "沛县",
-    "location": "徐州市沛县",
-    "lng": "116.90",
-    "lat": "34.75",
-    "count": "14",
-    'area': '20'
-},
-{
-    "name": "铜山区",
-    "location": "徐州市铜山区",
-    "lng": "117.5",
-    "lat": "34.2",
-    "count": "18",
-    'area': '20'
-}
+export const renderData = [
+    {
+        "AREA": 118.73458242,
+        "BHLXNUM": 3,
+        "LNG": "117.17",
+        "TASKNUM": 7,
+        "LAT": "34.18",
+        "COUNTY": "铜山区"
+    }, 
+    {
+        "AREA": 403.74187747,
+        "BHLXNUM": 9,
+        "LNG": "116.93",
+        "TASKNUM": 15,
+        "LAT": "34.73",
+        "COUNTY": "沛县"
+    }, 
+    {
+        "AREA": 703.74187747,
+        "BHLXNUM": 6,
+        "LNG": "116.57",
+        "TASKNUM": 35,
+        "LAT": "34.70",
+        "COUNTY": "丰县"
+    },
+    {
+        "AREA": 203.74187747,
+        "BHLXNUM": 5,
+        "LNG": "117.4580",
+        "TASKNUM": 23,
+        "LAT": "34.4110",
+        "COUNTY": "贾汪区"
+    }
     ,
-{
-    "name": "贾汪区",
-    "location": "徐州市贾汪区",
-    "lng": "117.45",
-    "lat": "34.34",
-    "count": "23",
-    'area': '20'
-},
-{
-    "name": "邳州市",
-    "location": "徐州市邳州市",
-    "lng": "117.95",
-    "lat": "34.32",
-    "count": "43",
-    'area': '20'
-},
-{
-    "name": "市区",
-    "location": "徐州市区",
-    "lng": "117.22",
-    "lat": "34.25",
-    "count": "19",
-    'area': '20'
-}
-    ,
-{
-    "name": "新沂市",
-    "location": "徐州市新沂市",
-    "lng": "118.35",
-    "lat": "34.38",
-    "count": "19",
-    'area': '20'
-}
-    ,
-{
-    "name": "睢宁县",
-    "location": "徐州市睢宁县",
-    "lng": "117.95",
-    "lat": "33.9",
-    "count": "19",
-    'area': '20'
-}
+    {
+        "AREA": 345.79868,
+        "BHLXNUM": 12,
+        "LNG": "118.0021",
+        "TASKNUM": 25,
+        "LAT": "34.3426",
+        "COUNTY": "邳州市"
+    },
+    {
+        "AREA": 121.79868,
+        "BHLXNUM": 14,
+        "LNG": "117.9295",
+        "TASKNUM": 6,
+        "LAT": "33.9132",
+        "COUNTY": "睢宁县"
+    }
 ];
 

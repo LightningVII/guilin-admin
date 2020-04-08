@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { ToolOutlined, InfoCircleOutlined, UserOutlined, SnippetsOutlined, UploadOutlined } from '@ant-design/icons';
-import { Row, Col, Affix, Menu, Button, Dropdown, Card, message, Drawer } from 'antd';
+import { Row, Col, Affix, Menu, Button, Dropdown, Card, message } from 'antd';
 // import { Map } from '@esri/react-arcgis';
 // import { WebMapView } from './BaseMap';
 import BaseMap from '../components/BaseMap';
@@ -17,6 +17,7 @@ import Print from '../components/PrintWidget';
 import BookMark from '../components/BookMark';
 import ImportGeo from '../components/ImportGeo';
 import GISStastic from '../components/GISStastic'
+import CircleSelect from '../components/CircleSelect'
 
 
 import style from './style.css';
@@ -36,6 +37,7 @@ export default class GlobeMapShow extends React.Component {
       showBookMark: false, // 显示书签
       showImportGeo: false, // 显示导入
       showTJCard: false,// 显示右侧统计任务面板
+      showCircleSelect: false,// 显示框选查询
       renderCompare: false, // Compare 内容框
       compareLayersArray: [], // Compare选择的图层列表
       showCompareModal: false, // Compare Model选择框
@@ -86,6 +88,11 @@ export default class GlobeMapShow extends React.Component {
       case 'tj':
         this.setState(prevState => ({
           showTJCard: !prevState.showTJCard
+        }));
+        break;
+      case 'kx':
+        this.setState(prevState => ({
+          showCircleSelect: !prevState.showCircleSelect
         }));
         break;
       default:
@@ -167,7 +174,7 @@ export default class GlobeMapShow extends React.Component {
                     <UserOutlined />
                     点选
                   </Menu.Item>
-                  <Menu.Item key="qx">
+                  <Menu.Item key="kx">
                     <UserOutlined />
                     框选
                   </Menu.Item>
@@ -289,39 +296,47 @@ export default class GlobeMapShow extends React.Component {
         }
 
 
-        {this.state.mapView ? (
-          <div className={style.search}>
-            <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
-          </div>
-        ) : null}
+        {
+          this.state.mapView ? (
+            <div className={style.search}>
+              <SearchGIS addFeature={this.addFeature2Cmp} view={this.state.mapView} />
+            </div>
+          ) : null
+        }
 
 
-        {this.state.showCompareModal ?
-          <ModalCompareTree onSetCompare={this.onSetCompare}
-          /> : null
+        {
+          this.state.showCompareModal ?
+            <ModalCompareTree onSetCompare={this.onSetCompare}
+            /> : null
         }
 
         {
           this.state.showTJCard ? (
-            <div>
-              <Drawer
-                title="统计分析"
-                placement="right"
-                mask={false}
-                onClose={() => {
-                  this.setState({
-                    showTJCard: false
-                  })
-                }}
-                visible
-                width={320}
-                className={style.tjCard}
-              >
-                <GISStastic view={this.state.mapView} />
-              </Drawer>
-            </div>
-
+            <GISStastic
+              visible={this.state.showTJCard}
+              view={this.state.mapView}
+              onClose={() => {
+                this.setState({
+                  showTJCard: false
+                })
+              }}
+            />
           ) : null
+        }
+
+
+        {
+          this.state.showCircleSelect ? (
+            <CircleSelect
+              visible={this.state.showCircleSelect}
+              view={this.state.mapView}
+              onClose={() => {
+                this.setState({
+                  showCircleSelect: false
+                })
+              }}
+            />) : null
         }
 
         <Row style={{ margin: '-24px' }}  >
@@ -335,7 +350,7 @@ export default class GlobeMapShow extends React.Component {
                   view.ui.remove(['zoom', 'attribution']);
                 }}
                 child={
-                  <div id='container'/>
+                  <div id='container' />
                 }
               />
             </Suspense>

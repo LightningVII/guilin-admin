@@ -73,7 +73,7 @@ class MapBottom extends React.Component {
         baseMap.baseLayers = [
           new EsriWebTileLayer(item)
         ]
-
+        localStorage.setItem('baseMap',JSON.stringify(item))
         break;
       case 'labelMap':
         this.setState({}); // 为了重新render
@@ -81,11 +81,14 @@ class MapBottom extends React.Component {
         baseMap.referenceLayers = [
           new EsriWebTileLayer(item)
         ]
+        localStorage.setItem('labelMap',JSON.stringify(item))
         break;
       default:
 
         break;
     }
+
+   
   }
 
 

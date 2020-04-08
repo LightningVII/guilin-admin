@@ -69,5 +69,6 @@
 .tjCard {
   position: absolute;
   top: 120px;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 180px);
 }
+

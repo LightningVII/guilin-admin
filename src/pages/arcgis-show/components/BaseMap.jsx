@@ -18,12 +18,22 @@ export default class BaseMap extends React.Component {
         loadModules(['esri/Map', 'esri/views/MapView', 'esri/layers/WebTileLayer', 'esri/Basemap'], { css: true })
             .then(([ArcGISMap, MapView, WebTileLayer, Basemap]) => {
 
+
+                let bm = localStorage.getItem('baseMap');
+                let lm = localStorage.getItem('labelMap');
+                let mapTitle = baseMapList[0].title;
+                if (bm) {
+                    bm = JSON.parse(bm)
+                    mapTitle=bm.title
+                }
+                if (lm) {
+                    lm = JSON.parse(lm)
+                }
                 this.argmap = new ArcGISMap({
                     basemap: new Basemap({
-                        baseLayers: [new WebTileLayer(baseMapList[0])],
-                        referenceLayers: [new WebTileLayer(labelMapList[0])],
-                        title: baseMapList[0].title,
-                        thumbnailUrl: baseMapList[0].thumbnailUrl,
+                        baseLayers: [new WebTileLayer(bm || baseMapList[0])],
+                        referenceLayers: [new WebTileLayer(lm || labelMapList[0])],
+                        title: mapTitle
                     })
                 });
 
