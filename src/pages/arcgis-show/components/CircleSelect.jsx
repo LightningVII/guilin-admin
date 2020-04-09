@@ -8,6 +8,7 @@ let EsriGraphic = null;
 let EsriPolygon = null;
 let EsriQuery = null;
 
+let draw = null;
 let bhlxArrays = [];
 
 
@@ -121,7 +122,7 @@ class CicleSelect extends React.Component {
 
     redraw = () => {
         const mapView = this.props.view;
-        const draw = new EsriDraw({
+        draw = new EsriDraw({
             view: this.props.view
         });
         mapView.graphics.removeAll();
@@ -141,6 +142,7 @@ class CicleSelect extends React.Component {
                 onClose={() => {
                     this.props.view.graphics.removeAll();
                     this.props.onClose()
+
                 }}
                 visible={this.state.visible}
                 height='180px'
@@ -162,9 +164,6 @@ class CicleSelect extends React.Component {
 
                 <EditOutlined
                     onClick={() => {
-                        this.setState({
-                            visible: false
-                        })
                         this.redraw()
                     }}
                     style={{ position: "absolute", top: 20, right: 60, cursor: 'pointer' }} />

@@ -8,10 +8,14 @@ import style from './css/style.css';
 import { baseMapList, labelMapList } from './json/baseMapList.js';
 
 let EsriWebTileLayer;
+let EsriQuery;
+let bhlxArrays = [];
+
 class MapBottom extends React.Component {
   constructor(props) {
     super(props);
     this.getXY = debounce(this.getXY, 10);// 防抖函数
+    this.query = debounce(this.query, 100);// 防抖函数
     // 设置 initial state
     this.state = {
       X: "117.1812",
@@ -20,22 +24,25 @@ class MapBottom extends React.Component {
       scale: '10000',
       baseMapTitle: this.props.mapView.map.basemap.title,
       showBaseMapCard: false, // 是否显示切换底图Card
-      showAreaQuery: false
+      showAreaQuery: false,
+      sumArea: 0,
+      bhtbCount: 0,
+      bhlxArray: []
     };
   }
 
   componentDidMount() {
-    loadModules(['esri/layers/WebTileLayer'])
-      .then(([WebTileLayer]) => {
+    loadModules(['esri/layers/WebTileLayer', "esri/tasks/support/Query"])
+      .then(([WebTileLayer, Query]) => {
         EsriWebTileLayer = WebTileLayer;
-
+        EsriQuery = Query;
         this.props.mapView.on('pointer-move', evt => {
           this.getXY(evt.x, evt.y);
         })
 
         this.props.mapView.watch('extent', ext => {
-          if (ext)
-            this.getXY(ext.center.longitude, ext.center.latitude);
+          if (ext) this.getXY(ext.center.longitude, ext.center.latitude);
+          if (this.state.showAreaQuery) this.query(ext)
         })
       })
   }
@@ -73,7 +80,7 @@ class MapBottom extends React.Component {
         baseMap.baseLayers = [
           new EsriWebTileLayer(item)
         ]
-        localStorage.setItem('baseMap',JSON.stringify(item))
+        localStorage.setItem('baseMap', JSON.stringify(item))
         break;
       case 'labelMap':
         this.setState({}); // 为了重新render
@@ -81,14 +88,14 @@ class MapBottom extends React.Component {
         baseMap.referenceLayers = [
           new EsriWebTileLayer(item)
         ]
-        localStorage.setItem('labelMap',JSON.stringify(item))
+        localStorage.setItem('labelMap', JSON.stringify(item))
         break;
       default:
 
         break;
     }
 
-   
+
   }
 
 
@@ -113,6 +120,55 @@ class MapBottom extends React.Component {
     this.setState(prevState => ({
       showAreaQuery: !prevState.showAreaQuery
     }))
+  }
+
+  query = ext => {
+    bhlxArrays = [];
+    this.setState({
+      sumArea: 0,
+      bhtbCount: 0,
+      bhlxArray: []
+    })
+    const layers = this.props.mapView.map.allLayers;
+    layers.forEach(item => {
+      switch (item.type) {
+        case "feature":
+          this.querFeatureExtent(ext, item)
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  querFeatureExtent = (ext, item) => {
+    const that = this
+    const fMap = this.props.mapView.map
+    const fLayer = fMap.findLayerById(item.id)
+    const query = new EsriQuery();
+    query.geometry = ext;
+    query.returnGeometry = false;
+    query.outFields = ["*"];
+    fLayer.queryFeatures(query).then(results => {
+      if (results.features.length > 0 && results.features[0].attributes.area) {
+        let area = 0;
+        let count = 0;
+        results.features.forEach(fea => {
+          area = fea.attributes.area + area
+          count += 1
+          const bhlx = fea.attributes.BHLX
+          if (bhlxArrays.indexOf(bhlx) === -1) {
+            bhlxArrays.push(bhlx)
+          }
+        })
+
+        that.setState(prevState => ({
+          sumArea: area + prevState.sumArea,
+          bhtbCount: count + prevState.bhtbCount,
+          bhlxArray: bhlxArrays
+        }))
+      }
+    });
   }
 
   render() {
@@ -197,9 +253,9 @@ class MapBottom extends React.Component {
         {this.state.showAreaQuery ? (
           <div className={style.areaQuery}>
             当前范围统计<br />
-            图斑面积：28平方公里<br />
-            图斑数量：23个<br />
-            图斑类型：2个<br />
+            图斑面积：{this.state.sumArea.toFixed(2)}亩<br />
+            图斑数量：{this.state.bhtbCount}个<br />
+            图斑类型：{this.state.bhlxArray.length}个<br />
           </div>
         ) : null}
 

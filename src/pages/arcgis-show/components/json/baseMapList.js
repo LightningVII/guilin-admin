@@ -46,7 +46,7 @@ export const labelMapList = [
   },
   {
     title: '关闭注记',
-    urlTemplate: '',
+    urlTemplate: null,
     subDomains: null,
     id: 'closeLabel',
     thumbnailUrl: `http://lbs.tianditu.gov.cn/images/vec_c.png`,

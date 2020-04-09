@@ -38,8 +38,8 @@ class GISStastic extends React.Component {
     }
 
     removeAll = () => {
-        this.removeChart()
         this.removeLegend()
+        this.removeChart()
         if (xzqLayer) {
             this.props.view.map.remove(xzqLayer)
             xzqLayer = null
@@ -178,6 +178,7 @@ class GISStastic extends React.Component {
                     mask={false}
                     onClose={() => {
                         this.removeAll()
+                        legend=null;
                         this.props.onClose()
                     }}
                     visible={this.props.visible}
@@ -231,6 +232,7 @@ class GISStastic extends React.Component {
                     </Form>
                     <div style={{ overflowY: "hidden" }}>
                         <div id='legend' />
+
                     </div>
                 </Drawer>
 
