@@ -1,51 +1,15 @@
-import { EllipsisOutlined } from '@ant-design/icons';
-import { Card, Menu, Dropdown, Table, Badge, Progress } from 'antd';
+import { Table, Badge } from 'antd';
 import React from 'react';
 import { statusEnum } from '@/constants/basicEnum';
 
-const menu = (
-  <Menu>
-    <Menu.Item>操作一</Menu.Item>
-    <Menu.Item>操作二</Menu.Item>
-  </Menu>
-);
-const dropdownGroup = (
-  <span>
-    <Dropdown overlay={menu} placement="bottomRight">
-      <EllipsisOutlined />
-    </Dropdown>
-  </span>
-);
-
-const progressValueEnum = {
-  0: {
-    text: '正常',
-    status: 'normal',
-  },
-  1: {
-    text: '运行中',
-    status: 'active',
-  },
-  2: {
-    text: '已上线',
-    status: 'success',
-  },
-  3: {
-    text: '异常',
-    status: 'exception',
-  },
-};
-
 const columns = [
-  {
-    title: '序号',
-    dataIndex: 'key',
-    width: 150,
-  },
   {
     title: '区县',
     dataIndex: 'address',
-    width: 150,
+  },
+  {
+    title: '图斑数量',
+    dataIndex: 'age',
   },
   {
     title: '未启动',
@@ -60,21 +24,12 @@ const columns = [
     },
   },
   {
-    title: '进度',
-    dataIndex: 'progress',
-    render: (record, row) => {
-      const { status } = progressValueEnum[row.status];
-      return <Progress percent={record} status={status} />;
-    },
-  },
-  {
     title: '已结束',
     dataIndex: 'finish',
   },
   {
-    title: '效率',
+    title: '执行率',
     dataIndex: 'updatedAt',
-    sorter: true,
     valueType: 'dateTime',
   },
 ];
@@ -95,17 +50,13 @@ for (let i = 0; i < 10; i += 1) {
 }
 
 const TaskProgressTable = () => (
-  <Card
-    title="任务"
-    bordered={false}
-    style={{
-      height: '100%',
-      marginTop: '24px',
-    }}
-    extra={dropdownGroup}
-  >
-    <Table columns={columns} dataSource={data} pagination={{ pageSize: 50 }} scroll={{ y: 240 }} />
-  </Card>
+  <Table
+    style={{ marginTop: '24px' }}
+    columns={columns}
+    dataSource={data}
+    pagination={false}
+    scroll={{ y: 240 }}
+  />
 );
 
 export default TaskProgressTable;

@@ -1,64 +1,62 @@
 import { Card } from 'antd';
 import React from 'react';
-// import { Chart, Geom, Axis, Tooltip, Legend } from 'bizcharts';
-import { Chart, Geom, Tooltip } from 'bizcharts';
-import DataSet from '@antv/data-set';
+import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
 
 const data = [
   {
-    name: '前一月',
-    'Jan.': 18.9,
-    'Feb.': 28.8,
-    'Mar.': 39.3,
-    'Apr.': 81.4,
-    'May.': 47,
-    'Jun.': 20.3,
-    'Jul.': 24,
-    'Aug.': 35.6,
-    'Sep.': 42.4,
-    'Oct.': 42.4,
-    'Nov.': 42.4,
-    'Dec.': 42.4,
+    month: '1',
+    value: 3,
   },
   {
-    name: '后一月',
-    'Jan.': 12.4,
-    'Feb.': 23.2,
-    'Mar.': 34.5,
-    'Apr.': 99.7,
-    'May.': 52.6,
-    'Jun.': 35.5,
-    'Jul.': 37.4,
-    'Aug.': 42.4,
-    'Sep.': 42.4,
-    'Oct.': 42.4,
-    'Nov.': 42.4,
-    'Dec.': 42.4,
+    month: '2',
+    value: 4,
+  },
+  {
+    month: '3',
+    value: 3.5,
+  },
+  {
+    month: '4',
+    value: 5,
+  },
+  {
+    month: '5',
+    value: 4.9,
+  },
+  {
+    month: '6',
+    value: 6,
+  },
+  {
+    month: '7',
+    value: 7,
+  },
+  {
+    month: '8',
+    value: 9,
+  },
+  {
+    month: '9',
+    value: 13,
   },
 ];
-const ds = new DataSet();
-const dv = ds.createView().source(data);
-dv.transform({
-  type: 'fold',
-  fields: [
-    'Jan.',
-    'Feb.',
-    'Mar.',
-    'Apr.',
-    'May.',
-    'Jun.',
-    'Jul.',
-    'Aug.',
-    'Sep.',
-    'Oct.',
-    'Nov.',
-    'Dec.',
-  ],
-  // 展开字段集
-  key: '月份',
-  // key字段
-  value: '月均降雨量', // value字段
-});
+const cols = {
+  value: {
+    alias: '新增数量',
+  },
+  month: {
+    alias: '月份',
+  },
+};
+
+const tooltip = [
+  'month*value',
+  (month, value) => ({
+    name: '图斑数量', // 要显示的名字
+    value,
+    title: `${month}月新增`,
+  }),
+];
 
 const SecondChart = ({ cardProps, loading }) => (
   <Card
@@ -69,20 +67,53 @@ const SecondChart = ({ cardProps, loading }) => (
       height: '260px',
     }}
     extra={<a>详情</a>}
+    bodyStyle={{ padding: 0 }}
   >
-    <Chart style={{ margin: '-45px -20px 0 -80px' }} height={280} data={dv} forceFit>
-      {/* <Legend />
-      <Axis name="月份" />
-      <Axis name="月均降雨量" /> */}
-      <Tooltip />
+    <Chart height={180} padding={[20, 32, 32, 32]} data={data} scale={cols} forceFit>
+      <Axis
+        name="month"
+        title={{
+          position: 'end',
+          offset: 15,
+          textStyle: {
+            fontSize: '12',
+            textAlign: 'left',
+            fill: '#333',
+            fontWeight: 'bold',
+            rotate: 0,
+          },
+        }}
+      />
+      <Axis
+        name="value"
+        title={{
+          position: 'end',
+          offset: -20,
+          textStyle: {
+            fontSize: '12',
+            fill: '#333',
+            fontWeight: 'bold',
+            rotate: 0,
+            textBaseline: 'bottom',
+          },
+        }}
+      />
+      <Tooltip
+        crosshairs={{
+          type: 'y',
+        }}
+      />
+      <Geom type="line" position="month*value" size={2} shape="smooth" tooltip={tooltip} />
       <Geom
-        type="intervalStack"
-        position="月份*月均降雨量"
-        color="name"
+        type="point"
+        position="month*value"
+        size={4}
+        shape="circle"
         style={{
           stroke: '#fff',
           lineWidth: 1,
         }}
+        tooltip={tooltip}
       />
     </Chart>
   </Card>
