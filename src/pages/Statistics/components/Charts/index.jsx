@@ -10,6 +10,7 @@ import Pie from './Pie';
 import TagCloud from './TagCloud';
 import TimelineChart from './TimelineChart';
 import WaterWave from './WaterWave';
+import DataStatistics from './DataStatistics';
 
 const yuan = val => `¥ ${numeral(val).format('0,0')}`;
 
@@ -26,6 +27,7 @@ const Charts = {
   WaterWave,
   TagCloud,
   TimelineChart,
+  DataStatistics,
 };
 export {
   Charts as default,
@@ -41,4 +43,5 @@ export {
   WaterWave,
   TagCloud,
   TimelineChart,
+  DataStatistics,
 };

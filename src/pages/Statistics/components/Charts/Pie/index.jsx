@@ -199,7 +199,7 @@ class Pie extends Component {
         value: `${(p * 100).toFixed(2)}%`,
       }),
     ];
-    const padding = [12, 0, 12, 0];
+    const padding = [12, 12, 12, 12];
     const dv = new DataView();
     dv.source(data).transform({
       type: 'percent',
@@ -238,7 +238,6 @@ class Pie extends Component {
             {(subTitle || total) && (
               <div className={styles.total}>
                 {subTitle && <h4 className="pie-sub-title">{subTitle}</h4>}
-                {/* eslint-disable-next-line */}
                 {total && (
                   <div className="pie-stat">{typeof total === 'function' ? total() : total}</div>
                 )}
