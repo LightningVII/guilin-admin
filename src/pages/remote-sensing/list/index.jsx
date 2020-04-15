@@ -154,6 +154,17 @@ const TableList = props => {
               }
               onClick={() => setVisible(true)}
             >
+              任务分发
+            </Button>
+            <Divider type="vertical" />
+            <Button
+              type="danger"
+              disabled={
+                !spotIds?.length &&
+                ['XTGLY', 'ZFDDZ'].includes(user?.currentUser?.roles?.[0]?.rolecode)
+              }
+              onClick={() => setApprovalShow(true)}
+            >
               {formatMessage({ id: 'remote-sensing.approval' })}
             </Button>
             <Divider type="vertical" />
@@ -186,27 +197,6 @@ const TableList = props => {
           loading={loading}
           rowKey={({ spotid }) => spotid}
           rowSelection={rowSelection}
-          // expandRowByClick
-          // rowExpandable={record =>
-          //   feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm)?.length
-          // }
-          /* expandedRowRender={record => {
-            const feedbackData = feedback?.feedbackData?.filter(r => r.tbbm === record?.tbbm);
-            return feedbackData?.length ? (
-              <FeedbackList
-                handleReportClick={r => {
-                  setApprovalContent('');
-                  setApprovalShow(true);
-                  implementId = r.implementid;
-                }}
-                handleImagesClick={images => {
-                  setSelectedImages(images);
-                  setImagesViewShow(true);
-                }}
-                record={feedbackData}
-              />
-            ) : null;
-          }} */
           pagination={{
             current: searchParams.current,
             defaultPageSize,
@@ -232,6 +222,7 @@ const TableList = props => {
             if (res?.code === 200) {
               fetchRemoteData();
               setVisible(false);
+              message.success('审批成功');
             } else {
               message.warning(res?.message || '数据异常');
             }
@@ -263,6 +254,7 @@ const TableList = props => {
             if (res?.code === 200) {
               fetchRemoteData();
               setApprovalShow(false);
+              message.success('审批成功');
             } else {
               message.warning(res?.message || '数据异常');
             }
@@ -281,6 +273,7 @@ const TableList = props => {
             if (res?.code === 200) {
               fetchRemoteData();
               setApprovalShow(false);
+              message.success('审批成功');
             } else {
               message.warning(res?.message || '数据异常');
             }
