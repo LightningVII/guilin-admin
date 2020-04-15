@@ -22,9 +22,16 @@ class CicleSelect extends React.Component {
             bhtbCount: 0,
             bhlxArray: []
         }
+
+
     }
 
     componentDidMount() {
+
+        const data = [{ "LNG": "116.93", "DETAIL": [{ "HSXDLMC": "建筑用地（定着物变化）", "QSXDLMC": "建筑用地（有定着物）", "COUNT": 3, "BHLX": "4" }, { "HSXDLMC": "建筑用地（有定着物）", "QSXDLMC": "建筑用地（无定着物）", "COUNT": 7, "BHLX": "3" }, { "HSXDLMC": "建设用地", "QSXDLMC": "未利用地", "COUNT": 5, "BHLX": "2" }], "LAT": "34.73", "COUNTY": "沛县" }, { "LNG": "117.17", "DETAIL": [{ "HSXDLMC": "建设用地", "QSXDLMC": "农用地", "COUNT": 1, "BHLX": "1" }, { "HSXDLMC": "建设用地", "QSXDLMC": "未利用地", "COUNT": 2, "BHLX": "2" }, { "HSXDLMC": "建筑用地（有定着物）", "QSXDLMC": "建筑用地（无定着物）", "COUNT": 4, "BHLX": "3" }], "LAT": "34.18", "COUNTY": "铜山区" }]
+
+        console.log(data)
+
 
         loadModules(["esri/views/draw/Draw", "esri/Graphic", "esri/geometry/Polygon", "esri/tasks/support/Query"]).then(
             ([Draw, Graphic, Polygon, Query]) => {
@@ -70,12 +77,13 @@ class CicleSelect extends React.Component {
         mapView.graphics.add(graphic);
         if (event.type === "draw-complete") {
             mapView.cursor = "default"
-            this.setState({
-                visible: true
-            })
+            // this.setState({
+            //     visible: true
+            // })
 
 
             const layers = this.props.view.map.allLayers;
+
             layers.forEach(item => {
                 switch (item.type) {
                     case "feature":
@@ -115,9 +123,21 @@ class CicleSelect extends React.Component {
                     bhtbCount: count + prevState.bhtbCount,
                     bhlxArray: bhlxArrays
                 }))
+
+                that.props.view.popup.open({
+                    location: geometry.extent.center,
+                    title: '查询结果统计',
+                    content: that.setContentInfo()
+                });
             }
         });
 
+    }
+
+    setContentInfo = () => {
+        const content = (<Statistic title="图斑总面积" value={this.state.sumArea} precision={2} suffix="亩" />)
+
+        return content;
     }
 
     redraw = () => {
@@ -134,7 +154,6 @@ class CicleSelect extends React.Component {
 
     render() {
         return (
-
             <Drawer
                 title="查询结果统计"
                 placement="bottom"

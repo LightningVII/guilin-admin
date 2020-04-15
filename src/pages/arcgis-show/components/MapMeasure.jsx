@@ -62,10 +62,10 @@ class MapMeasure extends React.Component {
     return this.props.showMeasure ? (
       <>
         <Button className={style.measureBtn} onClick={this.lineMeasure}>
-          <MinusOutlined /> 线测量
+          <MinusOutlined /> 测距离
         </Button>
         <Button className={style.measureBtn} onClick={this.areaMeasure}>
-          <BorderOutlined /> 面测量
+          <BorderOutlined /> 测面积
         </Button>
         <div style={{ float: 'left' }}>
           <Divider type="vertical" style={{ margin: 5, height: 18 }} />

@@ -2,8 +2,9 @@ import React from 'react';
 import { debounce } from 'lodash'
 import ReactDOM from 'react-dom';
 import { Form, Select, DatePicker, Button, Drawer } from 'antd';
+import DataSet from '@antv/data-set';
 import G2 from '@antv/g2';
-
+import moment from 'moment';
 import { loadModules } from 'esri-loader';
 import style from './css/style.css';
 
@@ -16,6 +17,12 @@ let charts = [];
 let legend = null;
 let maxNum = 0;
 
+const transField = {
+    TASKNUM: '任务数量',
+    AREA: '变化面积',
+    BHLXNUM: '类型数量'
+}
+
 
 class GISStastic extends React.Component {
 
@@ -26,6 +33,8 @@ class GISStastic extends React.Component {
         this.createChartToMap = debounce(this.createChartToMap, 200);// 防抖函数
         // 设置 initial state
         this.state = {
+            renderLegend:false,
+            legendTitle:'统计图'
         };
     }
 
@@ -35,6 +44,10 @@ class GISStastic extends React.Component {
                 EsriFeatureLayer = FeatureLayer
             },
         );
+    }
+
+    componentWillUnmount() {
+        this.removeAll()
     }
 
     removeAll = () => {
@@ -63,7 +76,6 @@ class GISStastic extends React.Component {
 
             </>
         )
-
         ReactDOM.render(eleDiv, document.getElementById('container'));
         data.forEach((item, index) => {
             const chart = this.creatHistorgramChart(refObj, maxNum, item, index)
@@ -73,17 +85,26 @@ class GISStastic extends React.Component {
 
     // 创建柱状图
     creatHistorgramChart = (refObj, num, item, index) => {
+        const ds = new DataSet();
+        const dv = ds.createView().source([item]);
+        dv.transform({
+            type: 'rename',
+            map: transField
+        });
         const chart = new G2.Chart({
             container: `chart'+${index}`,
             forceFit: true,
             height: 100,
             padding: 0
         });
-        chart.source([item]);
-        chart.scale(refObj.field, {
+        chart.source(dv);
+        chart.scale(transField[refObj.field], {
             tickInterval: num
         });
-        chart.interval().position(`COUNTY*${refObj.field}`);
+        chart.tooltip({
+            inPlot: false
+        })
+        chart.interval().position(`COUNTY*${transField[refObj.field]}`);
         chart.render();
         return chart
     }
@@ -102,9 +123,16 @@ class GISStastic extends React.Component {
                 width: 260,
                 padding: [20, 20, 20, 50]
             })
-        legend.source(renderData);
+        const ds = new DataSet();
+        const dv = ds.createView().source(renderData);
+        dv.transform({
+            type: 'rename',
+            map: transField
+        });
+
+        legend.source(dv);
         const refObj = this.formStasticRef.current.getFieldsValue();
-        legend.scale(refObj.field, {
+        legend.scale(transField[refObj.field], {
             tickInterval: maxNum
         });
         legend.axis('COUNTY', {
@@ -112,9 +140,16 @@ class GISStastic extends React.Component {
                 offset: 12
             }
         });
+        legend.tooltip({
+            inPlot: false
+        })
         legend.coord().transpose();
-        legend.interval().position(`COUNTY*${refObj.field}`);
+        legend.interval().position(`COUNTY*${transField[refObj.field]}`);
         legend.render();
+        this.setState({
+            renderLegend:true,
+            legendTitle:`${transField[refObj.field]}统计图`
+        })
     }
 
     mapPointToPosition = (xLNG, yLAT) => {
@@ -137,7 +172,6 @@ class GISStastic extends React.Component {
 
 
     renderChart = () => {
-
         if (!xzqLayer) {
             xzqLayer = new EsriFeatureLayer({ url: xzqFeature.layerUrl, id: xzqFeature.key })
             this.props.view.map.add(xzqLayer)
@@ -156,7 +190,6 @@ class GISStastic extends React.Component {
             this.removeLegend()
             this.creatLegend();
         }, 500)
-
     }
 
     removeChart = () => {
@@ -167,6 +200,25 @@ class GISStastic extends React.Component {
 
     removeLegend = () => {
         if (legend) legend.clear();
+        this.setState({
+            renderLegend:false
+        })
+    }
+
+    setDateToday = type => {
+        let date = '202001'
+        const d = new Date();
+        switch (type) {
+            case "pre":
+                date = `${d.getFullYear()}0${d.getMonth()}`;
+                break;
+            case "today":
+                date = `${d.getFullYear()}0${d.getMonth()+1}`;
+                break;
+            default:
+                break;
+        }
+        return date;
     }
 
     render() {
@@ -178,7 +230,7 @@ class GISStastic extends React.Component {
                     mask={false}
                     onClose={() => {
                         this.removeAll()
-                        legend=null;
+                        legend = null;
                         this.props.onClose()
                     }}
                     visible={this.props.visible}
@@ -189,10 +241,17 @@ class GISStastic extends React.Component {
                         ref={this.formStasticRef}
                         initialValues={{
                             field: 'TASKNUM',
-                            pattern: 'XZQ',
                             chartType: 'histogram'
                         }}
                     >
+                        <Form.Item name="chartType" label="图表类型">
+                            <Select style={{ width: 200 }} >
+                                <Select.Option value="histogram">柱状图</Select.Option>
+                                <Select.Option value="pieChart">饼状图</Select.Option>
+                                <Select.Option value="heatMap">热力图</Select.Option>
+                            </Select>
+                        </Form.Item>
+
                         <Form.Item name='field' label="统计字段">
                             <Select style={{ width: 200 }} >
                                 <Select.Option value="TASKNUM">任务数量</Select.Option>
@@ -200,21 +259,12 @@ class GISStastic extends React.Component {
                                 <Select.Option value="BHLXNUM">类型数量</Select.Option>
                             </Select>
                         </Form.Item>
-                        <Form.Item name="pattern" label="统计方式">
-                            <Select value='XZQ' style={{ width: 200 }} >
-                                <Select.Option value="XZQ">按行政区统计</Select.Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="chartType" label="图表类型">
-                            <Select style={{ width: 200 }} >
-                                <Select.Option value="histogram">柱状图</Select.Option>
-                                <Select.Option value="pieChart">饼状图</Select.Option>
-                                <Select.Option value="color">颜色渲染</Select.Option>
-                            </Select>
-                        </Form.Item>
+
                         <Form.Item name="datePicker" label="时间范围" >
-                            <DatePicker.RangePicker style={{ width: 200 }} picker="month" />
+                            <DatePicker.RangePicker defaultValue={[moment(this.setDateToday('pre'), "YYYYMM"), moment(this.setDateToday('today'), "YYYYMM")]}
+                                format="YYYYMM" style={{ width: 200 }} picker="month" />
                         </Form.Item>
+
                         <Form.Item style={{ textAlign: "center" }} >
                             <Button type="primary" htmlType="submit" onClick={() => {
                                 this.renderChart()
@@ -230,9 +280,9 @@ class GISStastic extends React.Component {
                         </Button>
                         </Form.Item>
                     </Form>
-                    <div style={{ overflowY: "hidden" }}>
+                    <div style={{ overflow: "hidden" }}>
                         <div id='legend' />
-
+                        {this.state.renderLegend?<h4 style={{ textAlign: 'center' }}>{this.state.legendTitle}</h4>:null}
                     </div>
                 </Drawer>
 

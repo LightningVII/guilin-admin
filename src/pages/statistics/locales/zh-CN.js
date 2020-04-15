@@ -32,7 +32,7 @@ export default {
   'dashboardanalysis.table.users': '用户数',
   'dashboardanalysis.table.weekly-range': '周涨幅',
   'dashboardanalysis.analysis.graph-comparison': '最新变化图斑分布',
-  'dashboardanalysis.analysis.graph-comparison-list': '变化图斑',
+  'dashboardanalysis.analysis.graph-comparison-list': '最新变化图斑类型占比',
   'dashboardanalysis.analysis.performance-appraisal': '绩效考核',
   'dashboardanalysis.analysis.image-data': '影像数据',
   'dashboardanalysis.analysis.variegated-spot': '变化图斑',

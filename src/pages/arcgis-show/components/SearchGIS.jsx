@@ -1,7 +1,7 @@
 import React from 'react';
 import { debounce } from 'lodash';
 import { UnorderedListOutlined } from '@ant-design/icons';
-import { Input, Tree, Tooltip, List, Typography,Empty  } from 'antd';
+import { Input, Tree, Tooltip, List, Typography, Empty } from 'antd';
 import { loadModules } from 'esri-loader';
 import { connect } from 'dva';
 // import router from 'umi/router';
@@ -13,8 +13,9 @@ import style from './css/style.css';
 const { Search } = Input;
 let EsriFeatureLayer;
 let EsriWebTileLayer;
+let EsriGraphic;
+let EsriPolygon;
 let flag = false;
-let tempFeatureLayer = null;
 
 
 @connect(({ remoteSensing, layer }) => ({
@@ -37,16 +38,17 @@ class SearchGIS extends React.Component {
       paddingTop: 0,
       searchPanelVisiable: 'hidden',
       searchData: [],
-      treeDatas: treeData,
+      treeDatas: treeData
     };
   }
 
   componentDidMount() {
-
-    loadModules(['esri/layers/FeatureLayer', 'esri/layers/WebTileLayer']).then(
-      ([FeatureLayer, WebTileLayer]) => {
+    loadModules(['esri/layers/FeatureLayer', 'esri/layers/WebTileLayer', "esri/Graphic", "esri/geometry/Polygon"]).then(
+      ([FeatureLayer, WebTileLayer, Graphic, Polygon]) => {
         EsriFeatureLayer = FeatureLayer;
         EsriWebTileLayer = WebTileLayer;
+        EsriGraphic = Graphic;
+        EsriPolygon = Polygon;
         flag = false;
         this.triggerAction();
 
@@ -56,10 +58,15 @@ class SearchGIS extends React.Component {
         // dispatch({
         //   type: 'layer/fetchLayerTree'
         // }).then(tree => {
+        //   const expandKeys = [];
+        //   tree.forEach(t => {
+        //     expandKeys.push(t.key)
+        //   })
         //   this.setState({
-        //     treeDatas: tree||treeData,
+        //     treeDatas: tree || treeData,
+        //     expandedKeys: expandKeys
         //   });
-        //   console.log(tree)
+        //   console.log(expandKeys)
         // });
 
       },
@@ -148,10 +155,7 @@ class SearchGIS extends React.Component {
             }
           });
         } else {
-          if (tempFeatureLayer)
-            this.props.view.map.remove(
-              tempFeatureLayer
-            );
+
           this.setState({
             searchPanelVisiable: 'hidden',
             searchData: [],
@@ -170,32 +174,36 @@ class SearchGIS extends React.Component {
   };
 
   serchItemClick = TBBM => {
-    const { dispatch, geomotry } = this.props;
+    const mapView = this.props.view;
+    const { dispatch } = this.props;
     dispatch({
       type: 'remoteSensing/fetchChangespotGeomotry',
       payload: { tbbm: TBBM },
-    }).then(() => {
-      console.log(geomotry);
+    }).then(res => {
+      if (res.code === 200) {
+        const geomotry = res.content;
+
+        const graphic = new EsriGraphic({
+          geometry: new EsriPolygon({
+            hasZ: false,
+            hasM: false,
+            rings: [geomotry.coordinates[0]],
+            spatialReference: { wkid: 4527 }
+          }),
+          symbol: {
+            type: "simple-fill",
+            color: [51, 51, 204, 0.2],
+            style: "solid",
+            outline: {
+              color: "orange",
+              width: 1
+            }
+          }
+        });
+
+        mapView.graphics.add(graphic);
+      }
     });
-
-
-    if (tempFeatureLayer)
-      this.props.view.map.remove(
-        tempFeatureLayer
-      );
-    tempFeatureLayer = new EsriFeatureLayer({ url: 'http://218.3.176.6:6080/arcgis/rest/services/GL/GLBHTB_Test/MapServer/0', id: 'test', popupTemplate: template });
-    this.props.view.map.add(
-      tempFeatureLayer
-    )
-
-    this.props.view.extent = {
-      type: "extent",
-      xmax: 13026057.551445255,
-      xmin: 13025591.166139795,
-      ymax: 4077224.692780885,
-      ymin: 4076708.145675606,
-      spatialReference: { wkid: 102100 }
-    }
 
   };
 
@@ -206,7 +214,7 @@ class SearchGIS extends React.Component {
           placeholder="输入查询关键字..."
           onChange={this.handleInputSearch}
           onPressEnter={this.handleInputSearch}
-          onSearch={ this.inputValChange}
+          onSearch={this.inputValChange}
           onClick={this.handleClick}
           className={style.search}
           allowClear
@@ -261,7 +269,7 @@ class SearchGIS extends React.Component {
                 }}
               />
 
-            ) : (<Empty/>)
+            ) : (<Empty />)
           }
 
         </div>

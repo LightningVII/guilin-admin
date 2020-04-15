@@ -6,18 +6,12 @@ const MyImageLayer = props => {
   const [imageLayer, setImageLayer] = useState(null);
 
   useEffect(() => {
-    loadModules(['esri/core/urlUtils', 'esri/layers/WebTileLayer'])
-      .then(([urlUtils, WebTileLayer]) => {
-        urlUtils.addProxyRule({
-          urlPrefix: 'http://127.0.0.1:83/arcgis/rest/services',
-          proxyUrl: 'http://112.35.60.89:82/resourceProxy',
-        });
-
+    loadModules(['esri/layers/WebTileLayer'])
+      .then(([ WebTileLayer]) => {
         const wt = new WebTileLayer({
           urlTemplate: props.imgLayer.layerUrl,
           id: props.imgLayer.id,
         });
-
         setImageLayer(wt);
         props.view.map.add(wt);
       })
