@@ -244,6 +244,7 @@ class Details extends Component {
                   payload: match?.params,
                 });
                 this.setState({ visible: false });
+                message.success('审批成功');
               } else {
                 message.warning(res?.message || '数据异常');
               }
@@ -278,6 +279,7 @@ class Details extends Component {
                   payload: match?.params,
                 });
                 this.setState({ approvalShow: false });
+                message.success('审批成功');
               } else {
                 message.warning(res?.message || '数据异常');
               }
@@ -299,6 +301,7 @@ class Details extends Component {
                   payload: match?.params,
                 });
                 this.setState({ approvalShow: false });
+                message.success('审批成功');
               } else {
                 message.warning(res?.message || '数据异常');
               }

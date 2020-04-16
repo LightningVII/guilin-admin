@@ -2,6 +2,7 @@ import { Col, Row } from 'antd';
 import React, { Suspense } from 'react';
 
 const ProportionSales = React.lazy(() => import('./ProportionSales'));
+const Proportion = React.lazy(() => import('./Proportion'));
 const SecondChart = React.lazy(() => import('./SecondChart'));
 
 const topColResponsiveProps = {
@@ -21,7 +22,7 @@ const IntroduceRow = ({ loading }) => (
   <Row gutter={24} type="flex">
     <Col {...topColResponsiveProps}>
       <Suspense fallback={null}>
-        <ProportionSales
+        <Proportion
           cardProps={{
             title: (
               <>
@@ -43,16 +44,16 @@ const IntroduceRow = ({ loading }) => (
           loading={loading}
           salesPieData={[
             {
-              x: '遥感数据',
-              y: 12,
+              item: '遥感数据',
+              count: 12,
             },
             {
-              x: '监测数据',
-              y: 13,
+              item: '监测数据',
+              count: 13,
             },
             {
-              x: '其他数据',
-              y: 15,
+              item: '其他数据',
+              count: 15,
             },
           ]}
         />
