@@ -49,12 +49,6 @@ class DatasourceView extends React.Component {
             showImgeLayerDate: false,
             treeJson: [],
             columns: [
-                // {
-                //   title: 'key',
-                //   dataIndex: 'key',
-                //   key: 'key',
-                //   width: '0%'
-                // },
                 {
                     title: '图层名',
                     dataIndex: 'title',
@@ -81,10 +75,10 @@ class DatasourceView extends React.Component {
                     render: record => (
                         (record.loadType === 'parent' ? <span>
                             <a onClick={() => this.add(record)} style={{ marginRight: 16 }}><Tooltip placement="top" title="添加"><FileAddOutlined /></Tooltip></a>
-                            <a style={{color:'red'}} onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined/></Tooltip></a>
+                            <a style={{ color: 'red' }} onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined /></Tooltip></a>
                         </span> : <span>
                                 <a onClick={() => this.update(record)} style={{ marginRight: 16 }}><Tooltip placement="top" title='修改'><EditOutlined /></Tooltip></a>
-                                <a style={{color:'red'}} onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined /></Tooltip></a>
+                                <a style={{ color: 'red' }} onClick={() => this.del(record)} ><Tooltip placement="top" title='删除'><DeleteOutlined /></Tooltip></a>
                             </span>)
                     ),
                 }
@@ -121,7 +115,6 @@ class DatasourceView extends React.Component {
     }
 
     initTreeJson = () => {
-
         const { dispatch } = this.props;
         dispatch({
             type: 'layer/fetchLayerTree',
@@ -129,10 +122,7 @@ class DatasourceView extends React.Component {
             this.setState({
                 treeJson: tree || treeData,
             });
-            console.log(tree)
         });
-
-
     }
 
     del = record => {
@@ -408,11 +398,8 @@ class DatasourceView extends React.Component {
                     destroyOnClose
                 >
                     <Form layout="horizontal"
-
                         labelCol={{ span: 4 }}
-
                         wrapperCol={{ span: 20 }}
-
                         name="control-ref"
                         ref={this.formAddRef}
                     >

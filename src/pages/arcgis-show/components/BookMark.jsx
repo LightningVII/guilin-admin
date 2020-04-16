@@ -20,8 +20,6 @@ class BookMark extends React.Component {
     componentDidMount() {
         loadModules(["esri/widgets/Bookmarks"], { css: true })
             .then(([Bookmarks]) => {
-                console.log(this.props.view)
-
                 bookMark = new Bookmarks({
                     view: this.props.view,
                     editingEnabled: true,

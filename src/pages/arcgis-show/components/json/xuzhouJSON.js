@@ -22,7 +22,7 @@ export const renderData = [
         "TASKNUM": 7,
         "LAT": "34.18",
         "COUNTY": "铜山区"
-    }, 
+    },
     {
         "AREA": 403.74187747,
         "BHLXNUM": 9,
@@ -30,7 +30,7 @@ export const renderData = [
         "TASKNUM": 15,
         "LAT": "34.73",
         "COUNTY": "沛县"
-    }, 
+    },
     {
         "AREA": 703.74187747,
         "BHLXNUM": 6,
@@ -65,4 +65,16 @@ export const renderData = [
         "COUNTY": "睢宁县"
     }
 ];
+
+export const pieData = [
+    {
+        "LNG": "116.93", "DETAIL": [{ "HSXDLMC": "建筑用地（定着物变化）", "QSXDLMC": "建筑用地（有定着物）", "COUNT": 3, "BHLX": "4" }, { "HSXDLMC": "建筑用地（有定着物）", "QSXDLMC": "建筑用地（无定着物）", "COUNT": 7, "BHLX": "3" },
+        { "HSXDLMC": "建设用地", "QSXDLMC": "未利用地", "COUNT": 5, "BHLX": "2" }], "LAT": "34.73", "COUNTY": "沛县"
+    },
+    {
+        "LNG": "117.17", "DETAIL": [{ "HSXDLMC": "建设用地", "QSXDLMC": "农用地", "COUNT": 1, "BHLX": "1" },
+        { "HSXDLMC": "建设用地", "QSXDLMC": "未利用地", "COUNT": 2, "BHLX": "2" },
+        { "HSXDLMC": "建筑用地（有定着物）", "QSXDLMC": "建筑用地（无定着物）", "COUNT": 4, "BHLX": "3" }], "LAT": "34.18", "COUNTY": "铜山区"
+    }
+]
 

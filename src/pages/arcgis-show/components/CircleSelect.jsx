@@ -7,10 +7,8 @@ let EsriDraw = null;
 let EsriGraphic = null;
 let EsriPolygon = null;
 let EsriQuery = null;
-
 let draw = null;
 let bhlxArrays = [];
-
 
 class CicleSelect extends React.Component {
     constructor(props) {
@@ -22,17 +20,9 @@ class CicleSelect extends React.Component {
             bhtbCount: 0,
             bhlxArray: []
         }
-
-
     }
 
     componentDidMount() {
-
-        const data = [{ "LNG": "116.93", "DETAIL": [{ "HSXDLMC": "建筑用地（定着物变化）", "QSXDLMC": "建筑用地（有定着物）", "COUNT": 3, "BHLX": "4" }, { "HSXDLMC": "建筑用地（有定着物）", "QSXDLMC": "建筑用地（无定着物）", "COUNT": 7, "BHLX": "3" }, { "HSXDLMC": "建设用地", "QSXDLMC": "未利用地", "COUNT": 5, "BHLX": "2" }], "LAT": "34.73", "COUNTY": "沛县" }, { "LNG": "117.17", "DETAIL": [{ "HSXDLMC": "建设用地", "QSXDLMC": "农用地", "COUNT": 1, "BHLX": "1" }, { "HSXDLMC": "建设用地", "QSXDLMC": "未利用地", "COUNT": 2, "BHLX": "2" }, { "HSXDLMC": "建筑用地（有定着物）", "QSXDLMC": "建筑用地（无定着物）", "COUNT": 4, "BHLX": "3" }], "LAT": "34.18", "COUNTY": "铜山区" }]
-
-        console.log(data)
-
-
         loadModules(["esri/views/draw/Draw", "esri/Graphic", "esri/geometry/Polygon", "esri/tasks/support/Query"]).then(
             ([Draw, Graphic, Polygon, Query]) => {
                 EsriDraw = Draw;
@@ -40,7 +30,7 @@ class CicleSelect extends React.Component {
                 EsriPolygon = Polygon;
                 EsriQuery = Query;
                 this.redraw()
-            },
+            }
         );
     }
 
@@ -77,13 +67,7 @@ class CicleSelect extends React.Component {
         mapView.graphics.add(graphic);
         if (event.type === "draw-complete") {
             mapView.cursor = "default"
-            // this.setState({
-            //     visible: true
-            // })
-
-
             const layers = this.props.view.map.allLayers;
-
             layers.forEach(item => {
                 switch (item.type) {
                     case "feature":
@@ -93,7 +77,6 @@ class CicleSelect extends React.Component {
                         break;
                 }
             });
-
         }
     }
 
@@ -131,12 +114,10 @@ class CicleSelect extends React.Component {
                 });
             }
         });
-
     }
 
     setContentInfo = () => {
         const content = (<Statistic title="图斑总面积" value={this.state.sumArea} precision={2} suffix="亩" />)
-
         return content;
     }
 
@@ -161,7 +142,6 @@ class CicleSelect extends React.Component {
                 onClose={() => {
                     this.props.view.graphics.removeAll();
                     this.props.onClose()
-
                 }}
                 visible={this.state.visible}
                 height='180px'
@@ -179,16 +159,12 @@ class CicleSelect extends React.Component {
                         </Col>
                     </Row>
                 </div>
-
-
                 <EditOutlined
                     onClick={() => {
                         this.redraw()
                     }}
                     style={{ position: "absolute", top: 20, right: 60, cursor: 'pointer' }} />
-
             </Drawer>
-
         );
     }
 }

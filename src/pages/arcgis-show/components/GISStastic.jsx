@@ -9,7 +9,7 @@ import { loadModules } from 'esri-loader';
 import style from './css/style.css';
 
 import { xzqFeature } from './json/treeData'
-import { renderData } from './json/xuzhouJSON'
+import { renderData, pieData } from './json/xuzhouJSON'
 
 let EsriFeatureLayer;
 let xzqLayer = null;
@@ -23,6 +23,15 @@ const transField = {
     BHLXNUM: '类型数量'
 }
 
+const histogram = [
+    { value: 'TASKNUM', text: '任务数量' },
+    { value: 'AREA', text: '变化面积' },
+    { value: 'BHLXNUM', text: '类型数量' }
+]
+
+const pieChart = [
+    { value: 'TASKNUM', text: '任务类型/数量' }
+]
 
 class GISStastic extends React.Component {
 
@@ -33,8 +42,9 @@ class GISStastic extends React.Component {
         this.createChartToMap = debounce(this.createChartToMap, 200);// 防抖函数
         // 设置 initial state
         this.state = {
-            renderLegend:false,
-            legendTitle:'统计图'
+            renderLegend: false,
+            legendTitle: '统计图',
+            selectOptions: histogram
         };
     }
 
@@ -42,7 +52,7 @@ class GISStastic extends React.Component {
         loadModules(['esri/layers/FeatureLayer']).then(
             ([FeatureLayer]) => {
                 EsriFeatureLayer = FeatureLayer
-            },
+            }
         );
     }
 
@@ -59,18 +69,17 @@ class GISStastic extends React.Component {
         }
     }
 
-    createChartToMap = data => {
+    createChartToMap = (data, refObj, callback) => {
         charts = [];
-        ReactDOM.unmountComponentAtNode(document.getElementById("container"));
-        const refObj = this.formStasticRef.current.getFieldsValue();
         maxNum = 0;
+        ReactDOM.unmountComponentAtNode(document.getElementById("container"));
         const eleDiv = (
             <>
                 {
                     data.map((item, index) => {
-                        if (item[refObj.field] > maxNum) maxNum = item[refObj.field]
+                        if (refObj.chartType === "histogram" && item[refObj.field] > maxNum) maxNum = item[refObj.field]
                         const pos = this.mapPointToPosition(item.LNG, item.LAT); // 经纬度坐标转换成屏幕位置
-                        return <div className={style.chart} style={{ top: pos.y, left: pos.x }} id={`chart'+${index}`} />
+                        return <div className={style.chart} style={{ top: pos.y + 30, left: pos.x - 30 }} id={`chart'+${index}`} />
                     })
                 }
 
@@ -78,8 +87,8 @@ class GISStastic extends React.Component {
         )
         ReactDOM.render(eleDiv, document.getElementById('container'));
         data.forEach((item, index) => {
-            const chart = this.creatHistorgramChart(refObj, maxNum, item, index)
-            charts.push(chart)
+            const chart = callback(refObj, maxNum, item, index)
+            if (chart) charts.push(chart)
         })
     }
 
@@ -98,11 +107,13 @@ class GISStastic extends React.Component {
             padding: 0
         });
         chart.source(dv);
+        chart.legend(false)
         chart.scale(transField[refObj.field], {
             tickInterval: num
         });
         chart.tooltip({
-            inPlot: false
+            inPlot: false,
+            itemTpl: '<li style="width:100px"><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
         })
         chart.interval().position(`COUNTY*${transField[refObj.field]}`);
         chart.render();
@@ -110,12 +121,43 @@ class GISStastic extends React.Component {
     }
 
     // 创建饼状图
-    creatPieChart = () => {
-
+    creatPieChart = (refObj, num, item, index) => {
+        const ds = new DataSet();
+        const dv = ds.createView().source(item.DETAIL);
+        dv.transform({
+            type: 'map',
+            callback(row) {
+                const r = row;
+                r.BHLX = `${r.QSXDLMC} / ${r.HSXDLMC}`;
+                return r;
+            }
+        });
+        const chart = new G2.Chart({
+            container: `chart'+${index}`,
+            forceFit: true,
+            height: 60,
+            padding: 0
+        });
+        chart.source(dv);
+        chart.legend(false)
+        chart.tooltip(true, {
+            showTitle: true,
+            inPlot: false,
+            itemTpl: '<li style="width:160px"><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+        });
+        chart.coord('theta');
+        chart.intervalStack().position(`${item.COUNTY}*COUNT`).color('BHLX')
+            .style({
+                stroke: 'white',
+                lineWidth: 1
+            })
+            .label('QSXDLMC');
+        chart.render();
+        return chart
     }
 
-    // 生成图例
-    creatLegend = () => {
+    // 生成柱状图图例
+    creatHistorgramLegend = refObj => {
         if (!legend)
             legend = new G2.Chart({
                 container: 'legend',
@@ -129,9 +171,7 @@ class GISStastic extends React.Component {
             type: 'rename',
             map: transField
         });
-
         legend.source(dv);
-        const refObj = this.formStasticRef.current.getFieldsValue();
         legend.scale(transField[refObj.field], {
             tickInterval: maxNum
         });
@@ -147,10 +187,44 @@ class GISStastic extends React.Component {
         legend.interval().position(`COUNTY*${transField[refObj.field]}`);
         legend.render();
         this.setState({
-            renderLegend:true,
-            legendTitle:`${transField[refObj.field]}统计图`
+            renderLegend: true,
+            legendTitle: `各县区${transField[refObj.field]}柱状图`
         })
     }
+
+    creatPieLegend = () => {
+        if (!legend)
+            legend = new G2.Chart({
+                container: 'legend',
+                height: 360,
+                width: 260,
+                padding: [20, 20, 20, 50]
+            })
+        legend.source(renderData);
+        legend.coord('theta', {
+            radius: 0.75
+        });
+        legend.tooltip({
+            showTitle: false,
+            itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+        });
+
+        legend.intervalStack()
+            .position('TASKNUM')
+            .color('COUNTY')
+            .label('COUNTY')
+            .tooltip('COUNTY*TASKNUM')
+            .style({
+                lineWidth: 1,
+                stroke: '#fff'
+            });
+        legend.render();
+        this.setState({
+            renderLegend: true,
+            legendTitle: '各县区任务数量饼状图'
+        })
+    }
+
 
     mapPointToPosition = (xLNG, yLAT) => {
         const mapPoint = {
@@ -165,31 +239,60 @@ class GISStastic extends React.Component {
             x: screenPoint.x - 20,
             y: screenPoint.y - 110
         } // 实际位置偏移
-
         return position
     }
 
-
-
     renderChart = () => {
+        // 清除/添加行政区图层
         if (!xzqLayer) {
             xzqLayer = new EsriFeatureLayer({ url: xzqFeature.layerUrl, id: xzqFeature.key })
             this.props.view.map.add(xzqLayer)
         }
+        // 获取表单数据
+        const refObj = this.formStasticRef.current.getFieldsValue();
+        let data;
+        let callback;
+        let legendCallback;
+        // 根据表单判断图形类别，选择数据源
+        switch (refObj.chartType) {
+            case "histogram":
+                data = renderData
+                callback = this.creatHistorgramChart
+                legendCallback = this.creatHistorgramLegend
+                this.setState({
+                    selectOptions: histogram
+                })
+                break;
+            case "pieChart":
+                data = pieData
+                callback = this.creatPieChart
+                legendCallback = this.creatPieLegend
+                this.setState({
+                    selectOptions: pieChart
+                })
+                break;
+            default:
+                data = null
+                break;
+        }
 
+        // 清除/重设地图extentChange事件
         if (this.mapExtentChange) this.mapExtentChange.remove();
         this.mapExtentChange = this.props.view.watch('extent', () => {
+            // 清除上次绘制
             charts.forEach(item => {
                 item.clear();
             })
-            this.createChartToMap(renderData);
+            // 绘制图形
+            if (data) this.createChartToMap(data, refObj, callback);
         })
 
+        // 创建图例部分的图形
         this.props.view.extent = xzqFeature.extent;
         setTimeout(() => {
             this.removeLegend()
-            this.creatLegend();
-        }, 500)
+            legendCallback(refObj)
+        }, 600)
     }
 
     removeChart = () => {
@@ -201,19 +304,19 @@ class GISStastic extends React.Component {
     removeLegend = () => {
         if (legend) legend.clear();
         this.setState({
-            renderLegend:false
+            renderLegend: false
         })
     }
 
     setDateToday = type => {
-        let date = '202001'
-        const d = new Date();
+        let date
+        const d = new Date()
         switch (type) {
             case "pre":
                 date = `${d.getFullYear()}0${d.getMonth()}`;
                 break;
             case "today":
-                date = `${d.getFullYear()}0${d.getMonth()+1}`;
+                date = `${d.getFullYear()}0${d.getMonth() + 1}`;
                 break;
             default:
                 break;
@@ -245,7 +348,29 @@ class GISStastic extends React.Component {
                         }}
                     >
                         <Form.Item name="chartType" label="图表类型">
-                            <Select style={{ width: 200 }} >
+                            <Select style={{ width: 200 }} onChange={() => {
+                                const refObj = this.formStasticRef.current.getFieldsValue();
+                                switch (refObj.chartType) {
+                                    case "histogram":
+                                        this.setState({
+                                            selectOptions: histogram
+                                        })
+                                        this.formStasticRef.current.setFieldsValue({
+                                            field: 'TASKNUM'
+                                        })
+                                        break;
+                                    case "pieChart":
+                                        this.setState({
+                                            selectOptions: pieChart
+                                        })
+                                        this.formStasticRef.current.setFieldsValue({
+                                            field: 'TASKNUM'
+                                        })
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }}>
                                 <Select.Option value="histogram">柱状图</Select.Option>
                                 <Select.Option value="pieChart">饼状图</Select.Option>
                                 <Select.Option value="heatMap">热力图</Select.Option>
@@ -254,9 +379,9 @@ class GISStastic extends React.Component {
 
                         <Form.Item name='field' label="统计字段">
                             <Select style={{ width: 200 }} >
-                                <Select.Option value="TASKNUM">任务数量</Select.Option>
-                                <Select.Option value="AREA">变化面积</Select.Option>
-                                <Select.Option value="BHLXNUM">类型数量</Select.Option>
+                                {
+                                    this.state.selectOptions.map(item => (<Select.Option value={item.value}>{item.text}</Select.Option>))
+                                }
                             </Select>
                         </Form.Item>
 
@@ -282,10 +407,9 @@ class GISStastic extends React.Component {
                     </Form>
                     <div style={{ overflow: "hidden" }}>
                         <div id='legend' />
-                        {this.state.renderLegend?<h4 style={{ textAlign: 'center' }}>{this.state.legendTitle}</h4>:null}
+                        {this.state.renderLegend ? <h4 style={{ textAlign: 'center' }}>{this.state.legendTitle}</h4> : null}
                     </div>
                 </Drawer>
-
             </>
         )
     }
