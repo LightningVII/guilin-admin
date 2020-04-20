@@ -2,44 +2,6 @@ import { Card } from 'antd';
 import React from 'react';
 import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
 
-const data = [
-  {
-    month: '1',
-    value: 3,
-  },
-  {
-    month: '2',
-    value: 4,
-  },
-  {
-    month: '3',
-    value: 3.5,
-  },
-  {
-    month: '4',
-    value: 5,
-  },
-  {
-    month: '5',
-    value: 4.9,
-  },
-  {
-    month: '6',
-    value: 6,
-  },
-  {
-    month: '7',
-    value: 7,
-  },
-  {
-    month: '8',
-    value: 9,
-  },
-  {
-    month: '9',
-    value: 13,
-  },
-];
 const cols = {
   value: {
     alias: '新增数量',
@@ -58,7 +20,7 @@ const tooltip = [
   }),
 ];
 
-const SecondChart = ({ cardProps, loading }) => (
+const SecondChart = ({ cardProps, data, loading }) => (
   <Card
     {...cardProps}
     loading={loading}

@@ -1,5 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { Suspense } from 'react';
+import { connect } from 'dva';
 
 const ProportionSales = React.lazy(() => import('./ProportionSales'));
 const Proportion = React.lazy(() => import('./Proportion'));
@@ -18,44 +19,32 @@ const topColResponsiveProps = {
 
 const salesType = 'all';
 
-const IntroduceRow = ({ loading }) => (
+const title = (a, b) => (
+  <>
+    {a}
+    <p
+      style={{
+        fontWeight: 'normal',
+        margin: 0,
+        fontSize: '14px',
+      }}
+      className="ant-card-meta-description"
+    >
+      {b}
+    </p>
+  </>
+);
+
+const IntroduceRow = ({ proportionData, proportionSalesData, secondChartData, loading }) => (
   <Row gutter={24} type="flex">
     <Col {...topColResponsiveProps}>
       <Suspense fallback={null}>
         <Proportion
           cardProps={{
-            title: (
-              <>
-                数据统计
-                <p
-                  style={{
-                    fontWeight: 'normal',
-                    margin: 0,
-                    fontSize: '14px',
-                  }}
-                  className="ant-card-meta-description"
-                >
-                  系统中数据统计占比情况
-                </p>
-              </>
-            ),
+            title: title('数据统计', '系统中数据统计占比情况'),
           }}
-          salesType={salesType}
           loading={loading}
-          salesPieData={[
-            {
-              item: '遥感数据',
-              count: 12,
-            },
-            {
-              item: '监测数据',
-              count: 13,
-            },
-            {
-              item: '其他数据',
-              count: 15,
-            },
-          ]}
+          data={proportionData}
         />
       </Suspense>
     </Col>
@@ -63,23 +52,10 @@ const IntroduceRow = ({ loading }) => (
       <Suspense fallback={null}>
         <SecondChart
           cardProps={{
-            title: (
-              <>
-                变化图斑类型分布
-                <p
-                  style={{
-                    fontWeight: 'normal',
-                    margin: 0,
-                    fontSize: '14px',
-                  }}
-                  className="ant-card-meta-description"
-                >
-                  汇总历史变化图斑类型的分布情况
-                </p>
-              </>
-            ),
+            title: title('变化图斑类型分布', '汇总历史变化图斑类型的分布情况'),
           }}
           loading={loading}
+          data={secondChartData}
         />
       </Suspense>
     </Col>
@@ -87,42 +63,20 @@ const IntroduceRow = ({ loading }) => (
       <Suspense fallback={null}>
         <ProportionSales
           cardProps={{
-            title: (
-              <>
-                任务执行
-                <p
-                  style={{
-                    fontWeight: 'normal',
-                    margin: 0,
-                    fontSize: '14px',
-                  }}
-                  className="ant-card-meta-description"
-                >
-                  汇总当前所有任务执行情况
-                </p>
-              </>
-            ),
+            title: title('任务执行', '汇总当前所有任务执行情况'),
           }}
           salesType={salesType}
           loading={loading}
-          salesPieData={[
-            {
-              x: '未启动',
-              y: 4544,
-            },
-            {
-              x: '正在执行',
-              y: 3321,
-            },
-            {
-              x: '已结束',
-              y: 3113,
-            },
-          ]}
+          data={proportionSalesData}
         />
       </Suspense>
     </Col>
   </Row>
 );
 
-export default IntroduceRow;
+export default connect(({ dashboardAnalysis, loading }) => ({
+  proportionData: dashboardAnalysis.proportionData,
+  proportionSalesData: dashboardAnalysis.proportionSalesData,
+  secondChartData: dashboardAnalysis.secondChartData,
+  loading: loading.effects['dashboardAnalysis/fetch'],
+}))(IntroduceRow);

@@ -3,7 +3,7 @@ import React from 'react';
 import { Pie } from './Charts';
 import styles from '../style.less';
 
-const ProportionSales = ({ loading, salesPieData, cardProps }) => (
+const ProportionSales = ({ loading, data, cardProps }) => (
   <Card
     {...cardProps}
     loading={loading}
@@ -15,8 +15,8 @@ const ProportionSales = ({ loading, salesPieData, cardProps }) => (
   >
     <Pie
       hasLegend
-      total={() => salesPieData.reduce((pre, now) => now.y + pre, 0)}
-      data={salesPieData}
+      total={() => data.reduce((pre, now) => now.y + pre, 0)}
+      data={data}
       valueFormat={value => value}
       height={180}
       lineWidth={4}

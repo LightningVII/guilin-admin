@@ -14,8 +14,9 @@ function getXY(c, { index: idx = 0, field = 'percent', radius = 0.5 }) {
   if (idx > d.length) return null;
   const scales = c.get('scales');
   let sum = 0;
+
   for (let i = 0; i < idx + 1; i += 1) {
-    let val = d[i][field];
+    let val = d?.[i]?.[field] || 0;
     if (i === idx) {
       val /= 2;
     }
@@ -30,7 +31,7 @@ function getXY(c, { index: idx = 0, field = 'percent', radius = 0.5 }) {
   return xy;
 }
 
-const Labelline = props => {
+const DataStatistics = props => {
   const { data } = props;
   const { DataView } = DataSet;
   const dv = new DataView();
@@ -89,4 +90,4 @@ const Labelline = props => {
   );
 };
 
-export default autoHeight()(Labelline);
+export default autoHeight()(DataStatistics);

@@ -1,4 +1,4 @@
-// import request from '@/utils/request';
+import request from '@/utils/request';
 import moment from 'moment';
 // mock data
 const visitData = [];
@@ -196,8 +196,27 @@ const getFakeChartData = {
 
 export async function fakeChartData() {
   // return request('/api/fake_chart_data');
-
   return new Promise(resolve => {
     setTimeout(() => resolve(getFakeChartData), 1000);
   });
+}
+
+export async function querybhlxtj() {
+  return request('/strapi/home/bhlxtj');
+}
+
+export async function querybhtblx() {
+  return request('/strapi/home/bhtblx');
+}
+
+export async function queryrwtj() {
+  return request('/strapi/home/rwtj');
+}
+
+export async function queryrwzx() {
+  return request('/strapi/home/rwzx');
+}
+
+export async function querysjtj() {
+  return request('/strapi/home/sjtj');
 }

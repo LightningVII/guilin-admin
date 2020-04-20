@@ -1,56 +1,37 @@
-import { Table, Badge } from 'antd';
+import { Table } from 'antd';
 import React from 'react';
-import { statusEnum } from '@/constants/basicEnum';
+import { connect } from 'dva';
 
 const columns = [
   {
     title: '区县',
-    dataIndex: 'address',
+    dataIndex: 'COUNTY',
   },
   {
     title: '图斑数量',
-    dataIndex: 'age',
+    dataIndex: 'TBSL',
   },
   {
     title: '未启动',
-    dataIndex: 'init',
+    dataIndex: 'WQDSL',
   },
   {
     title: '正在执行',
-    dataIndex: 'status',
-    render: record => {
-      const { text, status } = statusEnum[record];
-      return <Badge text={text} status={status} />;
-    },
+    dataIndex: 'ZXSL',
   },
   {
     title: '已结束',
-    dataIndex: 'finish',
+    dataIndex: 'JSSL',
   },
   {
     title: '执行率',
-    dataIndex: 'updatedAt',
-    valueType: 'dateTime',
+    dataIndex: 'zxxl',
   },
 ];
 
-const data = [];
-for (let i = 0; i < 10; i += 1) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `徐州.云龙区. ${i}`,
-    status: Math.floor(Math.random() * 10) % 4,
-    progress: Math.floor(Math.random() * 100),
-    finish: Math.floor(Math.random() * 300),
-    init: Math.floor(Math.random() * 300),
-    updatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
-  });
-}
-
-const TaskProgressTable = () => (
+const TaskProgressTable = ({ data }) => (
   <Table
+    rowKey="COUNTY"
     style={{ marginTop: '24px' }}
     columns={columns}
     dataSource={data}
@@ -59,4 +40,7 @@ const TaskProgressTable = () => (
   />
 );
 
-export default TaskProgressTable;
+export default connect(({ dashboardAnalysis, loading }) => ({
+  data: dashboardAnalysis.rwtjData,
+  loading: loading.effects['dashboardAnalysis/fetch'],
+}))(TaskProgressTable);
