@@ -76,6 +76,7 @@ const Model = {
             },
           ],
           rwtjData: response?.[2]?.content,
+          bhlxtjData: response?.[0]?.content,
         },
       });
     },
