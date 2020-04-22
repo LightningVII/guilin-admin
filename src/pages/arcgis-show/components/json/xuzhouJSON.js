@@ -78,3 +78,4 @@ export const pieData = [
     }
 ]
 
+export  const heatMapUrl='http://218.3.176.6:6080/arcgis/rest/services/pollution/MS_SL_pollution/MapServer/2'

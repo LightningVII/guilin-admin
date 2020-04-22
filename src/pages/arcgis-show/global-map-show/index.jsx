@@ -94,6 +94,7 @@ export default class GlobeMapShow extends React.Component {
         this.setState(prevState => ({
           showCircleSelect: !prevState.showCircleSelect
         }));
+        this.state.mapView.graphics.removeAll();
         break;
       default:
         break;

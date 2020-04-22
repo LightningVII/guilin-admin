@@ -61,7 +61,7 @@ class DVChart extends Component {
         const chart = new G2.Chart({
             container: 'bhlxContainer',
             forceFit: true,
-            padding: [20,20,60,20],
+            padding:'auto',
             height: 328
         });
         chart.source(dv);
