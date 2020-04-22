@@ -12,18 +12,6 @@ class DVChart extends Component {
 
 
     componentDidMount() {
-        // const data = [
-        //     { BHLX: '变化类型1', QSXDLMC: '农用地', HSXDLMC: '建设用地', total: 23, new: 2 },
-        //     { BHLX: '变化类型2', QSXDLMC: '未利用地', HSXDLMC: '建设用地', total: 30, new: 3 },
-        //     { BHLX: '变化类型3', QSXDLMC: '建设用地（无定着物）', HSXDLMC: '建设用地（有定着物）', total: 13, new: 4 },
-        //     { BHLX: '变化类型4', QSXDLMC: '建设用地（有定着物）', HSXDLMC: '建设用地（定着物发生变化）', total: 32, new: 12 },
-        //     { BHLX: '变化类型5', QSXDLMC: '建设用地（有定着物）', HSXDLMC: '建设用地（无定着物）', total: 43, new: 14 },
-        //     { BHLX: '变化类型6', QSXDLMC: '建设用地', HSXDLMC: '农用地', total: 54, new: 12 },
-        //     { BHLX: '变化类型7', QSXDLMC: '未利用地', HSXDLMC: '农用地', total: 32, new: 20 },
-        //     { BHLX: '变化类型8', QSXDLMC: '农用地', HSXDLMC: '未利用地', total: 23, new: 6 },
-        //     { BHLX: '变化类型9', QSXDLMC: '其他', HSXDLMC: '其他', total: 54, new: 9 }
-        // ];
-
         const data = [
             { "HSXDLMC": "建设用地", "new": 1, "total": 1, "QSXDLMC": "农用地", "BHLX": "1" },
             { "HSXDLMC": "建设用地", "new": 7, "total": 7, "QSXDLMC": "未利用地", "BHLX": "2" },

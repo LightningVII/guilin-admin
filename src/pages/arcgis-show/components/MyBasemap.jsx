@@ -54,6 +54,9 @@ const MyBasemap = props => {
       viewProperties={{
         center,
         zoom,
+        constraints: {
+            maxZoom: 18
+        }
       }}
       style={{ height }}
     >
