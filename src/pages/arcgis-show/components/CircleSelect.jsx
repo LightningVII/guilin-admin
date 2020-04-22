@@ -1,6 +1,6 @@
 import React from 'react';
-import { Drawer, Statistic, Row, Col } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { Drawer, Statistic, Row, Col, Tooltip } from 'antd';
+import { EditOutlined, ClearOutlined } from '@ant-design/icons';
 import { loadModules } from 'esri-loader';
 
 let EsriDraw = null;
@@ -66,6 +66,9 @@ class CicleSelect extends React.Component {
         // 将绘制的图形添加到view
         mapView.graphics.add(graphic);
         if (event.type === "draw-complete") {
+            this.setState({
+                visible: true
+            })
             mapView.cursor = "default"
             const layers = this.props.view.map.allLayers;
             layers.forEach(item => {
@@ -106,12 +109,6 @@ class CicleSelect extends React.Component {
                     bhtbCount: count + prevState.bhtbCount,
                     bhlxArray: bhlxArrays
                 }))
-
-                that.props.view.popup.open({
-                    location: geometry.extent.center,
-                    title: '查询结果统计',
-                    content: that.setContentInfo()
-                });
             }
         });
     }
@@ -143,8 +140,13 @@ class CicleSelect extends React.Component {
                     this.props.view.graphics.removeAll();
                     this.props.onClose()
                 }}
+
                 visible={this.state.visible}
                 height='180px'
+                style={{
+                    width: "400px",
+                    left: "calc(50% - 150px)"
+                }}
             >
                 <div style={{ textAlign: "center" }}>
                     <Row gutter={16}>
@@ -155,15 +157,26 @@ class CicleSelect extends React.Component {
                             <Statistic title="图斑数量" value={this.state.bhtbCount} suffix="个" />
                         </Col>
                         <Col span={8}>
-                            <Statistic title="变化类型数量" value={this.state.bhlxArray.length} suffix="个" />
+                            <Statistic title="变化类型数量" value={this.state.bhlxArray.length} suffix="类" />
                         </Col>
                     </Row>
                 </div>
-                <EditOutlined
-                    onClick={() => {
-                        this.redraw()
-                    }}
-                    style={{ position: "absolute", top: 20, right: 60, cursor: 'pointer' }} />
+
+                <Tooltip title="清除绘制">
+                    <ClearOutlined
+                        onClick={() => {
+                            this.props.view.graphics.removeAll()
+                        }}
+                        style={{ position: "absolute", top: 20, right: 60, cursor: 'pointer' }} />
+                </Tooltip>
+
+                <Tooltip title="重新绘制">
+                    <EditOutlined
+                        onClick={() => {
+                            this.redraw()
+                        }}
+                        style={{ position: "absolute", top: 20, right: 100, cursor: 'pointer' }} />
+                </Tooltip>
             </Drawer>
         );
     }

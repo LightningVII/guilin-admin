@@ -94,10 +94,7 @@ class MapBottom extends React.Component {
 
         break;
     }
-
-
   }
-
 
   getXY = (px, py) => {
     const point = this.props.mapView.toMap({ x: px, y: py });

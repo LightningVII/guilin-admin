@@ -9,8 +9,8 @@ export   const polylineSymbol = {
   color: 'red',
   outline: {
     // autocasts as new SimpleLineSymbol()
-    color: [128, 128, 128, 0.5],
-    width: '0.5px',
+    color: [255, 0, 0, 1],
+    width: '1.5px',
   },
 };
 

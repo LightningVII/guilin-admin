@@ -9,10 +9,11 @@ import { loadModules } from 'esri-loader';
 import style from './css/style.css';
 
 import { xzqFeature } from './json/treeData'
-import { renderData, pieData } from './json/xuzhouJSON'
+import { renderData, pieData, heatMapUrl } from './json/xuzhouJSON'
 
 let EsriFeatureLayer;
 let xzqLayer = null;
+let fLayer = null;
 let charts = [];
 let legend = null;
 let maxNum = 0;
@@ -192,6 +193,37 @@ class GISStastic extends React.Component {
         })
     }
 
+    // 创建热力图
+    creatHeatMap = () => {
+        const renderer = {
+            type: "heatmap",
+            colorStops: [
+                { ratio: 0, color: "rgba(0, 255, 150, 0)" },
+                { ratio: 0.6, color: "rgb(250, 250, 0)" },
+                { ratio: 0.85, color: "rgb(250, 150, 0)" },
+                { ratio: 0.95, color: "rgb(255, 50, 0)" },
+                { ratio: 1, color: "rgb(255, 0, 0)" }
+            ],
+            maxPixelIntensity: 25,
+            minPixelIntensity: 0
+        };
+        fLayer = new EsriFeatureLayer({
+            url: heatMapUrl,
+            renderer
+        })
+
+        this.props.view.map.add(fLayer)
+    }
+
+    // 创建热力图图例
+    creatHeatLegend = () => {
+        // const legend2 = new EsriLegend({
+        //     view: this.props.view,
+        //     container:'legend'
+        // })
+    }
+
+    // 创建饼图图例
     creatPieLegend = () => {
         if (!legend)
             legend = new G2.Chart({
@@ -200,7 +232,13 @@ class GISStastic extends React.Component {
                 width: 260,
                 padding: [20, 20, 20, 50]
             })
-        legend.source(renderData);
+        const ds = new DataSet();
+        const dv = ds.createView().source(renderData);
+        dv.transform({
+            type: 'rename',
+            map: transField
+        });
+        legend.source(dv);
         legend.coord('theta', {
             radius: 0.75
         });
@@ -210,10 +248,10 @@ class GISStastic extends React.Component {
         });
 
         legend.intervalStack()
-            .position('TASKNUM')
+            .position('任务数量')
             .color('COUNTY')
             .label('COUNTY')
-            .tooltip('COUNTY*TASKNUM')
+            .tooltip('任务数量')
             .style({
                 lineWidth: 1,
                 stroke: '#fff'
@@ -271,6 +309,12 @@ class GISStastic extends React.Component {
                     selectOptions: pieChart
                 })
                 break;
+            case "heatMap":
+                data = null
+                this.creatHeatMap();
+                callback = null;
+                legendCallback = this.creatHeatLegend
+                break;
             default:
                 data = null
                 break;
@@ -291,7 +335,7 @@ class GISStastic extends React.Component {
         this.props.view.extent = xzqFeature.extent;
         setTimeout(() => {
             this.removeLegend()
-            legendCallback(refObj)
+            if (legendCallback) legendCallback(refObj)
         }, 600)
     }
 
@@ -299,6 +343,10 @@ class GISStastic extends React.Component {
         charts = [];
         ReactDOM.unmountComponentAtNode(document.getElementById("container"));
         if (this.mapExtentChange) this.mapExtentChange.remove();
+        if (fLayer) {
+            this.props.view.map.remove(fLayer)
+            fLayer = null
+        }
     }
 
     removeLegend = () => {
@@ -394,7 +442,7 @@ class GISStastic extends React.Component {
                             <Button type="primary" htmlType="submit" onClick={() => {
                                 this.renderChart()
                             }}>
-                                地图渲染
+                                开始统计
                         </Button>
                             &#12288;
                         <Button type="danger" onClick={() => {

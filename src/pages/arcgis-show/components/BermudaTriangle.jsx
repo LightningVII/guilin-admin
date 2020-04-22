@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadModules } from 'esri-loader';
+import { polylineSymbol } from './json/lineSymbol.js'
 
 const BermudaTriangle = props => {
   const [graphic, setGraphic] = useState(null);
@@ -9,27 +10,18 @@ const BermudaTriangle = props => {
         // Create a polygon geometry
         const polygon = {
           type: 'polygon', // autocasts as new Polygon()
-          rings: props.rings,
-        };
-
-        // Create a symbol for rendering the graphic
-        const fillSymbol = {
-          type: 'simple-fill', // autocasts as new SimpleFillSymbol()
-          color: [227, 139, 79, 0.8],
-          outline: {
-            // autocasts as new SimpleLineSymbol()
-            color: [255, 255, 255],
-            width: 1,
-          },
+          rings: props.rings.coordinates,
         };
 
         // Add the geometry and symbol to a new graphic
         const g = new Graphic({
           geometry: polygon,
-          symbol: fillSymbol,
+          symbol: polylineSymbol,
         });
+        
         setGraphic(g);
         props.view.graphics.add(g);
+     
       })
       .catch(err => console.error(err));
 

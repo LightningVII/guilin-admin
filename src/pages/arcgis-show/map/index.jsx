@@ -28,8 +28,8 @@ export default connect(({ remoteSensing, layer }) => ({
       type: 'layer/fetchLayerGetLayerUrl',
       payload: match?.params
     });
-  }, []);
 
+  }, []);
 
   return (
     <PageHeaderWrapper title={false}>
@@ -37,7 +37,7 @@ export default connect(({ remoteSensing, layer }) => ({
         <Row>
           <Col span={12} style={{ border: '1px solid #888888' }}>
             <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 5 }}>
-              {layerUrl[0].title}
+              {layerUrl.length > 0 ? layerUrl[0].title : ''}
             </Button>
             <MyBasemap
               id="basemap1"
@@ -53,13 +53,13 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              <MyImageLayer imgLayer={layerUrl[0]} />
-              <MyFeatureLayer geomotry={geomotry} />
+               {layerUrl.length > 0 ? <MyImageLayer imgLayer={layerUrl[0]} /> : null}
+              <MyFeatureLayer geo={geomotry} />
             </MyBasemap>
           </Col>
           <Col span={12} style={{ border: '1px solid #888888' }}>
             <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 5 }}>
-              {layerUrl[1].title}
+              {layerUrl.length > 0 ? layerUrl[1].title : ''}
             </Button>
             <MyBasemap
               id="basemap2"
@@ -75,8 +75,8 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              <MyImageLayer imgLayer={layerUrl[1]} />
-              <MyFeatureLayer geomotry={geomotry} />
+              {layerUrl.length > 0 ? <MyImageLayer imgLayer={layerUrl[1]} /> : null}
+              <MyFeatureLayer geo={geomotry} /> 
             </MyBasemap>
           </Col>
         </Row>

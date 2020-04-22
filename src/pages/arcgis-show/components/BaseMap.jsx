@@ -23,7 +23,7 @@ export default class BaseMap extends React.Component {
                 const defaultLabel = labelMapList[0];
                 if (bm) {
                     bm = JSON.parse(bm)
-                    defaultMap.title=bm.title
+                    defaultMap.title = bm.title
                 }
                 if (lm) {
                     lm = JSON.parse(lm)
@@ -41,6 +41,9 @@ export default class BaseMap extends React.Component {
                     map: this.argmap,
                     center: [117.18, 34.27],
                     zoom: 13,
+                    constraints: {
+                        maxZoom: 18
+                    }
                 });
 
                 this.view.when(() => {

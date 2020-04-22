@@ -14,6 +14,7 @@ const MyImageLayer = props => {
         });
         setImageLayer(wt);
         props.view.map.add(wt);
+        
       })
       .catch(err => console.error(err));
 

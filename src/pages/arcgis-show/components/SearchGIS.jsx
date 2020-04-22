@@ -38,7 +38,8 @@ class SearchGIS extends React.Component {
       paddingTop: 0,
       searchPanelVisiable: 'hidden',
       searchData: [],
-      treeDatas: treeData
+      treeDatas: treeData,
+      expandedKeys:[]
     };
   }
 
@@ -55,19 +56,19 @@ class SearchGIS extends React.Component {
         const { dispatch } = this.props;
 
         // 图层数据
-        // dispatch({
-        //   type: 'layer/fetchLayerTree'
-        // }).then(tree => {
-        //   const expandKeys = [];
-        //   tree.forEach(t => {
-        //     expandKeys.push(t.key)
-        //   })
-        //   this.setState({
-        //     treeDatas: tree || treeData,
-        //     expandedKeys: expandKeys
-        //   });
-        //   console.log(expandKeys)
-        // });
+        dispatch({
+          type: 'layer/fetchLayerTree'
+        }).then(tree => {
+          const expandKeys = [];
+          tree.forEach(t => {
+            expandKeys.push(t.key)
+          })
+          this.setState({
+            treeDatas: tree || treeData,
+            expandedKeys: expandKeys
+          });
+          console.log(expandKeys)
+        });
 
       },
     );
@@ -261,6 +262,7 @@ class SearchGIS extends React.Component {
                 showLine
                 onCheck={this.onCheck}
                 treeData={this.state.treeDatas}
+                expandedKeys={this.state.expandedKeys}
                 defaultExpandAll
                 style={{
                   background: '#FFF',

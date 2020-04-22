@@ -1,18 +1,24 @@
 import { useState, useEffect } from 'react';
 import { loadModules } from 'esri-loader';
-import { polylineSymbol } from './json/lineSymbol.js'
+import { bhtblLineSymbol } from './json/lineSymbol.js'
 
 const MyFeatureLayer = props => {
-  const [featureLayer, setFeatureLayer] = useState(null);
+  const [featureLayer, setGraphic] = useState(null);
   useEffect(() => {
-    loadModules(['esri/Graphic'])
-      .then(([Graphic]) => {
-        setFeatureLayer(
-          props.view.graphics.add(new Graphic({
-            geometry: props.geometry,
-            symbol: polylineSymbol
-          }))
-        );
+    loadModules(['esri/Graphic',"esri/geometry/Polygon"])
+      .then(([Graphic,Polygon]) => {
+        const polygon = new Polygon ({
+          hasZ: true,
+          hasM: true,
+          rings: props.geo.coordinates, 
+        });
+        const g = new Graphic({
+          geometry: polygon,
+          symbol: bhtblLineSymbol,
+        });
+        props.view.extent=polygon.extent
+        setGraphic(g);
+        props.view.graphics.add(g);
       })
       .catch(err => console.error(err));
 
