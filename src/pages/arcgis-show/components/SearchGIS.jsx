@@ -67,12 +67,9 @@ class SearchGIS extends React.Component {
             treeDatas: tree || treeData,
             expandedKeys: expandKeys
           });
-          console.log(expandKeys)
         });
-
       },
     );
-
   }
 
   handleInputSearch = e => {

@@ -25,13 +25,13 @@ const transField = {
 }
 
 const histogram = [
-    { value: 'TASKNUM', text: '任务数量' },
-    { value: 'AREA', text: '变化面积' },
-    { value: 'BHLXNUM', text: '类型数量' }
+    { value: 'TASKNUM', text: '任务数量', key: '1' },
+    { value: 'AREA', text: '变化面积', key: '2' },
+    { value: 'BHLXNUM', text: '类型数量', key: '3' }
 ]
 
 const pieChart = [
-    { value: 'TASKNUM', text: '任务类型/数量' }
+    { value: 'TASKNUM', text: '任务类型/数量', key: '1' }
 ]
 
 class GISStastic extends React.Component {
@@ -53,6 +53,7 @@ class GISStastic extends React.Component {
         loadModules(['esri/layers/FeatureLayer']).then(
             ([FeatureLayer]) => {
                 EsriFeatureLayer = FeatureLayer
+                legend = null;
             }
         );
     }
@@ -336,7 +337,7 @@ class GISStastic extends React.Component {
         setTimeout(() => {
             this.removeLegend()
             if (legendCallback) legendCallback(refObj)
-        }, 600)
+        }, 1000)
     }
 
     removeChart = () => {
@@ -397,6 +398,7 @@ class GISStastic extends React.Component {
                     >
                         <Form.Item name="chartType" label="图表类型">
                             <Select style={{ width: 200 }} onChange={() => {
+                                this.removeChart()
                                 const refObj = this.formStasticRef.current.getFieldsValue();
                                 switch (refObj.chartType) {
                                     case "histogram":
@@ -428,7 +430,7 @@ class GISStastic extends React.Component {
                         <Form.Item name='field' label="统计字段">
                             <Select style={{ width: 200 }} >
                                 {
-                                    this.state.selectOptions.map(item => (<Select.Option value={item.value}>{item.text}</Select.Option>))
+                                    this.state.selectOptions.map(item => (<Select.Option key={item.key} value={item.value}>{item.text}</Select.Option>))
                                 }
                             </Select>
                         </Form.Item>
@@ -454,8 +456,9 @@ class GISStastic extends React.Component {
                         </Form.Item>
                     </Form>
                     <div style={{ overflow: "hidden" }}>
-                        <div id='legend' />
-                        {this.state.renderLegend ? <h4 style={{ textAlign: 'center' }}>{this.state.legendTitle}</h4> : null}
+                        <div id='legend' >
+                            {this.state.renderLegend ? <h4 style={{ textAlign: 'center' }}>{this.state.legendTitle}</h4> : null}
+                        </div>
                     </div>
                 </Drawer>
             </>
