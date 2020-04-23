@@ -5,6 +5,8 @@ import {
   queryRemoteSensingDetail,
   queryChangespotFuzzyQuery,
   queryChangespotGeomotry,
+  queryChangespotTBCount,
+  queryChangespotBZTTJ,
 } from '@/services/remote';
 
 const RemoteModel = {
@@ -69,7 +71,23 @@ const RemoteModel = {
         type: 'saveGeomotry',
         payload: data?.content,
       });
-      return data
+      return data;
+    },
+    *fetchChangespotTBCount({ payload }, { call, put }) {
+      const data = yield call(queryChangespotTBCount, payload);
+      yield put({
+        type: 'saveTBCount',
+        payload: data?.content,
+      });
+      return data;
+    },
+    *fetchChangespotBZTTJ({ payload }, { call, put }) {
+      const data = yield call(queryChangespotBZTTJ, payload);
+      yield put({
+        type: 'saveBZTTJ',
+        payload: data?.content,
+      });
+      return data;
     },
   },
 
@@ -88,6 +106,12 @@ const RemoteModel = {
     },
     saveGeomotry(state, { payload }) {
       return { ...state, geomotry: payload };
+    },
+    saveTBCount(state, { payload }) {
+      return { ...state, tbcount: payload };
+    },
+    saveBZTTJ(state, { payload }) {
+      return { ...state, bzttj: payload };
     },
   },
 };

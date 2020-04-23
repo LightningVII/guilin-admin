@@ -7,18 +7,23 @@ const MyFeatureLayer = props => {
   useEffect(() => {
     loadModules(['esri/Graphic',"esri/geometry/Polygon"])
       .then(([Graphic,Polygon]) => {
-        const polygon = new Polygon ({
-          hasZ: true,
-          hasM: true,
-          rings: props.geo.coordinates, 
-        });
-        const g = new Graphic({
-          geometry: polygon,
-          symbol: bhtblLineSymbol,
-        });
-        props.view.extent=polygon.extent
-        setGraphic(g);
-        props.view.graphics.add(g);
+
+        if(props.geo){
+          const polygon = new Polygon ({
+            hasZ: true,
+            hasM: true,
+            rings: props.geo.coordinates, 
+          });
+          const g = new Graphic({
+            geometry: polygon,
+            symbol: bhtblLineSymbol,
+          });
+          props.view.extent=polygon.extent
+          setGraphic(g);
+          props.view.graphics.add(g);
+        }
+
+        
       })
       .catch(err => console.error(err));
 

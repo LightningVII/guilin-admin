@@ -7,14 +7,15 @@ const MyImageLayer = props => {
 
   useEffect(() => {
     loadModules(['esri/layers/WebTileLayer'])
-      .then(([ WebTileLayer]) => {
-        const wt = new WebTileLayer({
-          urlTemplate: props.imgLayer.layerUrl,
-          id: props.imgLayer.id,
-        });
-        setImageLayer(wt);
-        props.view.map.add(wt);
-        
+      .then(([WebTileLayer]) => {
+        if (props.imgLayer) {
+          const wt = new WebTileLayer({
+            urlTemplate: props.imgLayer.layerUrl,
+            id: props.imgLayer.id,
+          });
+          setImageLayer(wt);
+          props.view.map.add(wt);
+        }
       })
       .catch(err => console.error(err));
 

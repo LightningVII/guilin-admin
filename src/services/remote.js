@@ -54,3 +54,11 @@ export async function queryChangespotFuzzyQuery(term) {
 export async function queryChangespotGeomotry(tbbm) {
   return request(`/strapi/changespot/geomotry?${stringify(tbbm)}`);
 }
+
+export async function queryChangespotTBCount(time) {
+  return request(`/strapi/changespot/tbcount?${stringify(time)}`);
+}
+
+export async function queryChangespotBZTTJ(time) {
+  return request(`/strapi/changespot/bzttj?${stringify(time)}`);
+}

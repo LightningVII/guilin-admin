@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import DataSet from '@antv/data-set';
 import G2 from '@antv/g2';
-import { mapJson ,renderData} from '../json/xuzhouJSON.js';
+import { connect } from 'dva';
+import { mapJson } from './json/xuzhouJSON';
 
 
 class LayoutImg extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
         }
     }
@@ -32,6 +33,17 @@ class LayoutImg extends Component {
             itemTpl: '<tr data-index="{index}"><td style="padding:5px;">{name}</td><td style="padding:5px;">{value}</td></tr>'
         });
 
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'remoteSensing/fetchChangespotTBCount'
+        }).then(res => {
+            if (res.code === 200)
+                this.renderChart(chart, res.content)
+        });
+    }
+
+
+    renderChart = (chart, data) => {
         const ds = new DataSet();
         const dv = ds.createView('back')
             .source(mapJson, {
@@ -54,7 +66,9 @@ class LayoutImg extends Component {
                 fillOpacity: 0.8
             });
 
-        const userData = ds.createView().source(renderData);
+
+        const userData = ds.createView().source(data);
+
         userData.transform({
             type: 'map',
             callback: obj => {
@@ -82,11 +96,15 @@ class LayoutImg extends Component {
 
     render() {
         return (
-            <div id="container"  />
+            <div id="container" style={{ height: 328 }}/>
         );
     }
 
 }
+export default connect(({ remoteSensing }) => ({
+    tbcount: remoteSensing.tbcount
+}))(LayoutImg);
 
-export default LayoutImg;
+
+
 

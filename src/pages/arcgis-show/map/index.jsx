@@ -53,8 +53,8 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-               {layerUrl.length > 0 ? <MyImageLayer imgLayer={layerUrl[0]} /> : null}
-              <MyFeatureLayer geo={geomotry} />
+              {layerUrl.length > 0 ? <MyImageLayer imgLayer={layerUrl[0]} /> : <MyImageLayer />}
+              {geomotry ? <MyFeatureLayer geo={geomotry} /> :  <MyFeatureLayer />}
             </MyBasemap>
           </Col>
           <Col span={12} style={{ border: '1px solid #888888' }}>
@@ -75,8 +75,8 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              {layerUrl.length > 0 ? <MyImageLayer imgLayer={layerUrl[1]} /> : null}
-              <MyFeatureLayer geo={geomotry} /> 
+              {layerUrl.length > 0 ? <MyImageLayer imgLayer={layerUrl[1]} /> : <MyImageLayer />}
+              {geomotry ? <MyFeatureLayer geo={geomotry} /> : <MyFeatureLayer />}
             </MyBasemap>
           </Col>
         </Row>
