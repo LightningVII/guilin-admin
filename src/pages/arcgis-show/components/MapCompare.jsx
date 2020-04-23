@@ -68,22 +68,22 @@ class MapCompare extends React.Component {
     const tLayers = [];
     const fLayers = [];
     if (this.props.featrueGraphic) {
-      // let graphic1 = {};
-      // const graphic2 = {};
+      const graphic1 = {};
+      const graphic2 = {};
 
-      // graphic1.title = this.props.featrueGraphic.attributes.QSX;
-      // graphic1.layerUrl =
-      //   'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}';
-      // graphic1.key = '1';
-      // graphic2.layerUrl =
-      //   'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201802/MapServer/tile/{level}/{row}/{col}';
-      // graphic2.key = '2';
-      // graphic2.title = this.props.featrueGraphic.attributes.HSX;
+      graphic1.title = this.props.featrueGraphic.attributes.QSX;
+      graphic1.layerUrl =
+        'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}';
+      graphic1.key = '1';
+      graphic2.layerUrl =
+        'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201802/MapServer/tile/{level}/{row}/{col}';
+      graphic2.key = '2';
+      graphic2.title = this.props.featrueGraphic.attributes.HSX;
 
-      // graphic1 = this.props.layerUrl[0]
+  
       
-      tLayers.push(this.props.layerUrl[0]);
-      tLayers.push(this.props.layerUrl[1]);
+      tLayers.push(graphic1);
+      tLayers.push(graphic2);
 
 
       const fg = this.props.featrueGraphic;
