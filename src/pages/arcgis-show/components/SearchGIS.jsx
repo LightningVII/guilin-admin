@@ -39,7 +39,7 @@ class SearchGIS extends React.Component {
       searchPanelVisiable: 'hidden',
       searchData: [],
       treeDatas: treeData,
-      expandedKeys:[]
+      expandedKeys: []
     };
   }
 
@@ -58,15 +58,18 @@ class SearchGIS extends React.Component {
         // 图层数据
         dispatch({
           type: 'layer/fetchLayerTree'
-        }).then(tree => {
-          const expandKeys = [];
-          tree.forEach(t => {
-            expandKeys.push(t.key)
-          })
-          this.setState({
-            treeDatas: tree || treeData,
-            expandedKeys: expandKeys
-          });
+        }).then(res => {
+          if (res.ok) {
+            const expandKeys = [];
+            res.forEach(t => {
+              expandKeys.push(t.key)
+            })
+            this.setState({
+              treeDatas: res || treeData,
+              expandedKeys: expandKeys
+            });
+          }
+
         });
       },
     );

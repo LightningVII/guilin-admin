@@ -302,8 +302,10 @@ class GISStastic extends React.Component {
             xzqLayer = new EsriFeatureLayer({ url: xzqFeature.layerUrl, id: xzqFeature.key });
             this.props.view.map.add(xzqLayer);
         }
+        
         // 获取表单数据
         const refObj = this.formStasticRef.current.getFieldsValue();
+        this.removeHeatLayer(refObj.chartType);
         let data;
         let callback;
         let legendCallback;
@@ -336,7 +338,7 @@ class GISStastic extends React.Component {
                 break;
         }
 
-        this.removeXZQLayer(refObj.chartType);
+     
 
         // 清除/重设地图extentChange事件
         if (this.mapExtentChange) this.mapExtentChange.remove();
@@ -367,10 +369,13 @@ class GISStastic extends React.Component {
         }
     };
 
-    removeXZQLayer = type => {
+    removeHeatLayer = type => {
         switch (type) {
             case "heatMap":
-
+                if (fLayer) {
+                    this.props.view.map.remove(fLayer);
+                    fLayer = null;
+                }
                 break;
             default:
                 if (fLayer) {
