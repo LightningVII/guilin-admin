@@ -109,7 +109,7 @@ const description = item => (
   </RouteContext.Consumer>
 );
 
-let implementId;
+// let implementId;
 
 class Details extends Component {
   state = {
@@ -205,12 +205,12 @@ class Details extends Component {
                         setSelectedImages(images);
                         setImagesViewShow(true);
                       },
-                      r => {
+                      () => {
                         this.setState({
                           approvalShow: true,
                           approvalContent: '',
                         });
-                        implementId = r.implementid;
+                        // implementId = r.implementid;
                       },
                     )}
                   />
@@ -267,10 +267,10 @@ class Details extends Component {
             dispatch({
               type: 'remoteSensing/fetchChangespotApproval',
               payload: {
-                implementId,
                 spjg: 1,
-                spbz: approvalContent,
+                spyj: approvalContent,
                 spr: user.currentUser.userid,
+                tbbm: changespot?.tbbm,
               },
             }).then(res => {
               if (res?.code === 200) {
@@ -289,10 +289,10 @@ class Details extends Component {
             dispatch({
               type: 'remoteSensing/fetchChangespotApproval',
               payload: {
-                implementId,
                 spjg: 2,
-                spbz: approvalContent,
+                spyj: approvalContent,
                 spr: user.currentUser.userid,
+                tbbm: changespot?.tbbm,
               },
             }).then(res => {
               if (res?.code === 200) {

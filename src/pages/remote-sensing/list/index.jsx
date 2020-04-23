@@ -53,7 +53,7 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
-let implementId;
+// let implementId;
 const TableList = props => {
   const [spotIds, setSpotIds] = useState([]);
   // const [selectedImages, setSelectedImages] = useState([]);
@@ -245,10 +245,10 @@ const TableList = props => {
           dispatch({
             type: 'remoteSensing/fetchChangespotApproval',
             payload: {
-              implementId,
               spjg: 1,
-              spbz: approvalContent,
+              spyj: approvalContent,
               spr: user.currentUser.userid,
+              tbbm: data.filter(item => spotIds.includes(item.spotid)).map(({ tbbm }) => tbbm),
             },
           }).then(res => {
             if (res?.code === 200) {
@@ -264,10 +264,10 @@ const TableList = props => {
           dispatch({
             type: 'remoteSensing/fetchChangespotApproval',
             payload: {
-              implementId,
               spjg: 2,
-              spbz: approvalContent,
+              spyj: approvalContent,
               spr: user.currentUser.userid,
+              tbbm: data.filter(item => spotIds.includes(item.spotid)).map(({ tbbm }) => tbbm),
             },
           }).then(res => {
             if (res?.code === 200) {
