@@ -1,10 +1,11 @@
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { queryCurrent, query as queryUsers, queryStaffList, queryUserAdd } from '@/services/user';
 
 const UserModel = {
   namespace: 'user',
 
   state: {
     currentUser: null,
+    staffList: {},
   },
 
   effects: {
@@ -26,6 +27,22 @@ const UserModel = {
         payload: response.content,
       });
     },
+    *fetchStaffList({ payload }, { call, put }) {
+      const response = yield call(queryStaffList, payload);
+
+      yield put({
+        type: 'saveStaffList',
+        payload: response.content,
+      });
+    },
+    *fetchUserAdd({ payload }, { call, put }) {
+      const res = yield call(queryUserAdd, payload);
+      console.log('res', res);
+      yield put({
+        type: 'addStaff',
+        payload,
+      });
+    },
   },
 
   reducers: {
@@ -39,7 +56,21 @@ const UserModel = {
           } || state.currentUser,
       };
     },
-
+    saveStaffList(state, action) {
+      return {
+        ...state,
+        staffList: action.payload,
+      };
+    },
+    addStaff(state, action) {
+      return {
+        ...state,
+        staffList: {
+          ...state.staffList,
+          list: [{ ...action.payload, unsave: true }, ...(state?.staffList?.list || [])],
+        },
+      };
+    },
     changeNotifyCount(
       state = {
         currentUser: {},

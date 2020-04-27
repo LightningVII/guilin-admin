@@ -7,6 +7,7 @@ const Model = {
     province: [],
     city: [],
     isLoading: false,
+    staffList: [],
   },
   effects: {
     *fetch(_, { call, put }) {
@@ -63,6 +64,32 @@ const Model = {
 
     changeLoading(state, action) {
       return { ...state, isLoading: action.payload };
+    },
+
+    saveStaff(state, action) {
+      const { row, key } = action.payload;
+      const { staffList } = state;
+      const index = staffList.findIndex(item => key === item.key);
+
+      if (index > -1) {
+        const { unsave, ...item } = staffList[index];
+        staffList.splice(index, 1, { ...item, ...row });
+      } else {
+        staffList.push(row);
+      }
+      return { ...state, staffList };
+    },
+
+    cancelEditStaff(state) {
+      return { ...state, staffList: state.staffList.filter(({ unsave }) => !unsave) };
+    },
+
+    addStaff(state, action) {
+      return { ...state, staffList: [{ ...action.payload, unsave: true }, ...state.staffList] };
+    },
+
+    deleteStaff(state, action) {
+      return { ...state, staffList: state.staffList.filter(item => item.key !== action.payload) };
     },
   },
 };

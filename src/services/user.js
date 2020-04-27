@@ -8,13 +8,7 @@ export async function query() {
 
 export async function queryCurrent(payload) {
   // return new Promise(resolve => setTimeout(() => resolve(user()), 1000));
-  return request(`/strapi/sys/user/info`, {
-    method: 'POST',
-    data: stringify(payload),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;',
-    },
-  });
+  return request(`/strapi/sys/user/info?${stringify(payload)}`);
 }
 
 export async function queryNotices() {
@@ -123,5 +117,19 @@ export async function queryNotices() {
         ]),
       1000,
     );
+  });
+}
+
+export async function queryStaffList(payload) {
+  return request(`/strapi/sys/user/list?${stringify(payload)}`);
+}
+
+export async function queryUserAdd(payload) {
+  return request(`/strapi/sys/user/info`, {
+    method: 'POST',
+    data: stringify(payload),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
   });
 }
