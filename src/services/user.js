@@ -1,19 +1,15 @@
 import request from '@/utils/request';
 import { stringify } from 'querystring';
-// import user from '@/constants/user';
 
 export async function query() {
   return request('/strapi/users');
 }
 
 export async function queryCurrent(payload) {
-  // return new Promise(resolve => setTimeout(() => resolve(user()), 1000));
   return request(`/strapi/sys/user/info?${stringify(payload)}`);
 }
 
 export async function queryNotices() {
-  // return request('/api/notices');
-
   return new Promise(resolve => {
     // console.log('queryNotices');
     setTimeout(
@@ -125,7 +121,17 @@ export async function queryStaffList(payload) {
 }
 
 export async function queryUserAdd(payload) {
-  return request(`/strapi/sys/user/info`, {
+  return request(`/strapi/sys/user/add`, {
+    method: 'POST',
+    data: stringify(payload),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+  });
+}
+
+export async function queryUserUpdate(payload) {
+  return request(`/strapi/sys/user/update`, {
     method: 'POST',
     data: stringify(payload),
     headers: {

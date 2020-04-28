@@ -57,6 +57,14 @@ const Model = {
       }
       return null;
     },
+    *checkLogin({ payload }, { call, select }) {
+      const { username } = yield select(state => state?.user?.currentUser);
+      return yield call(fakeAccountLogin, { username, password: payload });
+    },
+    *updatePassword({ payload }, { call, select }) {
+      const { userid } = yield select(state => state?.user?.currentUser);
+      return yield call(fakeAccountLogin, { xgrid: userid, ...payload });
+    },
     *getCaptcha({ payload }, { call }) {
       yield call(getFakeCaptcha, payload);
     },

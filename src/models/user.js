@@ -1,4 +1,10 @@
-import { queryCurrent, query as queryUsers, queryStaffList, queryUserAdd } from '@/services/user';
+import {
+  queryCurrent,
+  query as queryUsers,
+  queryStaffList,
+  queryUserAdd,
+  queryUserUpdate,
+} from '@/services/user';
 
 const UserModel = {
   namespace: 'user',
@@ -37,11 +43,15 @@ const UserModel = {
     },
     *fetchUserAdd({ payload }, { call, put }) {
       const res = yield call(queryUserAdd, payload);
-      console.log('res', res);
+      console.log('fetchUserAdd >>:', res);
       yield put({
         type: 'addStaff',
         payload,
       });
+    },
+    *fetchUserUpdate({ payload }, { call, put }) {
+      const { code } = yield call(queryUserUpdate, payload);
+      if (code === 200) yield put({ type: 'fetchCurrent' });
     },
   },
 

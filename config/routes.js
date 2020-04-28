@@ -51,7 +51,7 @@ export default [
             path: '/listsearchprojects',
             component: './ListSearchProjects',
             authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
-            // hideInMenu: true,
+            hideInMenu: true,
           },
           {
             icon: 'crown',
@@ -66,7 +66,6 @@ export default [
             path: '/remote-sensing',
             component: './remote-sensing/list',
             authority: ['XTGLY', 'ZFDDZ', 'PTYH'],
-            hideInMenu: true,
           },
           {
             path: '/remote-sensing/details/arcgis-show/:tbbm',

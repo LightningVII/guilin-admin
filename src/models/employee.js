@@ -43,15 +43,15 @@ const EmployeeModel = {
         });
     },
     *fetchRoleSave({ payload }, { call, put }) {
-      const { id, ...param } = payload;
-      if (id === 'new-roleid') return yield call(queryRoleAdd, param);
+      const { roleid, ...param } = payload;
+      if (roleid === 'new-roleid') return yield call(queryRoleAdd, param);
       const { code } = yield call(queryRoleUpdate, payload);
       if (code === 200) return yield put({ type: 'saveRole', payload });
       return null;
     },
     *fetchDeptSave({ payload }, { call, put }) {
-      const { id, ...param } = payload;
-      if (id === 'new-deptid') return yield call(queryDeptAdd, param);
+      const { deptid, ...param } = payload;
+      if (deptid === 'new-deptid') return yield call(queryDeptAdd, param);
       const { code } = yield call(queryDeptUpdate, payload);
       if (code === 200) return yield put({ type: 'saveDept', payload });
       return null;
