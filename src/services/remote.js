@@ -62,3 +62,7 @@ export async function queryChangespotTBCount(time) {
 export async function queryChangespotBZTTJ(time) {
   return request(`/strapi/changespot/bzttj?${stringify(time)}`);
 }
+
+export async function queryChangespotGeoJson(payload) {
+  return request(`/strapi/changespot/geojson?${stringify(payload)}`);
+}

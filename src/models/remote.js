@@ -7,6 +7,7 @@ import {
   queryChangespotGeomotry,
   queryChangespotTBCount,
   queryChangespotBZTTJ,
+  queryChangespotGeoJson,
 } from '@/services/remote';
 
 const RemoteModel = {
@@ -17,6 +18,7 @@ const RemoteModel = {
     changespot: null,
     fuzzyChangespot: null,
     geomotry: null,
+    geoJson: null,
   },
 
   effects: {
@@ -89,6 +91,14 @@ const RemoteModel = {
       });
       return data;
     },
+    *fetchChangespotGeoJson({ payload }, { call, put }) {
+      const data = yield call(queryChangespotGeoJson, payload);
+      yield put({
+        type: 'saveGeoJson',
+        payload: data,
+      });
+      return data;
+    },
   },
 
   reducers: {
@@ -112,6 +122,9 @@ const RemoteModel = {
     },
     saveBZTTJ(state, { payload }) {
       return { ...state, bzttj: payload };
+    },
+    saveGeoJson(state, { payload }) {
+      return { ...state, geoJson: payload };
     },
   },
 };
