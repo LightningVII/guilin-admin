@@ -43,12 +43,12 @@ export default connect(({ remoteSensing, layer }) => ({
               id="basemap1"
               height='calc(100vh - 120px)'
               handleLoad={(map, view) => {
+                console.log("basemap1",view)
                 basemap1 = view;
                 basemap1.ui.remove('attribution')
                 basemap1.watch('extent', () => {
                   if (basemap1.focused) {
                     basemap2.extent = basemap1.extent;
-                    basemap2.rotation = basemap1.rotation;
                   }
                 });
               }}
@@ -65,12 +65,12 @@ export default connect(({ remoteSensing, layer }) => ({
               id="basemap2"
               height='calc(100vh - 120px)'
               handleLoad={(map, view) => {
+                console.log("basemap2",view)
                 basemap2 = view;
                 basemap2.ui.remove('attribution')
                 basemap2.watch('extent', () => {
                   if (basemap2.focused) {
                     basemap1.extent = basemap2.extent;
-                    basemap1.rotation = basemap2.rotation;
                   }
                 });
               }}
