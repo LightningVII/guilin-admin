@@ -4,6 +4,7 @@ import {
   queryStaffList,
   queryUserAdd,
   queryUserUpdate,
+  queryStaffDelete,
 } from '@/services/user';
 
 const UserModel = {
@@ -21,6 +22,14 @@ const UserModel = {
         type: 'save',
         payload: response,
       });
+    },
+    *fetchStaffDelete({ payload }, { call, put }) {
+      const { code } = yield call(queryStaffDelete, payload);
+      if (code === 200)
+        yield put({
+          type: 'deleteStaff',
+          payload,
+        });
     },
     *fetchCurrent(_, { call, put, select }) {
       if (!sessionStorage.getItem('user') || sessionStorage.getItem('user') === 'undefined')
@@ -41,17 +50,16 @@ const UserModel = {
         payload: response.content,
       });
     },
-    *fetchUserAdd({ payload }, { call, put }) {
-      const res = yield call(queryUserAdd, payload);
-      console.log('fetchUserAdd >>:', res);
-      yield put({
-        type: 'addStaff',
-        payload,
-      });
-    },
-    *fetchUserUpdate({ payload }, { call, put }) {
-      const { code } = yield call(queryUserUpdate, payload);
-      if (code === 200) yield put({ type: 'fetchCurrent' });
+    *fetchUserSave({ payload }, { call, put }) {
+      let res;
+      const { userid, unsave, ...other } = payload;
+      if (payload.userid === 'new-userid')
+        res = yield call(queryUserAdd, { password: 888888, ...other });
+      else res = yield call(queryUserUpdate, payload);
+      if (res.code === 200) {
+        yield put({ type: 'fetchCurrent' });
+        yield put({ type: 'fetchStaffList', payload: { pageNum: 1, pageSize: 10 } });
+      }
     },
   },
 
@@ -78,6 +86,24 @@ const UserModel = {
         staffList: {
           ...state.staffList,
           list: [{ ...action.payload, unsave: true }, ...(state?.staffList?.list || [])],
+        },
+      };
+    },
+    deleteStaff(state, action) {
+      return {
+        ...state,
+        staffList: {
+          ...state.staffList,
+          list: state.staffList.list.filter(item => item.userid !== action.payload),
+        },
+      };
+    },
+    cancelEditStaff(state) {
+      return {
+        ...state,
+        staffList: {
+          ...state.staffList,
+          list: state.staffList.list.filter(({ unsave }) => !unsave),
         },
       };
     },

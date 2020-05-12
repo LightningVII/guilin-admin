@@ -1,7 +1,7 @@
 import { stringify } from 'querystring';
 import router from 'umi/router';
 import { message } from 'antd';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
+import { fakeAccountLogin, getFakeCaptcha, updatePassword } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
@@ -52,6 +52,7 @@ const Model = {
           }
         }
         if (content?.menus.find(({ perms }) => perms === 'HOME')) router.replace('/');
+        else router.replace('/');
       } else {
         router.replace('/404');
       }
@@ -61,9 +62,8 @@ const Model = {
       const { username } = yield select(state => state?.user?.currentUser);
       return yield call(fakeAccountLogin, { username, password: payload });
     },
-    *updatePassword({ payload }, { call, select }) {
-      const { userid } = yield select(state => state?.user?.currentUser);
-      return yield call(fakeAccountLogin, { xgrid: userid, ...payload });
+    *updatePassword({ payload }, { call }) {
+      return yield call(updatePassword, payload);
     },
     *getCaptcha({ payload }, { call }) {
       yield call(getFakeCaptcha, payload);

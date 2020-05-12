@@ -4,10 +4,15 @@ import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
 import { connect } from 'dva';
 import BaseView from './components/base';
+import ChangePassword from './components/ChangePassword';
 import BindingView from './components/binding';
 import NotificationView from './components/notification';
 import SecurityView from './components/security';
 import DatasourceView from './components/datasource';
+import StaffView from './components/StaffView';
+import RoleView from './components/RoleView';
+import DeptView from './components/DeptView';
+import MenuView from './components/MenuView';
 
 import styles from './style.less';
 
@@ -20,6 +25,11 @@ class AccountSettings extends Component {
     super(props);
     const menuMap = {
       base: <FormattedMessage id="app.settings.menuMap.basic" defaultMessage="Basic Settings" />,
+      changepassword: '修改密码',
+      staff: '职员管理列表',
+      role: '角色管理列表',
+      dept: '部门管理列表',
+      menu: '菜单管理列表',
       security: (
         <FormattedMessage id="app.settings.menuMap.security" defaultMessage="Security Settings" />
       ),
@@ -111,6 +121,21 @@ class AccountSettings extends Component {
     switch (selectKey) {
       case 'base':
         return <BaseView />;
+
+      case 'changepassword':
+        return <ChangePassword />;
+
+      case 'staff':
+        return <StaffView />;
+
+      case 'dept':
+        return <DeptView />;
+
+      case 'role':
+        return <RoleView />;
+
+      case 'menu':
+        return <MenuView />;
 
       case 'security':
         return <SecurityView />;
