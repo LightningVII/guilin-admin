@@ -6,6 +6,7 @@ import {
   queryDeptUpdate,
   queryRoleAdd,
   queryDeptAdd,
+  queryMenuData,
 } from '@/services/employee';
 
 const EmployeeModel = {
@@ -20,10 +21,13 @@ const EmployeeModel = {
   effects: {
     *fetchEmployeeData({ payload }, { call, put }) {
       const response = yield call(queryEmployeeData, payload);
-
+      const menu = yield call(queryMenuData);
       yield put({
         type: 'saveEmployeeData',
-        payload: response,
+        payload: {
+          ...response,
+          menu,
+        },
       });
     },
     *fetchRoleDelete({ payload }, { call, put }) {
@@ -69,6 +73,7 @@ const EmployeeModel = {
           })) || state.employeeList,
         deptList: action.payload.dept,
         roleList: action.payload.role,
+        menuList: action.payload.menu.list,
       };
     },
     addRole(state, action) {

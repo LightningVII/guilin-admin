@@ -139,3 +139,13 @@ export async function queryUserUpdate(payload) {
     },
   });
 }
+
+export async function queryStaffDelete(payload) {
+  return request(`/strapi/sys/user/delete`, {
+    method: 'POST',
+    data: stringify({ ids: [payload] }),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;',
+    },
+  });
+}
