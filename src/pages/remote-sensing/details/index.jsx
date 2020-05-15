@@ -81,19 +81,19 @@ const description = item => (
           {item?.qsxdlmc}
         </Descriptions.Item>
         <Descriptions.Item key={3} label="后时相">
-          {item?.HSX}
+          {item?.hsx}
         </Descriptions.Item>
         <Descriptions.Item key={4} label="后时相地类名称">
           {item?.hsxdlmc}
         </Descriptions.Item>
         <Descriptions.Item key={5} label="变化类型">
-          {item?.BHLX}
+          {item?.bhlx}
         </Descriptions.Item>
         <Descriptions.Item key={6} label="前时相变化地类">
           {item?.qsxbhdl}
         </Descriptions.Item>
         <Descriptions.Item key={7} label="区县">
-          {item?.COUNTY}
+          {item?.county}
         </Descriptions.Item>
         <Descriptions.Item key={8} label="后时相变化地类">
           {item?.hsxbhdl}
