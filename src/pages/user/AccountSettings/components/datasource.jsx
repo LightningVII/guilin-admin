@@ -7,8 +7,8 @@ import { connect } from 'dva';
 import { treeData } from '../../../arcgis-show/components/json/treeData';
 
 const props = {
-    name: 'file',
-    // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    name: 'files',
+    action: '/strapi/changespot/upload',
     accept: '.json,.txt',
     headers: {
         authorization: 'authorization-text',
@@ -118,10 +118,15 @@ class DatasourceView extends React.Component {
         const { dispatch } = this.props;
         dispatch({
             type: 'layer/fetchLayerTree',
-        }).then(tree => {
-            this.setState({
-                treeJson: tree || treeData,
-            });
+        }).then(res => {
+            if (res.status === 200)
+                this.setState({
+                    treeJson: res,
+                });
+            else
+                this.setState({
+                    treeJson: treeData,
+                });
         });
     }
 

@@ -60,13 +60,24 @@ class SearchGIS extends React.Component {
           type: 'layer/fetchLayerTree'
         }).then(res => {
           const expandKeys = [];
-          res.forEach(t => {
-            expandKeys.push(t.key)
-          })
-          this.setState({
-            treeDatas: res || treeData,
-            expandedKeys: expandKeys
-          });
+          if (res.status === 200) {
+            res.forEach(t => {
+              expandKeys.push(t.key)
+            })
+            this.setState({
+              treeDatas: res,
+              expandedKeys: expandKeys
+            });
+          }else{
+            treeData.forEach(t => {
+              expandKeys.push(t.key)
+            })
+            this.setState({
+              treeDatas: treeData,
+              expandedKeys: expandKeys
+            });
+          }
+
         });
       },
     );
