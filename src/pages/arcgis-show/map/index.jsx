@@ -29,6 +29,8 @@ export default connect(({ remoteSensing, layer }) => ({
       payload: match?.params
     });
 
+    
+
   }, []);
 
   return (
@@ -37,13 +39,12 @@ export default connect(({ remoteSensing, layer }) => ({
         <Row>
           <Col span={12} style={{ border: '1px solid #888888' }}>
             <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 5 }}>
-              {layerUrl.length > 0 ? layerUrl[0].title : ''}
+              {layerUrl?.length > 0 ? layerUrl[0].title : ''}
             </Button>
             <MyBasemap
               id="basemap1"
               height='calc(100vh - 120px)'
               handleLoad={(map, view) => {
-                console.log("basemap1",view)
                 basemap1 = view;
                 basemap1.ui.remove('attribution')
                 basemap1.watch('extent', () => {
@@ -53,19 +54,18 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              {layerUrl.length > 0 ? <MyImageLayer imgLayer={layerUrl[0]} /> : <MyImageLayer />}
+              {layerUrl?.length > 0 ? <MyImageLayer imgLayer={layerUrl[0]} /> : <MyImageLayer />}
               {geomotry ? <MyFeatureLayer geo={geomotry} /> :  <MyFeatureLayer />}
             </MyBasemap>
           </Col>
           <Col span={12} style={{ border: '1px solid #888888' }}>
             <Button type='primary' style={{ position: 'absolute', right: 15, top: 15, zIndex: 5 }}>
-              {layerUrl.length > 0 ? layerUrl[1].title : ''}
+              {layerUrl?.length > 0 ? layerUrl[1].title : ''}
             </Button>
             <MyBasemap
               id="basemap2"
               height='calc(100vh - 120px)'
               handleLoad={(map, view) => {
-                console.log("basemap2",view)
                 basemap2 = view;
                 basemap2.ui.remove('attribution')
                 basemap2.watch('extent', () => {
@@ -75,7 +75,7 @@ export default connect(({ remoteSensing, layer }) => ({
                 });
               }}
             >
-              {layerUrl.length > 0 ? <MyImageLayer imgLayer={layerUrl[1]} /> : <MyImageLayer />}
+              {layerUrl?.length > 0 ? <MyImageLayer imgLayer={layerUrl[1]} /> : <MyImageLayer />}
               {geomotry ? <MyFeatureLayer geo={geomotry} /> : <MyFeatureLayer />}
             </MyBasemap>
           </Col>

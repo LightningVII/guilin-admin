@@ -194,7 +194,7 @@ class MapBottom extends React.Component {
                   })
                 }
               >
-                X
+                ✕
                   </a>
             }
           >

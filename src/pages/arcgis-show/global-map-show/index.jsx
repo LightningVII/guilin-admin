@@ -152,10 +152,6 @@ export default class GlobeMapShow extends React.Component {
                   <UserOutlined />
                   书签
                </Menu.Item>
-                <Menu.Item key="3">
-                  <UserOutlined />
-                  截图
-               </Menu.Item>
                 <Menu.Item key="dr">
                   <UploadOutlined />
                   导入
@@ -212,7 +208,7 @@ export default class GlobeMapShow extends React.Component {
             () => this.setState({
               renderMeasure: false
             })
-          }>X</a>} style={{ width: 300 }}>
+          }>✕</a>} style={{ width: 300 }}>
             <MapMeasure view={this.state.mapView} showMeasure={this.state.renderMeasure} />
           </Card>
         </Affix>
@@ -220,7 +216,14 @@ export default class GlobeMapShow extends React.Component {
         {
           this.state.renderPrint ?
             <Affix className={style.print} offsetTop={80}>
-              <Print view={this.state.mapView} />
+              <Card size="small" title="选择测量工具" extra={<a onClick={
+                () => this.setState({
+                  renderPrint: false
+                })
+              }>✕</a>} style={{ width: 300 }}>
+                  <Print view={this.state.mapView} />
+              </Card>
+            
             </Affix> : null
         }
 
@@ -255,7 +258,7 @@ export default class GlobeMapShow extends React.Component {
                 () => this.setState({
                   renderSwipe: false
                 })
-              }>X</a>}>
+              }>✕</a>}>
                 <MapSwipe layersArray={this.state.swipeLayersArray} />
               </Card>
             </Affix>
@@ -270,7 +273,7 @@ export default class GlobeMapShow extends React.Component {
                   renderCompare: false,
                   featrueGraphic: null
                 })
-              }>X</a>}>
+              }>✕</a>}>
                 <MapCompare
                   featrueGraphic={this.state.featrueGraphic}
                   layersArray={this.state.compareLayersArray}
