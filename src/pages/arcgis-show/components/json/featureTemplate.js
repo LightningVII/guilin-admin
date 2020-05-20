@@ -97,7 +97,7 @@ export const infoTemplate = {
           label: '后时相',
         },
         {
-          fieldName: 'AREA_',
+          fieldName: 'AREA',
           label: '面积（亩）',
         },
       ],

@@ -7,12 +7,11 @@ const MyFeatureLayer = props => {
   useEffect(() => {
     loadModules(['esri/Graphic',"esri/geometry/Polygon"])
       .then(([Graphic,Polygon]) => {
-
         if(props.geo){
           const polygon = new Polygon ({
             hasZ: true,
             hasM: true,
-            rings: props.geo.coordinates, 
+            rings: props.geo.content.coordinates, 
           });
           const g = new Graphic({
             geometry: polygon,

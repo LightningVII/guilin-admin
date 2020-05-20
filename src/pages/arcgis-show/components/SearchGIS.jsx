@@ -8,6 +8,7 @@ import { connect } from 'dva';
 
 import { treeData } from './json/treeData.js';
 import { template } from './json/featureTemplate.js';
+import { bhtblLineSymbol } from './json/lineSymbol.js'
 import style from './css/style.css';
 
 const { Search } = Input;
@@ -23,6 +24,7 @@ let flag = false;
   geomotry: remoteSensing.geomotry,
   layerTree: layer.layerTree,
   layerUrl: layer.layerUrl,
+  remoteSensing
 }))
 
 
@@ -140,12 +142,7 @@ class SearchGIS extends React.Component {
           }).then(() => {
             if (fuzzyChangespot) {
               fuzzyChangespot.forEach(item => {
-                const obj = {};
-                obj.BATCH = item.BATCH;
-                obj.COUNTY = item.COUNTY;
-                obj.LOCATION = item.LOCATION;
-                obj.TBBM = item.TBBM;
-                temp.push(obj);
+                temp.push(item);
               });
               this.setState({
                 searchData: temp,
@@ -153,7 +150,7 @@ class SearchGIS extends React.Component {
             }
           });
         } else {
-
+          this.props.view.graphics.removeAll()
           this.setState({
             searchPanelVisiable: 'hidden',
             searchData: [],
@@ -171,35 +168,41 @@ class SearchGIS extends React.Component {
     }));
   };
 
-  serchItemClick = TBBM => {
+  serchItemClick = item => {
     const mapView = this.props.view;
+    const tbbm = item.TBBM
     const { dispatch } = this.props;
     dispatch({
       type: 'remoteSensing/fetchChangespotGeomotry',
-      payload: { tbbm: TBBM },
+      payload: { tbbm },
     }).then(res => {
-      if (res.code === 200) {
+      if (res?.code === 200) {
         const geomotry = res.content;
-
-        const graphic = new EsriGraphic({
-          geometry: new EsriPolygon({
-            hasZ: false,
-            hasM: false,
-            rings: [geomotry.coordinates[0]],
-            spatialReference: { wkid: 4527 }
-          }),
-          symbol: {
-            type: "simple-fill",
-            color: [51, 51, 204, 0.2],
-            style: "solid",
-            outline: {
-              color: "orange",
-              width: 1
-            }
-          }
+        const polygon = new EsriPolygon({
+          hasZ: true,
+          hasM: true,
+          rings: geomotry.coordinates,
         });
-
-        mapView.graphics.add(graphic);
+        const g = new EsriGraphic({
+          geometry: polygon,
+          symbol: bhtblLineSymbol,
+        });
+        mapView.extent = polygon.extent
+        mapView.graphics.removeAll()
+        mapView.graphics.add(g);
+        mapView.popup.open({
+          location: polygon.extent.center,
+          title: item.LOCATION,
+          content: `<div><span>图斑编码：</span><span>${item.TBBM}</span></div>
+                      <div><span>区县：</span><span>${item.COUNTY}</span></div>
+                      <div><span>批次：</span><span>${item.BATCH}</span></div>
+                      <div><span>前时相：</span><span>${item.QSX}</span></div>
+                      <div><span>后时相：</span><span>${item.HSX}</span></div>
+                      <div><span>前时相地类名称：</span><span>${item.QSXDLMC}</span></div>
+                      <div><span>后时相地类名称：</span><span>${item.QSXDLMC}</span></div>
+                      <div><span>状态：</span><span>${item.STATE}</span></div>
+                      <div><span>面积：</span><span>${item.AREA}</span></div>`,
+        });
       }
     });
 
@@ -231,7 +234,7 @@ class SearchGIS extends React.Component {
             renderItem={item => (
               <List.Item
                 style={{ cursor: 'pointer' }}
-                onClick={() => this.serchItemClick(item.TBBM)}
+                onClick={() => this.serchItemClick(item)}
               >
                 {item.TBBM}
                 <Typography.Text code>{item.COUNTY}</Typography.Text>
