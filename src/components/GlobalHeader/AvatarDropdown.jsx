@@ -1,4 +1,4 @@
-import { IdcardOutlined, LogoutOutlined, ScheduleOutlined, UserOutlined } from '@ant-design/icons';
+import { IdcardOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Menu, Spin } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
@@ -37,12 +37,12 @@ class AvatarDropdown extends React.Component {
     } = this.props;
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
-        {menu && (
+        {/* {menu && (
           <Menu.Item key="/remote-sensing">
             <ScheduleOutlined />
             <FormattedMessage id="menu.task.center" defaultMessage="account settings" />
           </Menu.Item>
-        )}
+        )} */}
         {menu && (
           <Menu.Item key="/account/center">
             <IdcardOutlined />

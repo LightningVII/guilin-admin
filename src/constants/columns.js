@@ -29,7 +29,8 @@ export const remoteSensingListColumns = () => [
   // },
   {
     title: '时间',
-    dataIndex: 'time',
+    dataIndex: 'createTime',
+    render: val => moment(val).format('MM-DD hh:mm'),
   },
   {
     title: '占地面积',

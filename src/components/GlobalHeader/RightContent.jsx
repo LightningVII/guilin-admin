@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import { formatMessage } from 'umi-plugin-react/locale';
+// import { formatMessage } from 'umi-plugin-react/locale';
 import Avatar from './AvatarDropdown';
-import HeaderSearch from '../HeaderSearch';
-import NoticeIconView from './NoticeIconView';
+// import HeaderSearch from '../HeaderSearch';
+// import NoticeIconView from './NoticeIconView';
 import styles from './index.less';
-import router from 'umi/router';
+// import router from 'umi/router';
 
 const GlobalHeaderRight = props => {
   const { theme, layout } = props;
@@ -17,7 +17,7 @@ const GlobalHeaderRight = props => {
 
   return (
     <div className={className}>
-      <HeaderSearch
+      {/* <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder={formatMessage({
           id: 'component.globalHeader.search',
@@ -41,8 +41,8 @@ const GlobalHeaderRight = props => {
           console.log('enter', value);
           router.push('/listsearch');
         }}
-      />
-      <NoticeIconView />
+      /> */}
+      {/* <NoticeIconView /> */}
       <Avatar menu />
     </div>
   );
