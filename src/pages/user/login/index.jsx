@@ -1,5 +1,5 @@
 import { Alert } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'dva';
 import LoginFrom from './components/Login';
 import styles from './style.less';
@@ -19,23 +19,19 @@ const LoginMessage = ({ content }) => (
 
 const Login = props => {
   const { userLogin = {}, submitting } = props;
-  const { status, type: loginType } = userLogin;
+  const { status } = userLogin;
   // const [autoLogin, setAutoLogin] = useState(true);
-  const [type, setType] = useState('account');
 
-  const handleSubmit = values => {
+  const handleSubmit = payload => {
     const { dispatch } = props;
-    dispatch({
-      type: 'login/login',
-      payload: { ...values, type },
-    });
+    dispatch({ type: 'login/login', payload });
   };
 
   return (
     <div className={styles.main}>
-      <LoginFrom activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
+      <LoginFrom activeKey="account" onSubmit={handleSubmit}>
         <Tab key="account" tab="账户密码登录">
-          {status === 'error' && loginType === 'account' && !submitting && (
+          {status === 'error' && !submitting && (
             <LoginMessage content="账户或密码错误（admin/ant.design）" />
           )}
 
