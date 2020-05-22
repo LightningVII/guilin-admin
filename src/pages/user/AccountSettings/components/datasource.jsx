@@ -4,7 +4,7 @@ import { UploadOutlined, ExclamationCircleOutlined, FolderAddOutlined, FileAddOu
 import moment from 'moment';
 import { connect } from 'dva';
 
-import { treeData } from '../../../arcgis-show/components/json/treeData';
+// import { treeData } from '../../../arcgis-show/components/json/treeData';
 
 const props = {
     name: 'files',
@@ -18,9 +18,9 @@ const props = {
             console.log(info.file, info.fileList);
         }
         if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
+            message.success(`${info.file.name} 上传成功`);
         } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
+            message.error(`${info.file.name} 上传失败.`);
         }
     },
 };
@@ -119,14 +119,10 @@ class DatasourceView extends React.Component {
         dispatch({
             type: 'layer/fetchLayerTree',
         }).then(res => {
-            if (res.status === 200)
-                this.setState({
-                    treeJson: res,
-                });
-            else
-                this.setState({
-                    treeJson: treeData,
-                });
+            this.setState({
+                treeJson: res,
+            });
+
         });
     }
 

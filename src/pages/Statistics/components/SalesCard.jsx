@@ -18,6 +18,7 @@ const SalesCard = ({ loading, data }) => (
           bordered={false}
           bodyStyle={{
             padding: 0,
+            height: "328px"
           }}
           title={
             <FormattedMessage
@@ -26,7 +27,7 @@ const SalesCard = ({ loading, data }) => (
             />
           }
         >
-          <MapCharts height="328px"/>
+          <MapCharts height="328px" />
         </Card>
       </Col>
 
@@ -45,14 +46,14 @@ const SalesCard = ({ loading, data }) => (
             />
           }
         >
-          <DVChart data={data}/>
+          <DVChart data={data} />
         </Card>
       </Col>
     </Row>
   </>
 );
 
-export default connect(({ dashboardAnalysis, loading}) => ({
+export default connect(({ dashboardAnalysis, loading }) => ({
   data: dashboardAnalysis.bhlxtjData,
   loading: loading.effects['dashboardAnalysis/fetch'],
 }))(SalesCard);
