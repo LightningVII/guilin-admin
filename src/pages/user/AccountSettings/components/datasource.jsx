@@ -7,13 +7,14 @@ import { connect } from 'dva';
 // import { treeData } from '../../../arcgis-show/components/json/treeData';
 
 const props = {
-    name: 'files',
-    action: '/strapi/changespot/upload',
+    name: 'jsonFile',
+    action: '/strapi/changespot/add',
     accept: '.json,.txt',
     headers: {
         authorization: 'authorization-text',
     },
     onChange(info) {
+        console.log(info)
         if (info.file.status !== 'uploading') {
             console.log(info.file, info.fileList);
         }
@@ -53,25 +54,22 @@ class DatasourceView extends React.Component {
                     title: '图层名',
                     dataIndex: 'title',
                     key: 'title',
-                    width: '25%'
+                    width: 250
                 },
                 {
                     title: '加载方式',
                     dataIndex: 'loadType',
-                    key: 'loadType',
-                    width: '10%'
+                    key: 'loadType'
                 },
                 {
                     title: '图层地址',
                     dataIndex: 'layerUrl',
-                    width: '30%',
                     key: 'layerUrl'
                 },
                 {
                     title: '操作',
                     key: 'action',
                     fixed: 'right',
-                    width: '20%',
                     render: record => (
                         (record.loadType === 'parent' ? <span>
                             <a onClick={() => this.add(record)} style={{ marginRight: 16 }}><Tooltip placement="top" title="添加"><FileAddOutlined /></Tooltip></a>
@@ -323,7 +321,7 @@ class DatasourceView extends React.Component {
 
 
                 <Table
-                    style={{ marginTop: 20, maxHeight: "calc(100vh - 280px)", overflowY: 'auto' }}
+                    style={{ marginTop: 20}}
                     columns={this.state.columns} dataSource={this.state.treeJson} />
 
                 <Modal

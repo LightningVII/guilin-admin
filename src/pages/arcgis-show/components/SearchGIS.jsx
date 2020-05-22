@@ -123,7 +123,7 @@ class SearchGIS extends React.Component {
 
   inputValChange = value => {
 
-    const { dispatch, fuzzyChangespot } = this.props;
+    const { dispatch } = this.props;
     this.setState(
       {
         isToggleOn: false,
@@ -139,16 +139,16 @@ class SearchGIS extends React.Component {
           dispatch({
             type: 'remoteSensing/fetchChangespotFuzzyQuery',
             payload: { term: str },
-          }).then(() => {
-            if (fuzzyChangespot) {
-              fuzzyChangespot.forEach(item => {
+          }).then(res => {
+            if (res?.code === 200) {
+              res.content.forEach(item => {
                 temp.push(item);
               });
               this.setState({
                 searchData: temp,
               });
             }
-          });
+          })
         } else {
           this.props.view.graphics.removeAll()
           this.setState({
@@ -193,91 +193,94 @@ class SearchGIS extends React.Component {
         mapView.popup.open({
           location: polygon.extent.center,
           title: item.LOCATION,
-          content: `<div><span>图斑编码：</span><span>${item.TBBM}</span></div>
-                      <div><span>区县：</span><span>${item.COUNTY}</span></div>
-                      <div><span>批次：</span><span>${item.BATCH}</span></div>
-                      <div><span>前时相：</span><span>${item.QSX}</span></div>
-                      <div><span>后时相：</span><span>${item.HSX}</span></div>
-                      <div><span>前时相地类名称：</span><span>${item.QSXDLMC}</span></div>
-                      <div><span>后时相地类名称：</span><span>${item.QSXDLMC}</span></div>
-                      <div><span>状态：</span><span>${item.STATE}</span></div>
-                      <div><span>面积：</span><span>${item.AREA}</span></div>`,
+          content: `<div class="table-a"> 
+          <table width="400" border="0" cellspacing="0" cellpadding="10">  
+          <tr> <td>图斑编码：</td> <td>${item.TBBM}</td> </tr>
+          <tr> <td>区县：</td> <td>${item.COUNTY}</td> </tr>
+          <tr> <td>批次：</td> <td>${item.BATCH}</td> </tr>
+          <tr> <td>前时相：</td> <td>${item.QSX}</td> </tr>
+          <tr> <td>后时相：</td> <td>${item.HSX}</td> </tr>
+          <tr> <td>前时相地类名称：</td> <td>${item.QSXDLMC}</td> </tr>
+          <tr> <td>后时相地类名称：</td> <td>${item.HSXDLMC}</td> </tr>
+          <tr> <td>状态：</td> <td>${item.STATE}</td> </tr>
+          <tr> <td>面积：</td> <td>${item.AREA}</td> </tr>
+          </table></div>`,              
         });
-      }
-    });
+  }
+});
 
   };
 
-  render() {
-    return (
-      <>
-        <Search
-          placeholder="输入查询关键字..."
-          onChange={this.handleInputSearch}
-          onPressEnter={this.handleInputSearch}
-          onSearch={this.inputValChange}
-          onClick={this.handleClick}
-          className={style.search}
-          allowClear
-          size="large"
-          prefix={
-            <Tooltip placement="bottom" title="图层">
-              <UnorderedListOutlined style={{ cursor: 'pointer' }} onClick={this.handleClick} />
-            </Tooltip>
-          }
+render() {
+  return (
+    <>
+      <Search
+        placeholder="输入查询关键字..."
+        onChange={this.handleInputSearch}
+        onPressEnter={this.handleInputSearch}
+        onSearch={this.inputValChange}
+        onClick={this.handleClick}
+        className={style.search}
+        allowClear
+        size="large"
+        prefix={
+          <Tooltip placement="bottom" title="图层">
+            <UnorderedListOutlined style={{ cursor: 'pointer' }} onClick={this.handleClick} />
+          </Tooltip>
+        }
+      />
+      <div className={style.searchList} style={{ visibility: this.state.searchPanelVisiable }}>
+        <List
+          style={{ maxHeight: '35vh', overflowY: 'scroll' }}
+          bordered
+          dataSource={this.state.searchData}
+          renderItem={item => (
+            <List.Item
+              style={{ cursor: 'pointer' }}
+              onClick={() => this.serchItemClick(item)}
+            >
+              {item.TBBM}
+              <Typography.Text code>{item.COUNTY}</Typography.Text>
+              <Typography.Text code>{item.BATCH}</Typography.Text>
+            </List.Item>
+          )}
         />
-        <div className={style.searchList} style={{ visibility: this.state.searchPanelVisiable }}>
-          <List
-            style={{ maxHeight: '35vh', overflowY: 'scroll' }}
-            bordered
-            dataSource={this.state.searchData}
-            renderItem={item => (
-              <List.Item
-                style={{ cursor: 'pointer' }}
-                onClick={() => this.serchItemClick(item)}
-              >
-                {item.TBBM}
-                <Typography.Text code>{item.COUNTY}</Typography.Text>
-                <Typography.Text code>{item.BATCH}</Typography.Text>
-              </List.Item>
-            )}
-          />
-        </div>
+      </div>
 
-        <div style={{
-          width: 300,
-          overflow: 'hidden',
-          overflowY: 'auto',
-          height: this.state.height,
-          transition: '.3s all ease-in',
-          paddingTop: this.state.paddingTop,
-          backgroundColor: 'white',
-          boxShadow: '2px 2px 1px #888888'
-        }}>
+      <div style={{
+        width: 300,
+        overflow: 'hidden',
+        overflowY: 'auto',
+        height: this.state.height,
+        transition: '.3s all ease-in',
+        paddingTop: this.state.paddingTop,
+        backgroundColor: 'white',
+        boxShadow: '2px 2px 1px #888888'
+      }}>
 
-          {
-            this.state.treeDatas ? (
-              <Tree
-                checkable
-                showLine
-                onCheck={this.onCheck}
-                treeData={this.state.treeDatas}
-                expandedKeys={this.state.expandedKeys}
-                defaultExpandAll
-                style={{
-                  background: '#FFF',
-                  paddingLeft: 12,
-                  fontSize: 16
-                }}
-              />
+        {
+          this.state.treeDatas ? (
+            <Tree
+              checkable
+              showLine
+              onCheck={this.onCheck}
+              treeData={this.state.treeDatas}
+              expandedKeys={this.state.expandedKeys}
+              defaultExpandAll
+              style={{
+                background: '#FFF',
+                paddingLeft: 12,
+                fontSize: 16
+              }}
+            />
 
-            ) : (<Empty />)
-          }
+          ) : (<Empty />)
+        }
 
-        </div>
-      </>
-    );
-  }
+      </div>
+    </>
+  );
+}
 }
 
 export default SearchGIS;

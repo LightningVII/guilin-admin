@@ -181,8 +181,9 @@ class GISStastic extends React.Component {
         if (!legend)
             legend = new G2.Chart({
                 container: 'legend',
-                height: 360,
-                width: 260,
+                width:200,
+                height:300,
+                autoFit:true,
                 padding: 'auto',
             });
         const ds = new DataSet();
@@ -280,7 +281,7 @@ class GISStastic extends React.Component {
         if (!legend)
             legend = new G2.Chart({
                 container: 'legend',
-                height: 360,
+                height: 300,
                 width: 260,
                 padding: [20, 20, 20, 50],
             });
@@ -499,7 +500,7 @@ class GISStastic extends React.Component {
                             >
                                 <Select.Option value="histogram">柱状图</Select.Option>
                                 <Select.Option value="pieChart">饼状图</Select.Option>
-                                <Select.Option value="heatMap">热力图</Select.Option>
+                                {/* <Select.Option value="heatMap">热力图</Select.Option> */}
                             </Select>
                         </Form.Item>
 

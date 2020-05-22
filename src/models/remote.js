@@ -66,6 +66,7 @@ const RemoteModel = {
         type: 'saveFuzzyChangespot',
         payload: data?.content,
       });
+      return data;
     },
     *fetchChangespotGeomotry({ payload }, { call, put }) {
       const data = yield call(queryChangespotGeomotry, payload);
