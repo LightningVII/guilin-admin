@@ -8,13 +8,12 @@ import { connect } from 'dva';
 
 const props = {
     name: 'jsonFile',
-    action: '/strapi/changespot/add',
+    action: '/strapi/changespot/add?userid=0',
     accept: '.json,.txt',
     headers: {
         authorization: 'authorization-text',
     },
     onChange(info) {
-        console.log(info)
         if (info.file.status !== 'uploading') {
             console.log(info.file, info.fileList);
         }
