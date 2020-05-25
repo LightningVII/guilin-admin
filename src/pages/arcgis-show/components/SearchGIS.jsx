@@ -80,7 +80,6 @@ class SearchGIS extends React.Component {
 
   onCheck = (checkedKeys, e) => {
     this.loadToMap(checkedKeys, e);
-
   };
 
   triggerAction = () => {
@@ -101,7 +100,6 @@ class SearchGIS extends React.Component {
     this.props.view.map.removeAll();
     e.checkedNodes.forEach(checkedNode => {
       const type = checkedNode.loadType;
-      // if (type!== 'parent') {
       const nodeUrl = checkedNode.layerUrl;
       const nodeId = checkedNode.key;
       switch (type) {
@@ -109,6 +107,10 @@ class SearchGIS extends React.Component {
           this.props.view.map.add(new EsriWebTileLayer({ urlTemplate: nodeUrl, id: nodeId }));
           break;
         case 'feature':
+          if(checkedNode.title==="行政区划") 
+          this.props.view.map.add(
+            new EsriFeatureLayer({ url: nodeUrl, id: nodeId}),
+          );else
           this.props.view.map.add(
             new EsriFeatureLayer({ url: nodeUrl, id: nodeId, popupTemplate: template }),
           );
@@ -117,7 +119,6 @@ class SearchGIS extends React.Component {
         default:
           break;
       }
-      // }
     });
   };
 
@@ -204,83 +205,83 @@ class SearchGIS extends React.Component {
           <tr> <td>后时相地类名称：</td> <td>${item.HSXDLMC}</td> </tr>
           <tr> <td>状态：</td> <td>${item.STATE}</td> </tr>
           <tr> <td>面积：</td> <td>${item.AREA}</td> </tr>
-          </table></div>`,              
+          </table></div>`,
         });
-  }
-});
+      }
+    });
 
   };
 
-render() {
-  return (
-    <>
-      <Search
-        placeholder="输入查询关键字..."
-        onChange={this.handleInputSearch}
-        onPressEnter={this.handleInputSearch}
-        onSearch={this.inputValChange}
-        onClick={this.handleClick}
-        className={style.search}
-        allowClear
-        size="large"
-        prefix={
-          <Tooltip placement="bottom" title="图层">
-            <UnorderedListOutlined style={{ cursor: 'pointer' }} onClick={this.handleClick} />
-          </Tooltip>
-        }
-      />
-      <div className={style.searchList} style={{ visibility: this.state.searchPanelVisiable }}>
-        <List
-          style={{ maxHeight: '35vh', overflowY: 'scroll' }}
-          bordered
-          dataSource={this.state.searchData}
-          renderItem={item => (
-            <List.Item
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.serchItemClick(item)}
-            >
-              {item.TBBM}
-              <Typography.Text code>{item.COUNTY}</Typography.Text>
-              <Typography.Text code>{item.BATCH}</Typography.Text>
-            </List.Item>
-          )}
+  render() {
+    return (
+      <>
+        <Search
+          placeholder="输入查询关键字..."
+          onChange={this.handleInputSearch}
+          onPressEnter={this.handleInputSearch}
+          onSearch={this.inputValChange}
+          onClick={this.handleClick}
+          className={style.search}
+          allowClear
+          size="large"
+          prefix={
+            <Tooltip placement="bottom" title="图层">
+              <UnorderedListOutlined style={{ cursor: 'pointer' }} onClick={this.handleClick} />
+            </Tooltip>
+          }
         />
-      </div>
+        <div className={style.searchList} style={{ visibility: this.state.searchPanelVisiable }}>
+          <List
+            style={{ maxHeight: '35vh', overflowY: 'scroll' }}
+            bordered
+            dataSource={this.state.searchData}
+            renderItem={item => (
+              <List.Item
+                style={{ cursor: 'pointer' }}
+                onClick={() => this.serchItemClick(item)}
+              >
+                {item.TBBM}
+                <Typography.Text code>{item.COUNTY}</Typography.Text>
+                <Typography.Text code>{item.BATCH}</Typography.Text>
+              </List.Item>
+            )}
+          />
+        </div>
 
-      <div style={{
-        width: 300,
-        overflow: 'hidden',
-        overflowY: 'auto',
-        height: this.state.height,
-        transition: '.3s all ease-in',
-        paddingTop: this.state.paddingTop,
-        backgroundColor: 'white',
-        boxShadow: '2px 2px 1px #888888'
-      }}>
+        <div style={{
+          width: 300,
+          overflow: 'hidden',
+          overflowY: 'auto',
+          height: this.state.height,
+          transition: '.3s all ease-in',
+          paddingTop: this.state.paddingTop,
+          backgroundColor: 'white',
+          boxShadow: '2px 2px 1px #888888'
+        }}>
 
-        {
-          this.state.treeDatas ? (
-            <Tree
-              checkable
-              showLine
-              onCheck={this.onCheck}
-              treeData={this.state.treeDatas}
-              expandedKeys={this.state.expandedKeys}
-              defaultExpandAll
-              style={{
-                background: '#FFF',
-                paddingLeft: 12,
-                fontSize: 16
-              }}
-            />
+          {
+            this.state.treeDatas ? (
+              <Tree
+                checkable
+                showLine
+                onCheck={this.onCheck}
+                treeData={this.state.treeDatas}
+                expandedKeys={this.state.expandedKeys}
+                defaultExpandAll
+                style={{
+                  background: '#FFF',
+                  paddingLeft: 12,
+                  fontSize: 16
+                }}
+              />
 
-          ) : (<Empty />)
-        }
+            ) : (<Empty />)
+          }
 
-      </div>
-    </>
-  );
-}
+        </div>
+      </>
+    );
+  }
 }
 
 export default SearchGIS;
