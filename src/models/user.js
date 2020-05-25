@@ -24,23 +24,20 @@ const UserModel = {
       });
     },
     *fetchStaffDelete({ payload }, { call, put }) {
-      const { code } = yield call(queryStaffDelete, payload);
-      if (code === 200)
-        yield put({
-          type: 'deleteStaff',
-          payload,
-        });
+      const { code } = yield call(queryStaffDelete, { ids: [payload] });
+      if (code === 200) yield put({ type: 'deleteStaff', payload });
     },
     *fetchCurrent(_, { call, put, select }) {
-      if (!sessionStorage.getItem('user') || sessionStorage.getItem('user') === 'undefined')
-        sessionStorage.setItem('user', '{}');
-      const { userid } = JSON.parse(sessionStorage.getItem('user'));
-      const id = yield select(state => state?.user?.currentUser?.userid || userid);
-      const response = yield call(queryCurrent, { id });
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response.content,
-      });
+      const storage = sessionStorage;
+      if (!storage.getItem('user') || storage.getItem('user') === 'undefined')
+        storage.setItem('user', '{}');
+
+      const { userid } = JSON.parse(storage.getItem('user'));
+      const id = yield select(({ user }) => user?.currentUser?.userid || userid);
+      if (!id) return;
+
+      const { content } = yield call(queryCurrent, { id });
+      yield put({ type: 'saveCurrentUser', payload: content });
     },
     *fetchStaffList({ payload }, { call, put }) {
       const response = yield call(queryStaffList, payload);
