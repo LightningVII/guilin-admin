@@ -62,13 +62,19 @@ const request = extend({
 
 request.interceptors.request.use((url, options) => {
   const token = localStorage.getItem('token');
-  if (token) options.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
-  if (options.method === 'post')
-    options.headers['Content-Type'] = 'application/x-www-form-urlencoded;';
+  const headers = {};
+  if (token) headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+  if (options.method === 'post') headers['Content-Type'] = 'application/x-www-form-urlencoded;';
 
   return {
     url,
-    options,
+    options: {
+      ...options,
+      headers: {
+        ...options.headers,
+        ...headers,
+      },
+    },
   };
 });
 
