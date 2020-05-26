@@ -6,7 +6,6 @@ import { loadModules } from 'esri-loader';
 import { connect } from 'dva';
 // import router from 'umi/router';
 
-import { treeData } from './json/treeData.js';
 import { template } from './json/featureTemplate.js';
 import { bhtblLineSymbol } from './json/lineSymbol.js'
 import style from './css/style.css';
@@ -40,7 +39,7 @@ class SearchGIS extends React.Component {
       paddingTop: 0,
       searchPanelVisiable: 'hidden',
       searchData: [],
-      treeDatas: treeData,
+      treeDatas: [],
       expandedKeys: []
     };
   }
