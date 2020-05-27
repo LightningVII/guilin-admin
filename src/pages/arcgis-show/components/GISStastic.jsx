@@ -45,22 +45,12 @@ class GISStastic extends React.Component {
             renderLegend: false,
             legendTitle: '统计图',
             selectOptions: histogram,
+            startTime: "",
+            endTime: "",
         };
-        const { dispatch } = props;
+    }
 
-        dispatch({
-            type: 'remoteSensing/fetchChangespotTBCount',
-        });
-
-        dispatch({
-            type: 'remoteSensing/fetchChangespotBZTTJ',
-        });
-
-        dispatch({
-            type: 'remoteSensing/fetchChangespotGeoJson',
-            payload: { qsx: '', hsx: '' },
-        });
-
+    componentDidMount() {
         loadModules(['esri/layers/FeatureLayer', "esri/layers/GeoJSONLayer",]).then(([FeatureLayer, GeoJSONLayer]) => {
             EsriFeatureLayer = FeatureLayer;
             EsriGeoJSONLayer = GeoJSONLayer
@@ -69,6 +59,44 @@ class GISStastic extends React.Component {
 
     componentWillUnmount() {
         this.removeAll();
+    }
+
+
+    reGetData = () => {
+        const { dispatch } = this.props;
+        const refObj = this.formStasticRef.current.getFieldsValue();
+        switch (refObj.chartType) {
+            case "histogram":
+                dispatch({
+                    type: 'remoteSensing/fetchChangespotTBCount',
+                    payload: { startTime: this.state.startTime, endTime: this.state.endTime }
+                }).then(res => {
+                    if (res?.code === 200) {
+                        this.renderChart(res.content);
+                    }
+                });
+                break;
+            case "pieChart":
+                dispatch({
+                    type: 'remoteSensing/fetchChangespotBZTTJ',
+                    payload: { startTime: this.state.startTime, endTime: this.state.endTime }
+                }).then(res => {
+                    if (res?.code === 200) {
+                        this.renderChart(res.content);
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+
+
+
+
+        // dispatch({
+        //     type: 'remoteSensing/fetchChangespotGeoJson',
+        //     payload: { qsx: this.state.startTime, hsx: this.state.endTime },
+        // });
     }
 
     removeAll = () => {
@@ -177,17 +205,17 @@ class GISStastic extends React.Component {
     };
 
     // 生成柱状图图例
-    creatHistorgramLegend = refObj => {
+    creatHistorgramLegend = (data, refObj) => {
         if (!legend)
             legend = new G2.Chart({
                 container: 'legend',
-                width:200,
-                height:300,
-                autoFit:true,
+                width: 200,
+                height: 300,
+                autoFit: true,
                 padding: 'auto',
             });
         const ds = new DataSet();
-        const dv = ds.createView().source(this.props.tbcount);
+        const dv = ds.createView().source(data);
         dv.transform({
             type: 'rename',
             map: transField,
@@ -278,43 +306,51 @@ class GISStastic extends React.Component {
 
     // 创建饼图图例
     creatPieLegend = () => {
-        if (!legend)
-            legend = new G2.Chart({
-                container: 'legend',
-                height: 300,
-                width: 260,
-                padding: [20, 20, 20, 50],
-            });
-        const ds = new DataSet();
-        const dv = ds.createView().source(this.props.tbcount);
-        dv.transform({
-            type: 'rename',
-            map: transField,
-        });
-        legend.source(dv);
-        legend.coord('theta', {
-            radius: 0.75,
-        });
-        legend.tooltip({
-            showTitle: false,
-            itemTpl:
-                '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>',
-        });
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'remoteSensing/fetchChangespotTBCount',
+            payload: { startTime: this.state.startTime, endTime: this.state.endTime }
+        }).then(res => {
+            if (res?.code === 200) {
+                if (!legend)
+                    legend = new G2.Chart({
+                        container: 'legend',
+                        height: 300,
+                        width: 260,
+                        padding: [20, 20, 20, 50],
+                    });
+                const ds = new DataSet();
+                const dv = ds.createView().source(res.content);
+                dv.transform({
+                    type: 'rename',
+                    map: transField,
+                });
+                legend.source(dv);
+                legend.coord('theta', {
+                    radius: 0.75,
+                });
+                legend.tooltip({
+                    showTitle: false,
+                    itemTpl:
+                        '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>',
+                });
 
-        legend
-            .intervalStack()
-            .position('任务数量')
-            .color('COUNTY')
-            .label('COUNTY')
-            .tooltip('任务数量')
-            .style({
-                lineWidth: 1,
-                stroke: '#fff',
-            });
-        legend.render();
-        this.setState({
-            renderLegend: true,
-            legendTitle: '各县区任务数量饼状图',
+                legend
+                    .intervalStack()
+                    .position('任务数量')
+                    .color('COUNTY')
+                    .label('COUNTY')
+                    .tooltip('任务数量')
+                    .style({
+                        lineWidth: 1,
+                        stroke: '#fff',
+                    });
+                legend.render();
+                this.setState({
+                    renderLegend: true,
+                    legendTitle: '各县区任务数量饼状图',
+                });
+            }
         });
     };
 
@@ -334,7 +370,7 @@ class GISStastic extends React.Component {
         return position;
     };
 
-    renderChart = () => {
+    renderChart = data => {
         // 清除/添加行政区图层
         if (!xzqLayer) {
             xzqLayer = new EsriFeatureLayer({ url: xzqFeature.layerUrl, id: xzqFeature.key });
@@ -344,13 +380,12 @@ class GISStastic extends React.Component {
         // 获取表单数据
         const refObj = this.formStasticRef.current.getFieldsValue();
         this.removeHeatLayer(refObj.chartType);
-        let data;
         let callback;
         let legendCallback;
         // 根据表单判断图形类别，选择数据源
         switch (refObj.chartType) {
             case 'histogram':
-                data = this.props.tbcount;
+                // data = this.props.tbcount;
                 callback = this.creatHistorgramChart;
                 legendCallback = this.creatHistorgramLegend;
                 this.setState({
@@ -358,7 +393,7 @@ class GISStastic extends React.Component {
                 });
                 break;
             case 'pieChart':
-                data = this.props.bzttj;
+                // data = this.props.bzttj;
                 callback = this.creatPieChart;
                 legendCallback = this.creatPieLegend;
                 this.setState({
@@ -366,13 +401,13 @@ class GISStastic extends React.Component {
                 });
                 break;
             case 'heatMap':
-                data = null;
+                // data = null;
                 this.creatHeatMap();
                 callback = null;
                 legendCallback = this.creatHeatLegend;
                 break;
             default:
-                data = null;
+                // data = null;
                 break;
         }
 
@@ -384,14 +419,14 @@ class GISStastic extends React.Component {
                 item.clear();
             });
             // 绘制图形
-            if (data) this.createChartToMap(data, refObj, callback);
+            this.createChartToMap(data, refObj, callback);
         });
 
         // 创建图例部分的图形
         this.props.view.extent = xzqFeature.extent;
         setTimeout(() => {
             this.removeLegend();
-            if (legendCallback) legendCallback(refObj);
+            if (legendCallback) legendCallback(data, refObj);
         }, 600);
     };
 
@@ -430,24 +465,7 @@ class GISStastic extends React.Component {
         });
     };
 
-    setDateToday = type => {
-        let date;
-        const d = new Date();
-        switch (type) {
-            case 'pre':
-                date = `${d.getFullYear()}0${d.getMonth()}`;
-                break;
-            case 'today':
-                date = `${d.getFullYear()}0${d.getMonth() + 1}`;
-                break;
-            default:
-                break;
-        }
-        return date;
-    };
-
     render() {
-        console.log(this.props.geoJson);
 
         return (
             <>
@@ -516,13 +534,16 @@ class GISStastic extends React.Component {
 
                         <Form.Item name="datePicker" label="时间范围">
                             <DatePicker.RangePicker
-                                defaultValue={[
-                                    moment(this.setDateToday('pre'), 'YYYYMM'),
-                                    moment(this.setDateToday('today'), 'YYYYMM'),
-                                ]}
                                 format="YYYYMM"
                                 style={{ width: 200 }}
                                 picker="month"
+                                onChange={val => {
+                                    if(val)
+                                    this.setState({
+                                        startTime: moment(val[0]).format('YYYYMM'),
+                                        endTime: moment(val[1]).format('YYYYMM')
+                                    })
+                                }}
                             />
                         </Form.Item>
 
@@ -531,7 +552,7 @@ class GISStastic extends React.Component {
                                 type="primary"
                                 htmlType="submit"
                                 onClick={() => {
-                                    this.renderChart();
+                                    this.reGetData();
                                 }}
                             >
                                 开始统计

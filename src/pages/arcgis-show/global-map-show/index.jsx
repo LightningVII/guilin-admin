@@ -216,7 +216,7 @@ export default class GlobeMapShow extends React.Component {
         {
           this.state.renderPrint ?
             <Affix className={style.print} offsetTop={80}>
-              <Card size="small" title="选择测量工具" extra={<a onClick={
+              <Card size="small" title="打印工具" extra={<a onClick={
                 () => this.setState({
                   renderPrint: false
                 })

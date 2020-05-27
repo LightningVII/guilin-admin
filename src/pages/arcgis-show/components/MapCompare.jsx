@@ -33,7 +33,6 @@ class MapCompare extends React.Component {
         EsriFeatureLayer = FeatureLayer;
         EsriGraphicsLayer = GraphicsLayer;
         EsriGraphic = Graphic;
-        // this.handleLoad(map, view, item, fLCounts, tLCounts)
       })
 
     if (this.props.featrueGraphic) {
@@ -44,46 +43,37 @@ class MapCompare extends React.Component {
         payload: { "tbbm": tbbm }
       }).then(res => {
         console.log(res)
-
-
       });
     }
 
   }
 
-  // loadGIS = (map, view, item, fLCounts, tLCounts) => {
-  //   loadModules(['esri/layers/WebTileLayer', 'esri/layers/FeatureLayer', 'esri/layers/GraphicsLayer', 'esri/Graphic'])
-  //     .then(([WebTileLayer, FeatureLayer, GraphicsLayer, Graphic]) => {
-  //       EsriWebTileLayer = WebTileLayer;
-  //       EsriFeatureLayer = FeatureLayer;
-  //       EsriGraphicsLayer = GraphicsLayer;
-  //       EsriGraphic = Graphic;
-  //       this.handleLoad(map, view, item, fLCounts, tLCounts)
-  //     })
-  // }
+  componentWillUnmount(){
+    maps=[]
+  }
 
   getTiledLayers = layersArray => {
 
     const obj = {};
-    const tLayers = [];
+    let tLayers = [];
     const fLayers = [];
     if (this.props.featrueGraphic) {
-      const graphic1 = {};
-      const graphic2 = {};
+      // const graphic1 = {};
+      // const graphic2 = {};
 
-      graphic1.title = this.props.featrueGraphic.attributes.QSX;
-      graphic1.layerUrl =
-        'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}';
-      graphic1.key = '1';
-      graphic2.layerUrl =
-        'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201802/MapServer/tile/{level}/{row}/{col}';
-      graphic2.key = '2';
-      graphic2.title = this.props.featrueGraphic.attributes.HSX;
+      // graphic1.title = this.props.featrueGraphic.attributes.QSX;
+      // graphic1.layerUrl =
+      //   'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201812/MapServer/tile/{level}/{row}/{col}';
+      // graphic1.key = '1';
+      // graphic2.layerUrl =
+      //   'http://218.3.176.6:6080/arcgis/rest/services/Raster/MS_SG_GF_201802/MapServer/tile/{level}/{row}/{col}';
+      // graphic2.key = '2';
+      // graphic2.title = this.props.featrueGraphic.attributes.HSX;
 
-  
-      
-      tLayers.push(graphic1);
-      tLayers.push(graphic2);
+      tLayers=this.props.layerUrl
+
+      // tLayers.push(graphic1);
+      // tLayers.push(graphic2);
 
 
       const fg = this.props.featrueGraphic;
@@ -111,8 +101,23 @@ class MapCompare extends React.Component {
     obj.fLayers = fLayers;
     return obj;
   };
+  
+  setExtentMove = (mapList, item) => {
+    mapList.forEach(mItem => {
+      const map = mItem;
+      if (mItem.key !== item.key) {
+        map.view.extent = item.view.extent;
+        // map.view.rotation = item.view.rotation;
+      }
+    })
+  };
 
   handleLoad = (map, view, item, fLCounts, tLCounts) => {
+    const mapObj = {};
+    mapObj.key = item.key||item.id;
+    mapObj.view = view;
+    maps.push(mapObj);
+
     if (this.props.featrueGraphic) {
       map.add(new EsriWebTileLayer({ urlTemplate: item.layerUrl, id: item.key }));
       fLCounts.forEach(fLayer => {
@@ -139,11 +144,6 @@ class MapCompare extends React.Component {
       });
     }
 
-    const mapObj = {};
-    mapObj.key = item.key;
-    mapObj.view = view;
-    maps.push(mapObj);
-
     if (maps.length === tLCounts.length) {
       maps.forEach(mapItem => {
         mapItem.view.watch('extent', () => {
@@ -155,22 +155,11 @@ class MapCompare extends React.Component {
     }
   };
 
-  setExtentMove = (mapList, item) => {
-    mapList.forEach(mItem => {
-      const map = mItem;
-      if (mItem.key !== item.key) {
-        map.view.extent = item.view.extent;
-        map.view.rotation = item.view.rotation;
-      }
-    })
-  };
-
   render() {
     let countsUp = [];
     let countsDown = [];
     let heightStyle = '';
     let colSpan = 4;
-    maps = [];
 
     const obj = this.getTiledLayers(this.props.layersArray);
     const tLCounts = obj.tLayers;
@@ -226,7 +215,7 @@ class MapCompare extends React.Component {
                 </Button>
                 {/* <MyBasemap
                   height={heightStyle}
-                  handleLoad={(map, view) => this.handleLoad(map, view, item, fLCounts, tLCounts)}
+                  handleLoad={(map, view) => this.handleLoad(map, view, item, fLCountshandleLoad, tLCounts)}
                 >
                   <BermudaTriangle />
                 </MyBasemap> */}

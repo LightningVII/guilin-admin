@@ -6,14 +6,21 @@ import { connect } from 'dva';
 
 // import { treeData } from '../../../arcgis-show/components/json/treeData';
 
-const props = {
+// const statusActions = info => ({
+//     done: message.success(`${info.file.name} 上传成功`),
+//     error: message.error(`${info.file.name} 上传失败.`),
+//     defaultStatus: console.log(info.file, info.fileList)
+// })
+
+const props = user => ({
     name: 'jsonFile',
-    action: '/strapi/changespot/add?userid=0',
+    action: `/strapi/changespot/add?userid=${user.userid}`,
     accept: '.json,.txt',
     headers: {
         authorization: 'authorization-text',
     },
     onChange(info) {
+        // statusActions(info)[info.file.status]()
         if (info.file.status !== 'uploading') {
             console.log(info.file, info.fileList);
         }
@@ -23,7 +30,9 @@ const props = {
             message.error(`${info.file.name} 上传失败.`);
         }
     },
-};
+});
+
+
 
 // @connect(({ layer }) => ({
 //     layerTree: layer.layerTree,
@@ -312,7 +321,7 @@ class DatasourceView extends React.Component {
                     () => this.addParent()
                 }><FolderAddOutlined />添加文件夹</Button>
 
-                <Upload {...props}>
+                <Upload {...props(this.props.currentUser)}>
                     <Button style={{ marginLeft: 20 }}>
                         <UploadOutlined /> 上传Json
                     </Button>
@@ -320,7 +329,7 @@ class DatasourceView extends React.Component {
 
 
                 <Table
-                    style={{ marginTop: 20}}
+                    style={{ marginTop: 20 }}
                     columns={this.state.columns} dataSource={this.state.treeJson} />
 
                 <Modal
@@ -480,7 +489,8 @@ class DatasourceView extends React.Component {
     }
 }
 
-export default connect(({ layer }) => ({
+export default connect(({ layer, user }) => ({
     layerTree: layer.layerTree,
     layerUrl: layer.layerUrl,
+    currentUser: user.currentUser,
 }))(DatasourceView);

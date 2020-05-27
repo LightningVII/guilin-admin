@@ -1,7 +1,12 @@
 import React from 'react';
 import { Modal, Tree } from 'antd';
-import { treeData } from './json/treeData.js';
+// import { treeData } from './json/treeData.js';
 
+import { connect } from 'dva';
+
+@connect(({ layer }) => ({
+  layerTree: layer.layerTree
+}))
 
 class ModalSwipeTree extends React.Component {
   constructor(props) {
@@ -13,6 +18,13 @@ class ModalSwipeTree extends React.Component {
       fCount: 0,
       checkedTempArray: []
     };
+
+    const { dispatch } = props;
+
+    dispatch({
+      type: 'layer/fetchLayerTree'
+    })
+
   }
 
   onCheck = (checkedKeys, e) => {
@@ -56,7 +68,7 @@ class ModalSwipeTree extends React.Component {
             checkable
             onCheck={this.onCheck}
             defaultExpandAll
-            treeData={treeData}
+            treeData={this.props.layerTree}
             style={{ overflowY: 'scroll', maxHeight: '50vh' }}
           />
           <p>
