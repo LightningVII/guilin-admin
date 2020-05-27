@@ -57,7 +57,7 @@ const RoleView = ({ data, dispatch }) => {
   const remove = key =>
     dispatch({
       type: 'employee/fetchRoleDelete',
-      payload: { ids: [key] },
+      payload: { roleIds: [key] },
     });
 
   const add = () => {

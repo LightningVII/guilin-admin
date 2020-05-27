@@ -33,7 +33,7 @@ const EmployeeModel = {
     },
     *fetchRoleDelete({ payload }, { call, put }) {
       const { code } = yield call(queryRoleDelete, payload);
-      if (code === 200) yield put({ type: 'deleteRole', payload: payload.roleid[0] });
+      if (code === 200) yield put({ type: 'deleteRole', payload: payload.roleIds[0] });
     },
     *fetchDeptDelete({ payload }, { call, put }) {
       const { code } = yield call(queryDeptDelete, payload);
