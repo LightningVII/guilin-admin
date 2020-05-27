@@ -1,45 +1,16 @@
 import request from '@/utils/request';
-import { stringify } from 'querystring';
+import { stringify as str } from 'querystring';
 
-export async function queryLayerTree() {
-  return request(`/strapi/layer/tree`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-  });
-}
+export const queryLayerTree = async () => request('/strapi/layer/tree');
 
-export async function queryLayerGetLayerUrl(payload) {
-  return request(`/strapi/layer/getLayerUrl?${stringify(payload)}`);
-}
+export const queryLayerGetLayerUrl = async params =>
+  request('/strapi/layer/getLayerUrl', { params });
 
-export async function queryLayerAdd(payload) {
-  return request(`/strapi/layer/add`, {
-    method: 'POST',
-    data: stringify(payload),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;',
-    },
-  });
-}
+export const queryLayerAdd = async payload =>
+  request.post('/strapi/layer/add', { data: str(payload) });
 
-export async function queryLayerUpdate(payload) {
-  return request(`/strapi/layer/update`, {
-    method: 'POST',
-    data: stringify(payload),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;',
-    },
-  });
-}
+export const queryLayerUpdate = async payload =>
+  request.post('/strapi/layer/update', { data: str(payload) });
 
-export async function queryLayerDelete(payload) {
-  return request(`/strapi/layer/delete`, {
-    method: 'POST',
-    data: stringify(payload),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;',
-    },
-  });
-}
+export const queryLayerDelete = async payload =>
+  request.post('/strapi/layer/delete', { data: str(payload) });
