@@ -1,5 +1,4 @@
 import {
-  queryEmployeeData,
   queryRoleDelete,
   queryDeptDelete,
   queryRoleUpdate,
@@ -7,6 +6,9 @@ import {
   queryRoleAdd,
   queryDeptAdd,
   queryMenuData,
+  queryDeptData,
+  queryRoleData,
+  queryDeptUserData,
 } from '@/services/employee';
 
 const EmployeeModel = {
@@ -19,32 +21,23 @@ const EmployeeModel = {
   },
 
   effects: {
-    *fetchEmployeeData({ payload }, { call, put }) {
-      const response = yield call(queryEmployeeData, payload);
-      const menu = yield call(queryMenuData);
-      yield put({
-        type: 'saveEmployeeData',
-        payload: {
-          ...response,
-          menu,
-        },
-      });
+    *fetchEmployeeData(_, { call, put, all }) {
+      const [dept, role, deptUser, menu] = yield all([
+        call(queryDeptData),
+        call(queryRoleData),
+        call(queryDeptUserData),
+        call(queryMenuData),
+      ]);
+
+      yield put({ type: 'saveEmployeeData', payload: [dept, role, deptUser, menu] });
     },
     *fetchRoleDelete({ payload }, { call, put }) {
       const { code } = yield call(queryRoleDelete, payload);
-      if (code === 200)
-        yield put({
-          type: 'deleteRole',
-          payload: payload.roleid[0],
-        });
+      if (code === 200) yield put({ type: 'deleteRole', payload: payload.roleid[0] });
     },
     *fetchDeptDelete({ payload }, { call, put }) {
       const { code } = yield call(queryDeptDelete, payload);
-      if (code === 200)
-        yield put({
-          type: 'deleteDept',
-          payload: payload.ids[0],
-        });
+      if (code === 200) yield put({ type: 'deleteDept', payload: payload.ids[0] });
     },
     *fetchRoleSave({ payload }, { call, put }) {
       const { roleid, ...param } = payload;
@@ -64,16 +57,17 @@ const EmployeeModel = {
 
   reducers: {
     saveEmployeeData(state, action) {
+      const [dept, role, deptUser, menu] = action.payload;
       return {
         ...state,
         employeeList:
-          action.payload.deptUser.map(item => ({
+          deptUser.map(item => ({
             ...item,
             checkable: item.checkable === 'true',
           })) || state.employeeList,
-        deptList: action.payload.dept,
-        roleList: action.payload.role,
-        menuList: action.payload.menu.list,
+        deptList: dept,
+        roleList: role,
+        menuList: menu.list,
       };
     },
     addRole(state, action) {

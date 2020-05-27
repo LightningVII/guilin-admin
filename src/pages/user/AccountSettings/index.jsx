@@ -29,8 +29,8 @@ class AccountSettings extends Component {
       staff: '职员管理列表',
       role: '角色管理列表',
       dept: '部门管理列表',
-      menu: '菜单管理列表',
-      security: (
+      // menu: '菜单管理列表',
+      /* security: (
         <FormattedMessage id="app.settings.menuMap.security" defaultMessage="Security Settings" />
       ),
       binding: (
@@ -41,7 +41,7 @@ class AccountSettings extends Component {
           id="app.settings.menuMap.notification"
           defaultMessage="New Message Notification"
         />
-      ), // 数据资源设置
+      ), */ // 数据资源设置
     };
 
     if (props?.currentUser?.roles?.[0]?.rolecode === 'XTGLY')

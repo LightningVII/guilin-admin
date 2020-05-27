@@ -38,8 +38,6 @@ const MenuView = ({ data, dispatch }) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
 
-  console.log('data', data);
-
   useEffect(() => {
     dispatch({ type: 'employee/fetchEmployeeData' });
   }, []);

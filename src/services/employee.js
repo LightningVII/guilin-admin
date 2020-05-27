@@ -1,15 +1,20 @@
 import request from '@/utils/request';
-import { stringify } from 'querystring';
+import { stringify as str } from 'querystring';
 
-const headers = {
-  'Content-Type': 'application/x-www-form-urlencoded;',
-};
+export async function queryDeptData() {
+  const content = await request('/strapi/sys/dept/all');
+  return content;
+}
 
-const postParams = payload => ({
-  method: 'POST',
-  data: stringify(payload),
-  headers,
-});
+export async function queryRoleData() {
+  const { content } = await request('/strapi/sys/role/all');
+  return content;
+}
+
+export async function queryDeptUserData() {
+  const content = await request('/strapi/sys/dept/deptUser');
+  return content;
+}
 
 export async function queryEmployeeData() {
   const dept = await request('/strapi/sys/dept/all');
@@ -18,43 +23,34 @@ export async function queryEmployeeData() {
   return { dept, role, deptUser };
 }
 
-export async function queryRoleAdd(payload) {
-  return request(`/strapi/sys/role/add`, postParams(payload));
-}
+export const queryRoleAdd = async params =>
+  request.post('/strapi/sys/role/add', { data: str(params) });
 
-export async function queryRoleDelete(payload) {
-  return request(`/strapi/sys/role/delete`, postParams(payload));
-}
+export const queryRoleDelete = async params =>
+  request.post('/strapi/sys/role/delete', { data: str(params) });
 
-export async function queryRoleUpdate(payload) {
-  return request(`/strapi/sys/role/update`, postParams(payload));
-}
+export const queryRoleUpdate = async params =>
+  request.post('/strapi/sys/role/update', { data: str(params) });
 
-export async function queryDeptAdd(payload) {
-  return request(`/strapi/sys/dept/add`, postParams(payload));
-}
+export const queryDeptAdd = async params =>
+  request.post('/strapi/sys/dept/add', { data: str(params) });
 
-export async function queryDeptDelete(payload) {
-  return request(`/strapi/sys/dept/delete`, postParams(payload));
-}
+export const queryDeptDelete = async params =>
+  request.post('/strapi/sys/dept/delete', { data: str(params) });
 
-export async function queryDeptUpdate(payload) {
-  return request(`/strapi/sys/dept/update`, postParams(payload));
-}
+export const queryDeptUpdate = async params =>
+  request.post('/strapi/sys/dept/update', { data: str(params) });
 
-export async function queryMenuData() {
-  const { content } = await request('/strapi/sys/menu/list');
+export const queryMenuData = async () => {
+  const { content } = await request.get('/strapi/sys/menu/list');
   return content;
-}
+};
 
-export async function queryMenuAdd(payload) {
-  return request(`/strapi/sys/menu/add`, postParams(payload));
-}
+export const queryMenuAdd = async params =>
+  request.post('/strapi/sys/menu/add', { data: str(params) });
 
-export async function queryMenuDelete(payload) {
-  return request(`/strapi/sys/menu/delete`, postParams(payload));
-}
+export const queryMenuDelete = async params =>
+  request.post('/strapi/sys/menu/delete', { data: str(params) });
 
-export async function queryMenuUpdate(payload) {
-  return request(`/strapi/sys/menu/update`, postParams(payload));
-}
+export const queryMenuUpdate = async params =>
+  request.post('/strapi/sys/menu/update', { data: str(params) });
