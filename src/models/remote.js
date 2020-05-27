@@ -1,13 +1,13 @@
 import {
   queryRemoteData,
-  queryChangespotIssue,
-  queryChangespotApproval,
+  querySpotIssue,
+  querySpotApproval,
   queryRemoteSensingDetail,
-  queryChangespotFuzzyQuery,
-  queryChangespotGeomotry,
-  queryChangespotTBCount,
-  queryChangespotBZTTJ,
-  queryChangespotGeoJson,
+  querySpotFuzzyQuery,
+  querySpotGeomotry,
+  querySpotTBCount,
+  querySpotBZTTJ,
+  querySpotGeoJson,
 } from '@/services/remote';
 
 const RemoteModel = {
@@ -24,10 +24,7 @@ const RemoteModel = {
   effects: {
     *fetchRemoteData({ payload }, { call, put, select }) {
       const userid = yield select(state => state?.user?.currentUser?.userid);
-      const response = yield call(queryRemoteData, {
-        ...payload,
-        userid,
-      });
+      const response = yield call(queryRemoteData, { ...payload, userid });
       if (response?.code === 200 && response?.content) {
         return yield put({
           type: 'saveRemoteData',
@@ -45,13 +42,13 @@ const RemoteModel = {
         const u = userIds.split('-');
         userIds = u[u.length - 1];
       }
-      return yield call(queryChangespotIssue, {
+      return yield call(querySpotIssue, {
         ...payload,
         userIds,
       });
     },
     *fetchChangespotApproval({ payload }, { call }) {
-      return yield call(queryChangespotApproval, payload);
+      return yield call(querySpotApproval, payload);
     },
     *fetchRemoteSensingDetail({ payload }, { call, put }) {
       const data = yield call(queryRemoteSensingDetail, payload);
@@ -61,7 +58,7 @@ const RemoteModel = {
       });
     },
     *fetchChangespotFuzzyQuery({ payload }, { call, put }) {
-      const data = yield call(queryChangespotFuzzyQuery, payload);
+      const data = yield call(querySpotFuzzyQuery, payload);
       yield put({
         type: 'saveFuzzyChangespot',
         payload: data?.content,
@@ -69,7 +66,7 @@ const RemoteModel = {
       return data;
     },
     *fetchChangespotGeomotry({ payload }, { call, put }) {
-      const data = yield call(queryChangespotGeomotry, payload);
+      const data = yield call(querySpotGeomotry, payload);
       yield put({
         type: 'saveGeomotry',
         payload: data?.content,
@@ -77,7 +74,7 @@ const RemoteModel = {
       return data;
     },
     *fetchChangespotTBCount({ payload }, { call, put }) {
-      const data = yield call(queryChangespotTBCount, payload);
+      const data = yield call(querySpotTBCount, payload);
       yield put({
         type: 'saveTBCount',
         payload: data?.content,
@@ -85,7 +82,7 @@ const RemoteModel = {
       return data;
     },
     *fetchChangespotBZTTJ({ payload }, { call, put }) {
-      const data = yield call(queryChangespotBZTTJ, payload);
+      const data = yield call(querySpotBZTTJ, payload);
       yield put({
         type: 'saveBZTTJ',
         payload: data?.content,
@@ -93,7 +90,7 @@ const RemoteModel = {
       return data;
     },
     *fetchChangespotGeoJson({ payload }, { call, put }) {
-      const data = yield call(queryChangespotGeoJson, payload);
+      const data = yield call(querySpotGeoJson, payload);
       yield put({
         type: 'saveGeoJson',
         payload: data,

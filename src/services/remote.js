@@ -1,68 +1,41 @@
 import request from '@/utils/request';
-import { stringify } from 'querystring';
+import { stringify as str } from 'querystring';
 import { TabsEnum } from '@/constants/basicEnum';
 
-export async function queryRemoteData(params) {
-  const status = TabsEnum.map(({ tab }) => tab).indexOf(params.status);
-  if (status > 0) {
-    params.status = status - 1;
-  } else {
-    delete params.status;
-  }
+export async function queryRemoteData(payload) {
+  const status = TabsEnum.map(({ tab }) => tab).indexOf(payload.status);
+  if (status > 0) payload.status = status - 1;
+  else delete payload.status;
 
-  const payload = {
-    pageSize: params.pageSize,
-    pageNum: params.current,
-    term: params.keywords,
-    startTime: params.rangePickerValue[0].format('YYYY-MM-DD'),
-    endTime: params.rangePickerValue[1].format('YYYY-MM-DD'),
-    userid: params.userid,
-    state: params.status,
+  const params = {
+    pageSize: payload.pageSize,
+    pageNum: payload.current,
+    term: payload.keywords,
+    startTime: payload.rangePickerValue[0].format('YYYY-MM-DD'),
+    endTime: payload.rangePickerValue[1].format('YYYY-MM-DD'),
+    userid: payload.userid,
+    state: payload.status,
   };
 
-  return request(`/strapi/changespot/list?${stringify(payload)}`);
+  return request('/strapi/changespot/list', { params });
 }
 
-export async function queryChangespotIssue(params) {
-  return request(`/strapi/changespot/issue`, {
-    method: 'POST',
-    data: stringify(params),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;',
-    },
-  });
-}
+export const querySpotIssue = async params =>
+  request.post('/strapi/changespot/issue', { data: str(params) });
 
-export async function queryChangespotApproval(params) {
-  return request(`/strapi/changespot/approval`, {
-    method: 'POST',
-    data: stringify(params),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;',
-    },
-  });
-}
+export const querySpotApproval = async params =>
+  request.post(`/strapi/changespot/approval`, { data: str(params) });
 
-export async function queryRemoteSensingDetail(tbbm) {
-  return request(`/strapi/changespot/info?${stringify(tbbm)}`);
-}
+export const queryRemoteSensingDetail = async params =>
+  request('/strapi/changespot/info', { params });
 
-export async function queryChangespotFuzzyQuery(term) {
-  return request(`/strapi/changespot/fuzzyQuery?${stringify(term)}`);
-}
+export const querySpotFuzzyQuery = async params =>
+  request('/strapi/changespot/fuzzyQuery', { params });
 
-export async function queryChangespotGeomotry(tbbm) {
-  return request(`/strapi/changespot/geomotry?${stringify(tbbm)}`);
-}
+export const querySpotGeomotry = async params => request('/strapi/changespot/geomotry', { params });
 
-export async function queryChangespotTBCount(time) {
-  return request(`/strapi/changespot/tbcount?${stringify(time)}`);
-}
+export const querySpotTBCount = async params => request('/strapi/changespot/tbcount', { params });
 
-export async function queryChangespotBZTTJ(time) {
-  return request(`/strapi/changespot/bzttj?${stringify(time)}`);
-}
+export const querySpotBZTTJ = async params => request('/strapi/changespot/bzttj', { params });
 
-export async function queryChangespotGeoJson(payload) {
-  return request(`/strapi/changespot/geojson?${stringify(payload)}`);
-}
+export const querySpotGeoJson = async params => request('/strapi/changespot/geojson', { params });
