@@ -86,17 +86,7 @@ const TableList = props => {
       dispatch({
         type: 'remoteSensing/fetchRemoteData',
         payload,
-      }).then(() => {
-        /* if (res?.payload?.data?.length) {
-          res.payload.data.forEach(async record => {
-            await dispatch({
-              type: 'feedback/fetchFeedbackTBBM',
-              payload: { tbbm: record?.tbbm },
-            });
-          });
-        } */
-        setLoading(false);
-      });
+      }).then(() => setLoading(false));
     }
   };
 

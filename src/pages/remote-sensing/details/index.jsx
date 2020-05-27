@@ -128,10 +128,6 @@ class Details extends Component {
       type: 'remoteSensing/fetchRemoteSensingDetail',
       payload: match?.params,
     });
-    /* dispatch({
-      type: 'feedback/fetchFeedbackTBBM',
-      payload: match?.params,
-    }); */
   }
 
   render() {
