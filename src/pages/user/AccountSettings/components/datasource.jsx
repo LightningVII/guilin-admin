@@ -1,6 +1,6 @@
 import React from 'react';
-import { Table, Button, Modal, Form, Input, Select, Upload, message, DatePicker, Tooltip } from 'antd';
-import { UploadOutlined, ExclamationCircleOutlined, FolderAddOutlined, FileAddOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Table, Button, Modal, Form, Input, Select, Upload, message, DatePicker, Tooltip, Menu, Dropdown, Alert } from 'antd';
+import { UploadOutlined, DownOutlined, ExclamationCircleOutlined, FolderAddOutlined, FileAddOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { connect } from 'dva';
 
@@ -32,8 +32,6 @@ const props = user => ({
     },
 });
 
-
-
 // @connect(({ layer }) => ({
 //     layerTree: layer.layerTree,
 //     layerUrl: layer.layerUrl,
@@ -54,6 +52,7 @@ class DatasourceView extends React.Component {
             updateVisible: false,
             addVisble: false,
             addParentVisble: false,
+            deleteUploadVisible: false,
             showBHTBDate: false,
             showImgeLayerDate: false,
             treeJson: [],
@@ -61,8 +60,7 @@ class DatasourceView extends React.Component {
                 {
                     title: '图层名',
                     dataIndex: 'title',
-                    key: 'title',
-                    width: 250
+                    key: 'title'
                 },
                 {
                     title: '加载方式',
@@ -72,7 +70,8 @@ class DatasourceView extends React.Component {
                 {
                     title: '图层地址',
                     dataIndex: 'layerUrl',
-                    key: 'layerUrl'
+                    key: 'layerUrl',
+                    width: '40%',
                 },
                 {
                     title: '操作',
@@ -278,6 +277,14 @@ class DatasourceView extends React.Component {
 
     }
 
+    deleteUploadData = () => {
+        this.setState({
+            deleteUploadVisible: true
+        }, () => {
+
+        })
+    }
+
     addParent = () => {
         this.setState({
             addParentVisble: true
@@ -319,17 +326,36 @@ class DatasourceView extends React.Component {
             <>
                 <Button type="primary" onClick={
                     () => this.addParent()
-                }><FolderAddOutlined />添加文件夹</Button>
+                }><FolderAddOutlined />添加父级图层</Button>
 
-                <Upload {...props(this.props.currentUser)}>
+                {/* <Upload {...props(this.props.currentUser)}>
                     <Button style={{ marginLeft: 20 }}>
-                        <UploadOutlined /> 上传Json
+                        <UploadOutlined /> 上传变化图斑Json
                     </Button>
-                </Upload>
+                </Upload> */}
 
+                <Dropdown overlay={
+                    <Menu >
+                        <Menu.Item key="1">
+                            <Upload {...props(this.props.currentUser)}>
+                                <div><UploadOutlined /> 上传JSON文件</div>
+                            </Upload>
+                        </Menu.Item>
+                        <Menu.Item key="2" onClick={() => {
+                            this.deleteUploadData()
+                        }}><DeleteOutlined />
+                        删除已上传
+                        </Menu.Item>
+                    </Menu>
+                }>
+                    <Button style={{ marginLeft: 20 }}>
+                        变化图斑 <DownOutlined />
+                    </Button>
+                </Dropdown>
 
                 <Table
                     style={{ marginTop: 20 }}
+                    scroll={{ y: "auto" }}
                     columns={this.state.columns} dataSource={this.state.treeJson} />
 
                 <Modal
@@ -447,7 +473,7 @@ class DatasourceView extends React.Component {
 
 
                 <Modal
-                    title='添加父级菜单'
+                    title='添加父级图层'
                     visible={this.state.addParentVisble}
                     onOk={() => {
                         this.addParentOK();
@@ -483,6 +509,38 @@ class DatasourceView extends React.Component {
 
                     </Form>
 
+                </Modal>
+
+                <Modal
+                    title='删除已上传数据'
+                    visible={this.state.deleteUploadVisible}
+                    onOk={() => {
+
+                    }}
+                    onCancel={() => {
+                        this.setState({
+                            deleteUploadVisible: false
+                        })
+                    }}
+                    okText='删除'
+                    okType='danger'
+                    cancelText="关闭"
+                    destroyOnClose
+                >
+                    <Form
+                        name="control-ref"
+                        ref={this.formAddRef}
+                        labelCol={{ span: 4 }}
+                        wrapperCol={{ span: 20 }}
+                    >
+                        <Form.Item name="datatype" label="时间范围" rules={[{ required: true }]}>
+                            <DatePicker.RangePicker
+                                picker="month"
+                                format="YYYYMM"
+                            />
+                        </Form.Item>
+                    </Form>
+                    <Alert message="会删除已上传任务，请谨慎操作" type="warning" style={{ marginTop: 20 }} />
                 </Modal>
             </>
         );
