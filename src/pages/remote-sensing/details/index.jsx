@@ -29,7 +29,7 @@ const routes = [
     breadcrumbName: '首页',
   },
   {
-    path: '../remote-sensing',
+    path: '/remote-sensing',
     breadcrumbName: '监测列表',
   },
   {
@@ -37,12 +37,12 @@ const routes = [
   },
 ];
 
-function itemRender(route, params, routeList, paths) {
+function itemRender(route, params, routeList) {
   const last = routeList.indexOf(route) === routeList.length - 1;
   return last ? (
     <span>{route.breadcrumbName}</span>
   ) : (
-    <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+    <Link to={route.path}>{route.breadcrumbName}</Link>
   );
 }
 
